@@ -3,49 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>M400 Executive Suite</title>
+    <title>M400 經理人終端</title>
     
-    <!-- 確保使用 HTTPS 加載 CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
-    <!-- 預載入字體 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
     <style>
         [v-cloak] { display: none !important; }
         :root { --bg-color: #05070a; }
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+            font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif; 
             background-color: var(--bg-color); 
             color: #f8fafc; 
             margin: 0;
             min-height: 100vh;
         }
-        /* 玻璃質感卡片 */
         .glass-card {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .profit-glow { text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+        .profit-glow { text-shadow: 0 0 25px rgba(16, 185, 129, 0.5); }
+        .loss-glow { text-shadow: 0 0 25px rgba(244, 63, 94, 0.5); }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body>
 
-    <!-- 備用顯示：如果 Vue 沒跑起來，至少會看到這個 -->
-    <div id="loading-fallback" style="display: flex; justify-content: center; align-items: center; height: 100vh; color: #475569;">
-        Initializing Terminal...
+    <div id="loading-fallback" style="display: flex; justify-content: center; align-items: center; height: 100vh; color: #475569; font-size: 14px; tracking: 2px;">
+        系統初始化中...
     </div>
 
     <div id="app" v-cloak>
+        <!-- 頂部標題 -->
         <header class="max-w-xl mx-auto px-6 pt-12 pb-6 flex justify-between items-end">
             <div>
-                <h1 class="text-3xl font-extrabold tracking-tighter text-white">M400<span class="text-emerald-500 text-sm align-top ml-1 font-bold">SUITE</span></h1>
-                <p class="text-slate-500 text-[10px] font-bold tracking-[0.3em] mt-1 uppercase">Strategic Ledger v1.0</p>
+                <h1 class="text-3xl font-extrabold tracking-tighter text-white">M400<span class="text-emerald-500 text-sm align-top ml-1 font-bold">精準終端</span></h1>
+                <p class="text-slate-500 text-[10px] font-bold tracking-[0.3em] mt-1 uppercase">戰略交易帳譜 v1.0</p>
             </div>
             <button @click="isModalOpen = true" class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-all">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -53,51 +52,89 @@
         </header>
 
         <main class="max-w-xl mx-auto px-6 space-y-8">
-            <!-- 核心獲利看板 -->
+            <!-- 獲利看板 -->
             <section class="glass-card rounded-[2.5rem] p-10 text-center relative overflow-hidden">
-                <span class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em]">Net Realized Profit</span>
+                <span class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em]">本月已實現損益</span>
                 <div class="mt-4 flex justify-center items-baseline gap-1">
-                    <span class="text-emerald-500 font-bold">$</span>
-                    <h2 class="text-6xl font-extrabold tracking-tighter text-white profit-glow">
-                        {{ realizedProfit.toFixed(2) }}
+                    <span class="text-emerald-500 font-bold text-xl">$</span>
+                    <h2 class="text-6xl font-extrabold tracking-tighter text-white" :class="realizedProfit >= 0 ? 'profit-glow' : 'loss-glow text-rose-500'">
+                        {{ realizedProfit.toLocaleString(undefined, {minimumFractionDigits: 2}) }}
                     </h2>
                 </div>
-                <div class="mt-8 flex items-center justify-center gap-3">
-                    <div class="h-1 flex-1 max-w-[100px] bg-slate-800 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500" :style="{ width: Math.min((realizedProfit/400)*100, 100) + '%' }"></div>
+                
+                <!-- 進度條 -->
+                <div class="mt-8">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">
+                        <span>目標達成率 {{ ((realizedProfit/400)*100).toFixed(1) }}%</span>
+                        <span>月目標 $400.00</span>
                     </div>
-                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ ((realizedProfit/400)*100).toFixed(1) }}% of Goal</span>
+                    <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-500 transition-all duration-1000 shadow-[0_0_10px_#10b981]" 
+                             :style="{ width: Math.min(Math.max((realizedProfit/400)*100, 0), 100) + '%' }"></div>
+                    </div>
                 </div>
             </section>
 
-            <!-- 列表 -->
-            <section class="space-y-4 pb-20">
-                <div v-for="trade in trades.slice().reverse()" :key="trade.id" class="flex justify-between items-center p-4 glass-card rounded-2xl">
+            <!-- 交易清單 -->
+            <section class="space-y-4 pb-32">
+                <div class="flex justify-between items-center px-2">
+                    <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">近期執行紀錄</h3>
+                    <span @click="clearData" class="text-[10px] text-slate-700 hover:text-rose-500 cursor-pointer transition-colors">重置所有紀錄</span>
+                </div>
+
+                <div v-if="trades.length === 0" class="py-12 border border-dashed border-slate-800 rounded-[2rem] text-center text-slate-600 text-sm italic">
+                    尚無交易指令紀錄
+                </div>
+
+                <div v-for="trade in trades.slice().reverse()" :key="trade.id" class="flex justify-between items-center p-5 glass-card rounded-2xl group hover:border-slate-700 transition-all">
                     <div>
-                        <div class="font-bold text-white">{{ trade.ticker }}</div>
-                        <div class="text-[10px] text-slate-500 font-mono italic">{{ trade.qty }} Shares @ {{ trade.entry }}</div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white tracking-tight text-lg">{{ trade.ticker }}</span>
+                            <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">{{ trade.qty }} 股</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-1 uppercase tracking-tighter">
+                            買入: {{ trade.entry }} <span class="text-slate-800 mx-1">/</span> 賣出: {{ trade.exit }}
+                        </div>
                     </div>
-                    <div :class="getPnl(trade) >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-bold font-mono">
-                        {{ getPnl(trade) >= 0 ? '+' : '' }}{{ getPnl(trade).toFixed(2) }}
+                    <div class="text-right">
+                        <div :class="getPnl(trade) >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-bold font-mono text-xl">
+                            {{ getPnl(trade) >= 0 ? '+' : '' }}{{ getPnl(trade).toFixed(2) }}
+                        </div>
+                        <div class="text-[9px] text-slate-600 font-bold uppercase tracking-tighter">盈虧金額 (USD)</div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Entry Modal -->
+        <!-- 輸入彈窗 -->
         <div v-if="isModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
-            <div class="bg-slate-900 w-full max-w-sm rounded-[2.5rem] p-8 border border-slate-800">
-                <h2 class="text-2xl font-bold text-white mb-6 tracking-tight">New Execution</h2>
-                <div class="space-y-4">
-                    <input v-model="form.ticker" placeholder="SYMBOL" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-emerald-500 uppercase">
-                    <div class="grid grid-cols-2 gap-4">
-                        <input v-model.number="form.entry" type="number" placeholder="ENTRY" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none">
-                        <input v-model.number="form.exit" type="number" placeholder="EXIT" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none">
+            <div class="bg-[#0a0c10] w-full max-w-sm rounded-[2.5rem] p-10 border border-slate-800 shadow-2xl">
+                <h2 class="text-2xl font-extrabold text-white mb-8 tracking-tighter italic">新增執行指令</h2>
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1 mb-2 block">標代碼 (Ticker)</label>
+                        <input v-model="form.ticker" placeholder="例如: NVDA" class="w-full bg-transparent border-b border-slate-800 py-3 font-bold text-xl text-white outline-none focus:border-emerald-500 uppercase transition-all placeholder:text-slate-800">
                     </div>
-                    <input v-model.number="form.qty" type="number" placeholder="QUANTITY" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none">
-                    <div class="flex gap-4 pt-4">
-                        <button @click="isModalOpen = false" class="flex-1 text-slate-500 font-bold">CANCEL</button>
-                        <button @click="saveTrade" class="flex-[2] bg-white text-black font-bold py-4 rounded-xl">CONFIRM</button>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1 mb-2 block">買入價格</label>
+                            <input v-model.number="form.entry" type="number" placeholder="0.00" class="w-full bg-transparent border-b border-slate-800 py-3 font-mono text-xl text-white outline-none focus:border-emerald-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1 mb-2 block">賣出價格</label>
+                            <input v-model.number="form.exit" type="number" placeholder="0.00" class="w-full bg-transparent border-b border-slate-800 py-3 font-mono text-xl text-white outline-none focus:border-emerald-500 transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1 mb-2 block">成交股數</label>
+                        <input v-model.number="form.qty" type="number" placeholder="0" class="w-full bg-transparent border-b border-slate-800 py-3 font-mono text-xl text-white outline-none focus:border-emerald-500 transition-all">
+                    </div>
+
+                    <div class="flex gap-4 pt-6">
+                        <button @click="isModalOpen = false" class="flex-1 text-slate-500 font-bold text-sm tracking-widest">取消</button>
+                        <button @click="saveTrade" class="flex-[2] bg-white text-black font-black py-4 rounded-2xl hover:bg-emerald-400 active:scale-95 transition-all shadow-xl">確認記錄</button>
                     </div>
                 </div>
             </div>
@@ -116,7 +153,7 @@
 
                     onMounted(() => {
                         document.getElementById('loading-fallback').style.display = 'none';
-                        const saved = localStorage.getItem('m400_v1');
+                        const saved = localStorage.getItem('m400_suite_v2');
                         if (saved) trades.value = JSON.parse(saved);
                     });
 
@@ -124,14 +161,24 @@
                     const realizedProfit = computed(() => trades.value.reduce((s, t) => s + getPnl(t), 0));
 
                     const saveTrade = () => {
-                        if (!form.value.ticker || !form.value.entry) return;
+                        if (!form.value.ticker || form.value.entry === '' || form.value.exit === '' || !form.value.qty) {
+                            alert('請完整填寫交易數據');
+                            return;
+                        }
                         trades.value.push({ ...form.value, id: Date.now(), ticker: form.value.ticker.toUpperCase() });
-                        localStorage.setItem('m400_v1', JSON.stringify(trades.value));
+                        localStorage.setItem('m400_suite_v2', JSON.stringify(trades.value));
                         isModalOpen.value = false;
                         form.value = { ticker: '', entry: '', exit: '', qty: '' };
                     };
 
-                    return { trades, isModalOpen, form, realizedProfit, saveTrade, getPnl };
+                    const clearData = () => {
+                        if(confirm('確定要清除所有交易紀錄嗎？此動作無法復原。')) {
+                            trades.value = [];
+                            localStorage.removeItem('m400_suite_v2');
+                        }
+                    };
+
+                    return { trades, isModalOpen, form, realizedProfit, saveTrade, getPnl, clearData };
                 }
             }).mount('#app');
         });
