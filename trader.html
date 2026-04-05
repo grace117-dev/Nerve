@@ -2,218 +2,113 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>Executive Terminal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>M400 Terminal</title>
+    <!-- 1. 確保網路通暢，載入這兩個核心引擎 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- 引入 Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-        .glass-effect { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        /* 防止 Vue 載入前的閃爍或空白 */
+        [v-cloak] { display: none !important; }
+        body { background-color: #020617; color: white; margin: 0; }
+        .loading-screen { 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; font-family: sans-serif; color: #64748b;
+        }
     </style>
 </head>
-<body class="bg-[#020617] text-slate-200 antialiased overflow-x-hidden">
+<body>
 
 <div id="app" v-cloak>
     <!-- Header -->
-    <nav class="sticky top-0 z-50 border-b border-slate-800 bg-[#020617]/80 backdrop-blur-md px-6 py-4">
+    <nav class="border-b border-slate-800 p-4 sticky top-0 bg-[#020617]/80 backdrop-blur-md z-50">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-lg font-bold tracking-tighter text-white flex items-center gap-2">
-                <div class="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_#10b981]"></div>
-                TERMINAL <span class="text-slate-500 font-light text-xs tracking-normal">v1.0</span>
-            </h1>
-            <button @click="isModalOpen = true" class="bg-emerald-600/10 text-emerald-400 p-2 rounded-lg active:scale-95 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            </button>
+            <h1 class="font-bold tracking-tighter text-white">M400 TERMINAL</h1>
+            <button @click="isModalOpen = true" class="text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-lg">+</button>
         </div>
     </nav>
 
-    <main class="max-w-md mx-auto px-6 py-8 space-y-8 pb-32">
-        <!-- Goal Monitor -->
-        <section class="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-2xl relative overflow-hidden">
-            <div class="relative z-10">
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Monthly PnL Goal</p>
-                <div class="flex justify-between items-baseline mb-6">
-                    <h2 class="text-4xl font-mono font-bold text-white tracking-tighter">${{ realizedProfit.toFixed(2) }}</h2>
-                    <span class="text-sm font-mono text-slate-400">/ $400.00</span>
+    <!-- Main Content -->
+    <main class="max-w-md mx-auto p-6 space-y-6">
+        <!-- Goal Card -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl">
+            <p class="text-xs text-slate-500 uppercase tracking-widest mb-2">Monthly Profit</p>
+            <div class="text-4xl font-mono font-bold mb-4">${{ realizedProfit.toFixed(2) }}</div>
+            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div class="bg-emerald-500 h-full transition-all duration-1000" :style="{ width: (realizedProfit/400*100) + '%' }"></div>
+            </div>
+        </div>
+
+        <!-- List -->
+        <div class="space-y-3">
+            <div v-for="trade in trades" :key="trade.id" class="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex justify-between">
+                <div>
+                    <div class="font-bold">{{ trade.ticker }}</div>
+                    <div class="text-xs text-slate-500">{{ trade.qty }} Shares</div>
                 </div>
-                
-                <div class="space-y-2">
-                    <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500 shadow-[0_0_12px_#10b981] transition-all duration-1000 ease-out"
-                             :style="{ width: Math.min((realizedProfit / 400) * 100, 100) + '%' }"></div>
-                    </div>
-                    <div class="flex justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-                        <span>{{ ((realizedProfit / 400) * 100).toFixed(1) }}% Achieved</span>
-                        <span>Gap: ${{ Math.max(400 - realizedProfit, 0).toFixed(2) }}</span>
-                    </div>
+                <div :class="trade.pnl >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-mono font-bold">
+                    ${{ trade.pnl }}
                 </div>
             </div>
-            <!-- 背景裝飾微光 -->
-            <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/5 blur-3xl rounded-full"></div>
-        </section>
-
-        <!-- Execution History -->
-        <section class="space-y-4">
-            <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 px-1 flex justify-between">
-                Recent Executions
-                <span @click="clearHistory" class="normal-case font-normal text-slate-700 cursor-pointer hover:text-rose-900 transition-colors">Clear All</span>
-            </h3>
-            
-            <div v-if="trades.length === 0" class="py-12 border border-dashed border-slate-800 rounded-3xl flex flex-col items-center justify-center text-slate-600">
-                <p class="text-sm italic tracking-wide">Waiting for market data...</p>
-            </div>
-
-            <transition-group name="list" tag="div" class="space-y-3">
-                <div v-for="trade in sortedTrades" :key="trade.id" 
-                     class="bg-slate-900/40 border border-slate-800/50 p-4 rounded-2xl flex justify-between items-center group hover:border-slate-700 transition-all">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-white font-bold tracking-tight">{{ trade.ticker }}</span>
-                            <span class="text-[10px] text-slate-500 font-mono tracking-tighter">{{ trade.qty }} SHS</span>
-                        </div>
-                        <p class="text-[10px] text-slate-500 mt-1 font-mono uppercase tracking-tighter">
-                            In: {{ trade.entry }} <span class="mx-1 text-slate-700">→</span> Out: {{ trade.exit }}
-                        </p>
-                    </div>
-                    <div class="text-right">
-                        <div :class="getPnl(trade) >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-mono font-bold text-lg">
-                            {{ getPnl(trade) >= 0 ? '+' : '' }}{{ getPnl(trade).toFixed(2) }}
-                        </div>
-                    </div>
-                </div>
-            </transition-group>
-        </section>
+        </div>
     </main>
 
-    <!-- Modal: New Trade -->
-    <div v-if="isModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-6 glass-effect">
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-[2rem] w-full max-w-sm shadow-2xl relative">
-            <h3 class="text-white font-bold mb-8 tracking-tighter text-2xl italic">NEW EXECUTION</h3>
-            
-            <div class="space-y-5">
-                <div>
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2 block">Ticker</label>
-                    <input v-model="form.ticker" type="text" placeholder="e.g. NVDA" 
-                           class="w-full bg-[#020617] border border-slate-800 p-4 rounded-xl font-mono text-white focus:border-emerald-500 outline-none transition-all uppercase">
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2 block">Entry</label>
-                        <input v-model.number="form.entry" type="number" step="0.01" placeholder="0.00" 
-                               class="w-full bg-[#020617] border border-slate-800 p-4 rounded-xl font-mono text-white outline-none focus:border-emerald-500">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2 block">Exit</label>
-                        <input v-model.number="form.exit" type="number" step="0.01" placeholder="0.00" 
-                               class="w-full bg-[#020617] border border-slate-800 p-4 rounded-xl font-mono text-white outline-none focus:border-emerald-500">
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2 block">Quantity</label>
-                    <input v-model.number="form.qty" type="number" placeholder="0" 
-                           class="w-full bg-[#020617] border border-slate-800 p-4 rounded-xl font-mono text-white outline-none focus:border-emerald-500">
-                </div>
-
-                <div class="flex gap-3 pt-4">
-                    <button @click="isModalOpen = false" class="flex-1 py-4 text-slate-500 font-bold tracking-tighter hover:text-white transition-colors">CANCEL</button>
-                    <button @click="saveTrade" class="flex-[2] bg-emerald-600 text-white font-bold py-4 rounded-2xl hover:bg-emerald-500 shadow-lg shadow-emerald-900/20 active:scale-95 transition-all">CONFIRM</button>
-                </div>
+    <!-- New Entry Modal -->
+    <div v-if="isModalOpen" class="fixed inset-0 bg-black/90 flex items-center justify-center p-6 z-[100]">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl w-full max-w-sm">
+            <h2 class="text-white font-bold mb-4">NEW TRADE</h2>
+            <input v-model="form.ticker" placeholder="TICKER" class="w-full bg-black border border-slate-800 p-3 mb-3 rounded-xl text-white">
+            <input v-model.number="form.pnl" type="number" placeholder="PNL ($)" class="w-full bg-black border border-slate-800 p-3 mb-3 rounded-xl text-white">
+            <div class="flex gap-2">
+                <button @click="isModalOpen = false" class="flex-1 text-slate-500 py-3">CANCEL</button>
+                <button @click="saveTrade" class="flex-1 bg-emerald-600 text-white rounded-xl py-3">SAVE</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Navigation Bar -->
-    <footer class="fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-800 px-10 py-5 z-40">
-        <div class="max-w-md mx-auto flex justify-between items-center">
-            <div class="flex flex-col items-center gap-1.5 text-emerald-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                <span class="text-[9px] font-bold tracking-[0.1em]">DASHBOARD</span>
-            </div>
-            <div class="flex flex-col items-center gap-1.5 text-slate-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
-                <span class="text-[9px] font-bold tracking-[0.1em]">ANALYSIS</span>
-            </div>
-            <div class="flex flex-col items-center gap-1.5 text-slate-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span class="text-[9px] font-bold tracking-[0.1em]">LOGS</span>
-            </div>
-        </div>
-    </footer>
+<!-- 如果 Vue 沒跑起來，會顯示這個 -->
+<div id="fallback" class="loading-screen">
+    Initializing Terminal...
 </div>
 
 <script>
-    const { createApp, ref, computed, onMounted } = Vue;
-
-    createApp({
-        setup() {
-            const trades = ref([]);
-            const isModalOpen = ref(false);
-            const form = ref({ ticker: '', entry: '', exit: '', qty: '' });
-
-            // 載入資料
-            onMounted(() => {
-                const saved = localStorage.getItem('executive_trades');
-                if (saved) trades.value = JSON.parse(saved);
-            });
-
-            // 計算當前獲利
-            const realizedProfit = computed(() => {
-                return trades.value.reduce((sum, trade) => {
-                    return sum + (trade.exit - trade.entry) * trade.qty;
-                }, 0);
-            });
-
-            const sortedTrades = computed(() => {
-                return [...trades.value].sort((a, b) => b.id - a.id);
-            });
-
-            const getPnl = (trade) => (trade.exit - trade.entry) * trade.qty;
-
-            const saveTrade = () => {
-                if (!form.value.ticker || !form.value.entry || !form.value.exit || !form.value.qty) return;
-                
-                const newTrade = {
-                    ...form.value,
-                    id: Date.now(),
-                    ticker: form.value.ticker.toUpperCase()
-                };
-                
-                trades.value.push(newTrade);
-                localStorage.setItem('executive_trades', JSON.stringify(trades.value));
-                
-                // 重置
-                isModalOpen.value = false;
-                form.value = { ticker: '', entry: '', exit: '', qty: '' };
-            };
-
-            const clearHistory = () => {
-                if (confirm('Are you sure you want to clear all history?')) {
-                    trades.value = [];
-                    localStorage.removeItem('executive_trades');
-                }
-            };
-
-            return {
-                trades, isModalOpen, form,
-                realizedProfit, sortedTrades, getPnl,
-                saveTrade, clearHistory
-            };
+    // 檢查 Vue 是否成功載入
+    window.onload = function() {
+        if (typeof Vue === 'undefined') {
+            document.getElementById('fallback').innerHTML = "Error: Please check your internet connection.";
+            return;
         }
-    }).mount('#app');
+        document.getElementById('fallback').style.display = 'none';
+
+        const { createApp, ref, computed, onMounted } = Vue;
+        createApp({
+            setup() {
+                const trades = ref([]);
+                const isModalOpen = ref(false);
+                const form = ref({ ticker: '', pnl: 0, qty: 1 });
+
+                onMounted(() => {
+                    const saved = localStorage.getItem('m400_data');
+                    if (saved) trades.value = JSON.parse(saved);
+                });
+
+                const realizedProfit = computed(() => {
+                    return trades.value.reduce((sum, t) => sum + t.pnl, 0);
+                });
+
+                const saveTrade = () => {
+                    if(!form.value.ticker) return;
+                    trades.value.push({ ...form.value, id: Date.now() });
+                    localStorage.setItem('m400_data', JSON.stringify(trades.value));
+                    isModalOpen.value = false;
+                    form.value = { ticker: '', pnl: 0, qty: 1 };
+                };
+
+                return { trades, isModalOpen, form, realizedProfit, saveTrade };
+            }
+        }).mount('#app');
+    };
 </script>
-
-<style>
-    /* 列表動畫 */
-    .list-enter-active, .list-leave-active { transition: all 0.5s ease; }
-    .list-enter-from, .list-leave-to { opacity: 0; transform: translateY(30px); }
-    [v-cloak] { display: none; }
-</style>
-
 </body>
 </html>
