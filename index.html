@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>M400 Executive Suite</title>
+    
+    <!-- 確保使用 HTTPS 加載 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- 預載入字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+    <style>
+        [v-cloak] { display: none !important; }
+        :root { --bg-color: #05070a; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-color); 
+            color: #f8fafc; 
+            margin: 0;
+            min-height: 100vh;
+        }
+        /* 玻璃質感卡片 */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .profit-glow { text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+    </style>
+</head>
+<body>
+
+    <!-- 備用顯示：如果 Vue 沒跑起來，至少會看到這個 -->
+    <div id="loading-fallback" style="display: flex; justify-content: center; align-items: center; height: 100vh; color: #475569;">
+        Initializing Terminal...
+    </div>
+
+    <div id="app" v-cloak>
+        <header class="max-w-xl mx-auto px-6 pt-12 pb-6 flex justify-between items-end">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tighter text-white">M400<span class="text-emerald-500 text-sm align-top ml-1 font-bold">SUITE</span></h1>
+                <p class="text-slate-500 text-[10px] font-bold tracking-[0.3em] mt-1 uppercase">Strategic Ledger v1.0</p>
+            </div>
+            <button @click="isModalOpen = true" class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+        </header>
+
+        <main class="max-w-xl mx-auto px-6 space-y-8">
+            <!-- 核心獲利看板 -->
+            <section class="glass-card rounded-[2.5rem] p-10 text-center relative overflow-hidden">
+                <span class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em]">Net Realized Profit</span>
+                <div class="mt-4 flex justify-center items-baseline gap-1">
+                    <span class="text-emerald-500 font-bold">$</span>
+                    <h2 class="text-6xl font-extrabold tracking-tighter text-white profit-glow">
+                        {{ realizedProfit.toFixed(2) }}
+                    </h2>
+                </div>
+                <div class="mt-8 flex items-center justify-center gap-3">
+                    <div class="h-1 flex-1 max-w-[100px] bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-500" :style="{ width: Math.min((realizedProfit/400)*100, 100) + '%' }"></div>
+                    </div>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ ((realizedProfit/400)*100).toFixed(1) }}% of Goal</span>
+                </div>
+            </section>
+
+            <!-- 列表 -->
+            <section class="space-y-4 pb-20">
+                <div v-for="trade in trades.slice().reverse()" :key="trade.id" class="flex justify-between items-center p-4 glass-card rounded-2xl">
+                    <div>
+                        <div class="font-bold text-white">{{ trade.ticker }}</div>
+                        <div class="text-[10px] text-slate-500 font-mono italic">{{ trade.qty }} Shares @ {{ trade.entry }}</div>
+                    </div>
+                    <div :class="getPnl(trade) >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-bold font-mono">
+                        {{ getPnl(trade) >= 0 ? '+' : '' }}{{ getPnl(trade).toFixed(2) }}
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Entry Modal -->
+        <div v-if="isModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
+            <div class="bg-slate-900 w-full max-w-sm rounded-[2.5rem] p-8 border border-slate-800">
+                <h2 class="text-2xl font-bold text-white mb-6 tracking-tight">New Execution</h2>
+                <div class="space-y-4">
+                    <input v-model="form.ticker" placeholder="SYMBOL" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-emerald-500 uppercase">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input v-model.number="form.entry" type="number" placeholder="ENTRY" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none">
+                        <input v-model.number="form.exit" type="number" placeholder="EXIT" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none">
+                    </div>
+                    <input v-model.number="form.qty" type="number" placeholder="QUANTITY" class="w-full bg-black border border-slate-800 p-4 rounded-xl text-white outline-none">
+                    <div class="flex gap-4 pt-4">
+                        <button @click="isModalOpen = false" class="flex-1 text-slate-500 font-bold">CANCEL</button>
+                        <button @click="saveTrade" class="flex-[2] bg-white text-black font-bold py-4 rounded-xl">CONFIRM</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const { createApp, ref, computed, onMounted } = Vue;
+            
+            createApp({
+                setup() {
+                    const trades = ref([]);
+                    const isModalOpen = ref(false);
+                    const form = ref({ ticker: '', entry: '', exit: '', qty: '' });
+
+                    onMounted(() => {
+                        document.getElementById('loading-fallback').style.display = 'none';
+                        const saved = localStorage.getItem('m400_v1');
+                        if (saved) trades.value = JSON.parse(saved);
+                    });
+
+                    const getPnl = (t) => (t.exit - t.entry) * t.qty;
+                    const realizedProfit = computed(() => trades.value.reduce((s, t) => s + getPnl(t), 0));
+
+                    const saveTrade = () => {
+                        if (!form.value.ticker || !form.value.entry) return;
+                        trades.value.push({ ...form.value, id: Date.now(), ticker: form.value.ticker.toUpperCase() });
+                        localStorage.setItem('m400_v1', JSON.stringify(trades.value));
+                        isModalOpen.value = false;
+                        form.value = { ticker: '', entry: '', exit: '', qty: '' };
+                    };
+
+                    return { trades, isModalOpen, form, realizedProfit, saveTrade, getPnl };
+                }
+            }).mount('#app');
+        });
+    </script>
+</body>
+</html>
