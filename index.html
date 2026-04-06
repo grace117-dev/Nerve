@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M400 戰略終端 v10.4</title>
+    <title>M400 戰略終端 v10.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -27,18 +27,18 @@
 
 <div id="app" v-cloak class="flex flex-col lg:flex-row w-full flex-1">
     
-    <!-- 移動端頂部 -->
+    <!-- 移動端頂部導覽 -->
     <div class="lg:hidden flex justify-between items-center p-6 border-b border-slate-900 bg-[#05080f]">
         <div class="flex items-center gap-2">
             <div class="w-6 h-6 bg-emerald-500 rounded flex items-center justify-center text-black font-black text-[10px]">M</div>
-            <h1 class="font-bold text-sm tracking-widest uppercase">M400 終端</h1>
+            <h1 class="font-bold text-sm tracking-widest uppercase">M400 戰略終端</h1>
         </div>
         <button @click="isMobileMenuOpen = true" class="p-2 text-slate-400">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
         </button>
     </div>
 
-    <!-- 側邊欄 -->
+    <!-- 側邊選單 -->
     <div v-if="isMobileMenuOpen" @click="isMobileMenuOpen = false" class="overlay lg:hidden"></div>
     <aside :class="{'open': isMobileMenuOpen}" class="mobile-nav lg:static lg:transform-none lg:flex lg:flex-col p-8 sidebar justify-between min-h-screen">
         <div class="flex flex-col h-full">
@@ -49,55 +49,55 @@
 
             <nav class="space-y-8 flex-1 overflow-y-auto no-scrollbar">
                 <div>
-                    <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">核心控制台</p>
+                    <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">主選單</p>
                     <div class="space-y-2">
-                        <button @click="currentTab = 'open'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'open'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">在庫倉位</button>
-                        <button @click="currentTab = 'history'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'history'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">獲利分析系統</button>
-                        <button @click="currentTab = 'news'; isMobileMenuOpen = false" :class="{'text-sky-400 bg-sky-400/5': currentTab === 'news'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all italic">機構戰略評等</button>
-                        <button @click="currentTab = 'settings'; isMobileMenuOpen = false" :class="{'text-amber-400 bg-amber-400/5': currentTab === 'settings'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">系統設定</button>
+                        <button @click="currentTab = 'open'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'open'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">在庫倉位管理</button>
+                        <button @click="currentTab = 'history'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'history'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">獲利分析報表</button>
+                        <button @click="currentTab = 'news'; isMobileMenuOpen = false" :class="{'text-sky-400 bg-sky-400/5': currentTab === 'news'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">華爾街機構評等</button>
+                        <button @click="currentTab = 'settings'; isMobileMenuOpen = false" :class="{'text-amber-400 bg-amber-400/5': currentTab === 'settings'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">API 連線設定</button>
                     </div>
                 </div>
 
                 <div>
                     <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">數據管理</p>
                     <div class="space-y-2">
-                        <button @click="exportData" class="w-full text-[11px] font-bold bg-slate-900 p-3 rounded-xl text-slate-300 hover:bg-slate-800 transition-all">導出備份</button>
-                        <button @click="$refs.fileInput.click()" class="w-full text-[11px] font-bold bg-slate-900 p-3 rounded-xl text-slate-300 hover:bg-slate-800 transition-all">導入數據</button>
+                        <button @click="exportData" class="w-full text-[11px] font-bold bg-slate-900 p-3 rounded-xl text-slate-300 hover:bg-slate-800 transition-all">導出備份 (JSON)</button>
+                        <button @click="$refs.fileInput.click()" class="w-full text-[11px] font-bold bg-slate-900 p-3 rounded-xl text-slate-300 hover:bg-slate-800 transition-all">導入數據備份</button>
                         <input type="file" ref="fileInput" @change="importData" class="hidden" accept=".json">
                         
-                        <!-- ⚠️ 核彈按鈕：一鍵清空 -->
-                        <button @click="clearAllData" class="w-full text-[11px] font-black bg-rose-500/10 p-3 rounded-xl text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all mt-4">💣 清空所有紀錄</button>
+                        <!-- ⚠️ 優化後的清空按鈕：保留金鑰 -->
+                        <button @click="clearAllData" class="w-full text-[11px] font-black bg-rose-500/10 p-3 rounded-xl text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all mt-4">💣 清空所有交易紀錄</button>
                     </div>
                 </div>
 
                 <div class="bg-slate-900 p-4 rounded-xl text-[10px] text-slate-400 font-mono">
-                    <div class="flex justify-between mb-2"><span>狀態</span><span v-if="apiKey" class="text-emerald-400">已連線</span><span v-else class="text-rose-500">無金鑰</span></div>
-                    <div class="flex justify-between mb-3"><span>同步</span><span>{{ lastUpdateTime }}</span></div>
+                    <div class="flex justify-between mb-2"><span>系統狀態</span><span v-if="apiKey" class="text-emerald-400">連線中</span><span v-else class="text-rose-500">未設定</span></div>
+                    <div class="flex justify-between mb-3"><span>同步時間</span><span>{{ lastUpdateTime }}</span></div>
                     <button @click="fetchAllData" :disabled="!apiKey || isFetching" class="w-full bg-slate-800 py-2 rounded text-white flex justify-center items-center gap-2">
                         <svg :class="{'refresh-spin': isFetching}" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        手動同步
+                        手動即時同步
                     </button>
                 </div>
             </nav>
         </div>
     </aside>
 
-    <!-- 主內容 -->
+    <!-- 主內容區 -->
     <main class="main-content flex-1 p-6 lg:p-12 overflow-y-auto">
         <div class="max-w-5xl mx-auto w-full">
             
             <!-- 指數看板 -->
             <div v-if="currentTab !== 'settings'" class="grid grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
-                <div v-for="idx in marketIndices" :key="idx.symbol" class="glass-card p-3 rounded-xl border-b-2" :class="idx.change >= 0 ? 'border-emerald-500' : 'border-rose-500'">
+                <div v-for="idx in marketIndices" :key="idx.symbol" class="glass-card p-3 rounded-xl border-b-2 shadow-sm" :class="idx.change >= 0 ? 'border-emerald-500' : 'border-rose-500'">
                     <p class="text-[8px] text-slate-500 font-bold uppercase tracking-tighter">{{ idx.name }}</p>
                     <p class="text-xs font-mono text-white font-black">{{ idx.price ? idx.price.toFixed(2) : '--' }}</p>
                     <p class="text-[8px] font-mono font-bold" :class="idx.change >= 0 ? 'profit-text' : 'loss-text'">{{ idx.change >= 0 ? '+' : '' }}{{ idx.change?.toFixed(2) }}%</p>
                 </div>
             </div>
 
-            <!-- 1. 獲利分析系統 (回歸完整版) -->
+            <!-- 1. 獲利分析報表 -->
             <div v-if="currentTab === 'history'" class="animate-in fade-in duration-500">
-                <h2 class="text-3xl font-black text-white tracking-widest mb-8 uppercase italic">Profit Analysis</h2>
+                <h2 class="text-3xl font-black text-white tracking-widest mb-8 uppercase italic">獲利分析報表</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="glass-card md:col-span-2 rounded-[2.5rem] p-8 border border-emerald-500/10">
@@ -105,12 +105,11 @@
                         <div class="text-6xl font-black mt-2 font-mono" :class="annualProfit >= 0 ? 'profit-text' : 'loss-text'">${{ annualProfit.toLocaleString(undefined, {minimumFractionDigits: 2}) }}</div>
                     </div>
                     <div class="glass-card rounded-[2.5rem] p-8 flex flex-col justify-center items-center">
-                        <span class="text-[10px] text-slate-500 font-bold mb-2 tracking-widest uppercase">{{ selectedMonth }}月 損益</span>
+                        <span class="text-[10px] text-slate-500 font-bold mb-2 tracking-widest uppercase">{{ selectedMonth }}月 結算損益</span>
                         <div class="text-3xl font-black font-mono" :class="monthlyProfit >= 0 ? 'profit-text' : 'loss-text'">${{ monthlyProfit.toFixed(2) }}</div>
                     </div>
                 </div>
 
-                <!-- 月份切換器 -->
                 <div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar mb-6">
                     <button v-for="m in 12" :key="m" @click="selectedMonth = m" 
                             :class="selectedMonth === m ? 'bg-emerald-500 text-black font-black shadow-lg shadow-emerald-500/20' : 'bg-slate-900 text-slate-500 font-bold'"
@@ -119,13 +118,12 @@
                     </button>
                 </div>
 
-                <!-- 歷史明細 -->
                 <div class="space-y-3">
-                    <div v-if="filteredHistory.length === 0" class="py-12 text-center text-slate-600 font-bold italic">該月份尚無已結清紀錄</div>
+                    <div v-if="filteredHistory.length === 0" class="py-12 text-center text-slate-600 font-bold italic">本月份尚無已結清之交易紀錄</div>
                     <div v-for="h in filteredHistory" :key="h.id" class="glass-card rounded-2xl p-5 flex justify-between items-center hover:bg-slate-800/50 transition-all">
                         <div>
                             <div class="font-bold text-white tracking-tight text-lg">{{ h.ticker }} <span class="text-xs text-slate-500 font-normal ml-2">x {{ h.qty }} 股</span></div>
-                            <div class="text-[10px] text-slate-500 font-mono mt-1 uppercase">買: {{ h.entry }} → 賣: {{ h.exit }}</div>
+                            <div class="text-[10px] text-slate-500 font-mono mt-1 uppercase">買入: {{ h.entry }} → 賣出: {{ h.exit }}</div>
                         </div>
                         <div :class="h.pnl >= 0 ? 'profit-text' : 'loss-text'" class="font-mono font-bold text-xl">${{ h.pnl.toFixed(2) }}</div>
                     </div>
@@ -134,13 +132,13 @@
 
             <!-- 2. 機構戰略評等 -->
             <div v-if="currentTab === 'news'" class="animate-in fade-in duration-500">
-                <h2 class="text-3xl font-black text-white tracking-widest mb-8 uppercase italic">Institutional Intelligence</h2>
-                <div v-if="Object.keys(recommendations).length === 0" class="py-20 text-center glass-card rounded-[2.5rem] border-slate-900 border-2 text-slate-600 font-bold italic">尚無持倉評等數據，請同步 API。</div>
+                <h2 class="text-3xl font-black text-white tracking-widest mb-8 uppercase italic">華爾街機構評等</h2>
+                <div v-if="Object.keys(recommendations).length === 0" class="py-20 text-center glass-card rounded-[2.5rem] border-slate-900 border-2 text-slate-600 font-bold italic">目前無持倉數據，請先新增持倉並點擊同步。</div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div v-for="(rec, ticker) in recommendations" :key="ticker" class="glass-card rounded-3xl p-6 border-l-4 border-emerald-500">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-xl font-black text-white italic tracking-tighter">{{ ticker }}</h3>
-                            <span class="text-[10px] text-slate-400 font-mono">{{ rec.period }}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">發布期間：{{ rec.period }}</span>
                         </div>
                         <div class="flex gap-1 h-2 mb-4 rounded-full overflow-hidden bg-slate-800">
                             <div :style="{width: (rec.strongBuy + rec.buy) / rec.total * 100 + '%'}" class="bg-emerald-500"></div>
@@ -148,26 +146,26 @@
                             <div :style="{width: (rec.sell + rec.strongSell) / rec.total * 100 + '%'}" class="bg-rose-500"></div>
                         </div>
                         <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-bold">
-                            <div class="text-emerald-400">買入 {{ rec.strongBuy + rec.buy }}</div>
-                            <div class="text-slate-500">觀望 {{ rec.hold }}</div>
-                            <div class="text-rose-500">賣出 {{ rec.sell + rec.strongSell }}</div>
+                            <div class="text-emerald-400">強烈買入/買入: {{ rec.strongBuy + rec.buy }}</div>
+                            <div class="text-slate-500">持有觀望: {{ rec.hold }}</div>
+                            <div class="text-rose-500">賣出/強烈賣出: {{ rec.sell + rec.strongSell }}</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. 在庫倉位 (首頁) -->
+            <!-- 3. 在庫倉位 -->
             <section v-if="currentTab === 'open'" class="animate-in fade-in duration-500">
                 <div class="flex justify-between items-end mb-6 px-2">
                     <div>
-                        <h2 class="text-3xl font-black text-white tracking-widest">在庫倉位</h2>
-                        <p class="text-slate-500 text-xs mt-1">追蹤中標的: {{ openPositions.length }}</p>
+                        <h2 class="text-3xl font-black text-white tracking-widest uppercase italic">在庫倉位管理</h2>
+                        <p class="text-slate-500 text-xs mt-1">目前監控標的數：{{ openPositions.length }} 筆</p>
                     </div>
-                    <button @click="openModal('entry')" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all">+ 新增持倉</button>
+                    <button @click="openModal('entry')" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all">+ 新增持倉標的</button>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-[2rem] p-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+                    <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-[2rem] p-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all group">
                         <div>
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center gap-4">
@@ -175,52 +173,59 @@
                                     <div><h4 class="font-black text-white text-xl">{{ p.ticker }}</h4><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ p.qty }} 股</span></div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-[9px] text-slate-600 font-bold uppercase">時價</span>
+                                    <span class="text-[9px] text-slate-600 font-bold uppercase">目前時價</span>
                                     <p class="font-mono text-white font-bold text-lg">${{ p.currentPrice ? Number(p.currentPrice).toFixed(2) : '--' }}</p>
                                 </div>
                             </div>
                             <div class="bg-black/50 rounded-xl p-3 mb-4 flex justify-between items-center border border-slate-800/50">
-                                <div><span class="text-[9px] text-slate-500 block">成本</span><span class="font-mono text-slate-300 text-sm">${{ Number(p.entry).toFixed(2) }}</span></div>
+                                <div><span class="text-[9px] text-slate-500 block">持倉成本</span><span class="font-mono text-slate-300 text-sm">${{ Number(p.entry).toFixed(2) }}</span></div>
                                 <div class="text-right"><span class="text-[9px] text-slate-500 block">未實現損益</span><span class="font-mono font-bold text-sm" :class="((p.currentPrice || p.entry) - p.entry) * p.qty >= 0 ? 'profit-text' : 'loss-text'">${{ (((p.currentPrice || p.entry) - p.entry) * p.qty).toFixed(2) }}</span></div>
                             </div>
                         </div>
                         <div class="flex gap-2">
-                            <button @click="openModal('edit', p)" class="flex-1 bg-slate-900 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white transition-all">修改/刪除</button>
-                            <button @click="startExit(p)" class="flex-1 bg-rose-500/10 text-rose-500 border border-rose-500/20 py-3 rounded-xl text-[11px] font-black hover:bg-rose-500 hover:text-white transition-all">獲利結清</button>
+                            <button @click="openModal('edit', p)" class="flex-1 bg-slate-900 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white transition-all">修改數據/刪除</button>
+                            <button @click="startExit(p)" class="flex-1 bg-rose-500/10 text-rose-500 border border-rose-500/20 py-3 rounded-xl text-[11px] font-black hover:bg-rose-500 hover:text-white transition-all">結清獲利</button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 4. 設定 -->
+            <!-- 4. API 設定 -->
             <div v-if="currentTab === 'settings'" class="animate-in fade-in duration-500">
-                <h2 class="text-3xl font-black text-white tracking-widest mb-8">系統設定</h2>
+                <h2 class="text-3xl font-black text-white tracking-widest mb-8 uppercase italic">API 連線設定</h2>
                 <div class="glass-card rounded-3xl p-8 max-w-xl">
-                    <label class="text-xs font-bold text-emerald-500 tracking-widest mb-4 block uppercase">Finnhub API Key</label>
-                    <input v-model="tempApiKey" type="password" placeholder="貼上 API Key..." class="input-field font-mono mb-4">
-                    <button @click="saveApiKey" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs">儲存並建立連線</button>
-                    <p class="text-[10px] text-slate-500 mt-8 leading-relaxed italic">數據僅儲存於此瀏覽器 LocalStorage，請定期執行導出備份以確保資料安全。</p>
+                    <label class="text-xs font-bold text-emerald-500 tracking-widest mb-4 block uppercase">Finnhub API 金鑰 (Key)</label>
+                    <input v-model="tempApiKey" type="password" placeholder="在此貼上您的 API Key..." class="input-field font-mono mb-4">
+                    <button @click="saveApiKey" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs">儲存金鑰並啟動連線</button>
+                    <div class="mt-8 space-y-4">
+                        <p class="text-[11px] text-slate-400 leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                            <strong>安全說明：</strong> 您的數據僅存儲於此瀏覽器的本地緩存 (LocalStorage) 中，不會上傳至任何雲端伺服器。
+                        </p>
+                        <p class="text-[11px] text-slate-500 leading-relaxed italic">
+                            請定期使用側邊欄的「導出備份」功能，確保您的交易數據不會因瀏覽器清除緩存而遺失。
+                        </p>
+                    </div>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <!-- 彈窗系統 -->
+    <!-- 全能彈窗系統 -->
     <div v-if="modal.show" class="fixed inset-0 z-[300] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
         <div class="bg-[#0b111d] w-full max-w-sm rounded-[2.5rem] p-8 border border-slate-800 shadow-2xl">
-            <h3 class="text-xl font-black text-white mb-6 border-l-4 border-emerald-500 pl-4 uppercase">{{ modal.title }}</h3>
+            <h3 class="text-xl font-black text-white mb-6 border-l-4 border-emerald-500 pl-4 uppercase tracking-tight">{{ modal.title }}</h3>
             <div class="space-y-5">
-                <div v-if="modal.mode !== 'exit'"><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">股票代碼</label><input v-model="form.ticker" class="input-field uppercase font-black text-xl"></div>
+                <div v-if="modal.mode !== 'exit'"><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">股票代碼 (例如: TSLA)</label><input v-model="form.ticker" class="input-field uppercase font-black text-xl"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">{{ modal.mode === 'exit' ? '賣出價' : '成本價' }}</label><input v-model.number="form.price" type="number" class="input-field font-mono"></div>
-                    <div><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">數量</label><input v-model.number="form.qty" type="number" class="input-field font-mono"></div>
+                    <div><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">{{ modal.mode === 'exit' ? '結清價格' : '成交成本' }}</label><input v-model.number="form.price" type="number" class="input-field font-mono"></div>
+                    <div><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">股數 / 數量</label><input v-model.number="form.qty" type="number" class="input-field font-mono"></div>
                 </div>
                 <div class="flex flex-col gap-3 pt-4">
-                    <button @click="handleAction" class="w-full bg-emerald-500 text-black font-black py-4 rounded-2xl hover:bg-emerald-400 transition-all">確認送出</button>
+                    <button @click="handleAction" class="w-full bg-emerald-500 text-black font-black py-4 rounded-2xl hover:bg-emerald-400 transition-all">確認儲存</button>
                     <div class="flex gap-3">
-                        <button @click="modal.show = false" class="flex-1 bg-slate-900 text-slate-400 font-bold py-3 rounded-xl">取消</button>
-                        <button v-if="modal.mode === 'edit'" @click="deletePos" class="flex-1 bg-rose-500/10 text-rose-500 border border-rose-500/20 font-bold py-3 rounded-xl hover:bg-rose-500 hover:text-white transition-all italic uppercase">Delete</button>
+                        <button @click="modal.show = false" class="flex-1 bg-slate-900 text-slate-400 font-bold py-3 rounded-xl">取消返回</button>
+                        <button v-if="modal.mode === 'edit'" @click="deletePos" class="flex-1 bg-rose-500/10 text-rose-500 border border-rose-500/20 font-bold py-3 rounded-xl hover:bg-rose-500 hover:text-white transition-all italic">刪除此筆</button>
                     </div>
                 </div>
             </div>
@@ -237,7 +242,7 @@ const KEY_API = 'M400_FINNHUB_API_KEY';
 createApp({
     setup() {
         const currentTab = ref('open');
-        const selectedMonth = ref(new Date().getMonth() + 1); // 月份分析關鍵變數
+        const selectedMonth = ref(new Date().getMonth() + 1);
         const openPositions = ref([]);
         const history = ref([]);
         const isMobileMenuOpen = ref(false);
@@ -248,12 +253,12 @@ createApp({
         const recommendations = ref({});
         
         const marketIndices = ref([
-            { symbol: 'SPY', name: 'S&P 500', price: null, change: null },
-            { symbol: 'GLD', name: '黃金', price: null, change: null },
-            { symbol: 'UUP', name: '美元', price: null, change: null },
-            { symbol: 'VXX', name: '恐慌', price: null, change: null },
-            { symbol: 'QQQ', name: '納指', price: null, change: null },
-            { symbol: 'DIA', name: '道瓊', price: null, change: null }
+            { symbol: 'SPY', name: '標普 500', price: null, change: null },
+            { symbol: 'GLD', name: '黃金現貨', price: null, change: null },
+            { symbol: 'UUP', name: '美元指數', price: null, change: null },
+            { symbol: 'VXX', name: '恐慌指數', price: null, change: null },
+            { symbol: 'QQQ', name: '納斯達克', price: null, change: null },
+            { symbol: 'DIA', name: '道瓊工業', price: null, change: null }
         ]);
 
         const modal = ref({ show: false, mode: 'entry', title: '', targetId: null });
@@ -280,7 +285,7 @@ createApp({
                 });
                 save();
                 lastUpdateTime.value = new Date().toLocaleTimeString();
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error('獲取行情失敗', e); }
             isFetching.value = false;
         };
 
@@ -298,28 +303,27 @@ createApp({
                     }
                 });
                 recommendations.value = newRecs;
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error('獲取機構數據失敗', e); }
         };
 
         const fetchAllData = () => { fetchMarketData(); fetchAnalystData(); };
 
+        // 💣 優化後的清空功能：不清除金鑰
         const clearAllData = () => {
-            if (confirm('💣 警告：此操作將刪除所有持倉紀錄、交易歷史與 API 金鑰！')) {
-                if (confirm('最後確認：真的要全部清空嗎？此動作無法復原！')) {
-                    localStorage.clear();
+            if (confirm('💣 注意：這將會永久刪除所有持倉紀錄與獲利歷史！')) {
+                if (confirm('最後確認：您的 API 金鑰將被保留，其餘交易數據將完全清空。確定嗎？')) {
+                    localStorage.removeItem(KEY_OPEN);
+                    localStorage.removeItem(KEY_HISTORY);
                     openPositions.value = [];
                     history.value = [];
-                    apiKey.value = '';
-                    tempApiKey.value = '';
                     recommendations.value = {};
-                    alert('數據已完全清空。');
-                    location.reload();
+                    alert('交易數據已清空，API 金鑰已為您保留。');
                 }
             }
         };
 
         const deletePos = () => {
-            if (confirm('確定刪除這筆持倉嗎？')) {
+            if (confirm('確定要永久刪除此筆持倉紀錄嗎？')) {
                 openPositions.value = openPositions.value.filter(x => x.id !== modal.value.targetId);
                 save();
                 modal.value.show = false;
@@ -332,20 +336,22 @@ createApp({
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `M400_Backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `M400_戰略備份_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
         };
 
         const importData = (e) => {
             const reader = new FileReader();
             reader.onload = (ev) => {
-                const d = JSON.parse(ev.target.result);
-                if (confirm('導入數據將覆蓋目前的紀錄，確定嗎？')) {
-                    openPositions.value = d.open || [];
-                    history.value = d.history || [];
-                    apiKey.value = d.apiKey || '';
-                    save(); location.reload();
-                }
+                try {
+                    const d = JSON.parse(ev.target.result);
+                    if (confirm('導入數據將會覆蓋您目前的紀錄，確定繼續嗎？')) {
+                        openPositions.value = d.open || [];
+                        history.value = d.history || [];
+                        if (d.apiKey) { apiKey.value = d.apiKey; localStorage.setItem(KEY_API, d.apiKey); }
+                        save(); location.reload();
+                    }
+                } catch(err) { alert('檔案格式錯誤，請確保為有效的 JSON 備份檔。'); }
             };
             reader.readAsText(e.target.files[0]);
         };
@@ -364,8 +370,12 @@ createApp({
         const filteredHistory = computed(() => history.value.filter(h => h.closedMonth === selectedMonth.value).reverse());
 
         const openModal = (mode, target = null) => {
-            modal.value = { show: true, mode, title: mode==='entry'?'New Position':(mode==='edit'?'Modify/Delete':'Take Profit'), targetId: target?.id };
-            form.value = { ticker: target?.ticker || '', price: mode==='edit'?target.entry:'', qty: target?.qty || '' };
+            modal.value = { 
+                show: true, mode, 
+                title: mode==='entry' ? '新增持倉標的' : (mode==='edit' ? '修改或刪除持倉' : '結清該筆獲利'), 
+                targetId: target?.id 
+            };
+            form.value = { ticker: target?.ticker || '', price: mode==='edit' ? target.entry : '', qty: target?.qty || '' };
         };
 
         const handleAction = () => {
