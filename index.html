@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M400 戰略終端 v10.1</title>
+    <title>M400 戰略終端 v10.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
 
 <div id="app" v-cloak class="flex flex-col lg:flex-row w-full flex-1">
     
-    <!-- 移動端頂部列 -->
+    <!-- 移動端頂部 -->
     <div class="lg:hidden flex justify-between items-center p-6 border-b border-slate-900 bg-[#05080f]">
         <div class="flex items-center gap-2">
             <div class="w-6 h-6 bg-emerald-500 rounded flex items-center justify-center text-black font-black text-[10px]">M</div>
@@ -38,25 +38,36 @@
         </button>
     </div>
 
-    <!-- 側邊導航欄 -->
+    <!-- 側邊欄 -->
     <div v-if="isMobileMenuOpen" @click="isMobileMenuOpen = false" class="overlay lg:hidden"></div>
     <aside :class="{'open': isMobileMenuOpen}" class="mobile-nav lg:static lg:transform-none lg:flex lg:flex-col p-8 sidebar justify-between min-h-screen">
-        <div>
+        <div class="flex flex-col h-full">
             <div class="hidden lg:flex items-center gap-3 mb-10">
                 <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-black font-black text-sm">M</div>
                 <h1 class="font-black tracking-widest text-xl text-white italic">M400 PRO</h1>
             </div>
 
-            <nav class="space-y-8">
+            <nav class="space-y-8 flex-1 overflow-y-auto no-scrollbar">
                 <div>
                     <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">核心控制台</p>
                     <div class="space-y-2">
                         <button @click="currentTab = 'open'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'open'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">在庫倉位</button>
                         <button @click="currentTab = 'history'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'history'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">獲利分析系統</button>
-                        <button @click="currentTab = 'news'; isMobileMenuOpen = false" :class="{'text-sky-400 bg-sky-400/5': currentTab === 'news'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all italic">即時情報站</button>
-                        <button @click="currentTab = 'settings'; isMobileMenuOpen = false" :class="{'text-amber-400 bg-amber-400/5': currentTab === 'settings'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">系統設定 ⚙️</button>
+                        <button @click="currentTab = 'news'; isMobileMenuOpen = false" :class="{'text-sky-400 bg-sky-400/5': currentTab === 'news'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">即時情報站</button>
+                        <button @click="currentTab = 'settings'; isMobileMenuOpen = false" :class="{'text-amber-400 bg-amber-400/5': currentTab === 'settings'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all italic">API 系統設定</button>
                     </div>
                 </div>
+
+                <!-- 數據備份與還原 (功能回歸) -->
+                <div>
+                    <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">數據管理</p>
+                    <div class="grid grid-cols-1 gap-2">
+                        <button @click="exportData" class="text-[11px] font-bold bg-slate-900 p-3 rounded-xl text-slate-300 hover:bg-slate-800 transition-all">導出備份 (JSON)</button>
+                        <button @click="$refs.fileInput.click()" class="text-[11px] font-bold bg-slate-900 p-3 rounded-xl text-slate-300 hover:bg-slate-800 transition-all">導入數據</button>
+                        <input type="file" ref="fileInput" @change="importData" class="hidden" accept=".json">
+                    </div>
+                </div>
+
                 <div>
                     <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">系統狀態</p>
                     <div class="bg-slate-900 p-4 rounded-xl text-[10px] text-slate-400 font-mono">
@@ -64,10 +75,10 @@
                             <span v-if="apiKey" class="text-emerald-400">已連線</span>
                             <span v-else class="text-rose-500 animate-pulse">無金鑰</span>
                         </div>
-                        <div class="flex justify-between"><span>最後同步</span><span>{{ lastUpdateTime }}</span></div>
-                        <button @click="fetchAllData" :disabled="!apiKey" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 disabled:opacity-50 py-2 rounded text-white flex justify-center items-center gap-2 transition-all">
+                        <div class="flex justify-between mb-3"><span>最後同步</span><span>{{ lastUpdateTime }}</span></div>
+                        <button @click="fetchAllData" :disabled="!apiKey || isFetching" class="w-full bg-slate-800 hover:bg-slate-700 disabled:opacity-50 py-2 rounded text-white flex justify-center items-center gap-2 transition-all">
                             <svg :class="{'refresh-spin': isFetching}" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            手動強制刷新
+                            手動刷新
                         </button>
                     </div>
                 </div>
@@ -79,90 +90,56 @@
     <main class="main-content flex-1 p-6 lg:p-12 flex flex-col justify-between">
         <div class="max-w-5xl mx-auto w-full">
             
-            <!-- 大盤總經儀表板 (改為追蹤三大指數ETF) -->
+            <!-- 指數看板 -->
             <div v-if="currentTab !== 'settings'" class="grid grid-cols-3 gap-3 mb-8">
                 <div v-for="idx in marketIndices" :key="idx.symbol" class="glass-card p-4 rounded-2xl border-t-2" :class="idx.change >= 0 ? 'border-emerald-500' : (idx.change < 0 ? 'border-rose-500' : 'border-slate-700')">
-                    <p class="text-[10px] text-slate-500 font-bold tracking-widest mb-1">{{ idx.name }} <span class="text-[8px]">({{ idx.symbol }})</span></p>
+                    <p class="text-[10px] text-slate-500 font-bold tracking-widest mb-1">{{ idx.name }}</p>
                     <div v-if="idx.price">
                         <p class="text-sm lg:text-base font-mono text-white font-black">{{ idx.price.toFixed(2) }}</p>
-                        <p class="text-[10px] font-mono font-bold" :class="idx.change >= 0 ? 'profit-text' : 'loss-text'">
-                            {{ idx.change >= 0 ? '+' : '' }}{{ idx.change.toFixed(2) }}%
-                        </p>
+                        <p class="text-[10px] font-mono font-bold" :class="idx.change >= 0 ? 'profit-text' : 'loss-text'">{{ idx.change >= 0 ? '+' : '' }}{{ idx.change.toFixed(2) }}%</p>
                     </div>
-                    <div v-else-if="!apiKey" class="text-xs text-rose-500 font-bold mt-2">請設定金鑰</div>
-                    <div v-else class="text-xs text-slate-600 font-mono mt-2 animate-pulse">載入中...</div>
+                    <div v-else class="text-xs text-slate-600 font-mono mt-2 animate-pulse">---</div>
                 </div>
             </div>
 
-            <!-- 系統設定 (新增 API 金鑰管理) -->
+            <!-- 1. API 設定頁面 -->
             <div v-if="currentTab === 'settings'" class="animate-in fade-in duration-500">
                 <h2 class="text-3xl font-black text-white tracking-widest mb-2">系統設定</h2>
-                <p class="text-slate-500 text-xs mb-8">設置通訊金鑰以啟用全球數據自動攔截</p>
-
-                <div class="glass-card rounded-[2rem] p-8 max-w-2xl">
+                <div class="glass-card rounded-[2rem] p-8 max-w-2xl mt-6">
                     <label class="text-xs font-bold text-emerald-500 tracking-widest mb-4 block">Finnhub API 金鑰</label>
-                    <p class="text-[10px] text-slate-400 leading-relaxed mb-4">
-                        因 Yahoo Finance 封鎖公共存取，請至 <a href="https://finnhub.io/" target="_blank" class="text-sky-400 underline">finnhub.io</a> 註冊免費帳號取得 API Key。<br>
-                        金鑰僅會儲存於您的瀏覽器本地端，確保絕對安全。
-                    </p>
                     <input v-model="tempApiKey" type="password" placeholder="貼上您的 API Key..." class="input-field font-mono mb-4">
-                    <button @click="saveApiKey" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all">
-                        儲存並連線
-                    </button>
-                    <span v-if="saveMsg" class="ml-4 text-xs font-bold text-sky-400">{{ saveMsg }}</span>
+                    <button @click="saveApiKey" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all">儲存並連線</button>
+                    <p class="text-[10px] text-slate-500 mt-6 leading-relaxed">請至 finnhub.io 取得免費金鑰。免費帳號每分鐘可刷新 60 次。</p>
                 </div>
             </div>
 
-            <!-- 即時情報站 (不變) -->
+            <!-- 2. 即時情報 -->
             <div v-if="currentTab === 'news'" class="animate-in fade-in duration-500">
-                <div class="flex justify-between items-end mb-8">
-                    <div>
-                        <h2 class="text-3xl font-black text-white tracking-widest">即時情報站</h2>
-                        <p class="text-slate-500 text-xs mt-1">為您持有的標的自動抓取最新外電新聞</p>
-                    </div>
-                </div>
-                <div v-if="openPositions.length === 0" class="py-20 text-center glass-card rounded-[2.5rem] border-dashed border-slate-800 border-2 text-slate-600 font-bold">目前無持倉，無法提供專屬情報。</div>
-                <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <h2 class="text-3xl font-black text-white tracking-widest mb-8">即時情報站</h2>
+                <div v-if="newsList.length === 0" class="py-20 text-center glass-card rounded-[2.5rem] border-slate-900 border-2 text-slate-600 font-bold">目前無情報可顯示。</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <a :href="news.link" target="_blank" v-for="(news, index) in newsList" :key="index" class="glass-card rounded-3xl p-6 border-l-4 border-sky-500 hover:bg-slate-800 transition-all group block">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-[10px] text-sky-500 font-black uppercase tracking-widest bg-sky-500/10 px-2 py-1 rounded">即時快訊</span>
-                            <span class="text-[10px] text-slate-500 font-mono">{{ news.pubDate.substring(0, 16) }}</span>
-                        </div>
+                        <span class="text-[10px] text-slate-500 font-mono block mb-2">{{ news.pubDate.substring(0, 16) }}</span>
                         <h3 class="text-sm font-bold text-white leading-relaxed group-hover:text-sky-400 transition-colors">{{ news.title }}</h3>
                     </a>
                 </div>
             </div>
 
-            <!-- 獲利分析系統 (不變) -->
+            <!-- 3. 獲利分析 -->
             <div v-if="currentTab === 'history'" class="animate-in fade-in duration-500">
-                <!-- 原有歷史紀錄UI -->
-                <div class="glass-card rounded-[2.5rem] p-8 mb-8 bg-gradient-to-br from-emerald-500/5 to-transparent border border-emerald-500/10">
-                    <span class="text-[10px] text-emerald-500 font-black tracking-widest">年度總結算</span>
-                    <div class="text-6xl font-black mt-2 font-mono tracking-tighter" :class="annualProfit >= 0 ? 'profit-text' : 'loss-text'">
-                        ${{ annualProfit.toLocaleString(undefined, {minimumFractionDigits: 2}) }}
-                    </div>
+                <div class="glass-card rounded-[2.5rem] p-8 mb-8 border border-emerald-500/10">
+                    <span class="text-[10px] text-emerald-500 font-black tracking-widest">年度總損益</span>
+                    <div class="text-6xl font-black mt-2 font-mono tracking-tighter" :class="annualProfit >= 0 ? 'profit-text' : 'loss-text'">${{ annualProfit.toLocaleString(undefined, {minimumFractionDigits: 2}) }}</div>
                 </div>
+                <!-- 月份選擇 -->
                 <div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
-                    <button v-for="m in 12" :key="m" @click="selectedMonth = m" 
-                            :class="selectedMonth === m ? 'bg-emerald-500 text-black font-black' : 'bg-slate-900 text-slate-500 font-bold'"
-                            class="px-5 py-2 rounded-xl text-xs transition-all flex-shrink-0">
-                        {{ m }}月
-                    </button>
+                    <button v-for="m in 12" :key="m" @click="selectedMonth = m" :class="selectedMonth === m ? 'bg-emerald-500 text-black font-black' : 'bg-slate-900 text-slate-500 font-bold'" class="px-5 py-2 rounded-xl text-xs transition-all flex-shrink-0">{{ m }}月</button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 mb-10">
-                    <div class="glass-card md:col-span-2 rounded-[2rem] p-8">
-                        <span class="text-[10px] text-slate-500 font-bold tracking-widest">{{ selectedMonth }}月 已實現損益</span>
-                        <div class="text-4xl font-black mt-2 text-white font-mono" :class="monthlyProfit >= 0 ? 'profit-text' : 'loss-text'">${{ monthlyProfit.toFixed(2) }}</div>
-                    </div>
-                    <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-center items-center">
-                        <span class="text-[10px] text-slate-500 font-bold mb-2 tracking-widest">月度勝率</span>
-                        <div class="text-3xl font-black text-emerald-400 font-mono">{{ monthlyWinRate }}%</div>
-                    </div>
-                </div>
-                <div class="space-y-3">
+                <!-- 列表 -->
+                <div class="space-y-3 mt-6">
                     <div v-for="h in filteredHistory" :key="h.id" class="glass-card rounded-2xl p-5 flex justify-between items-center">
                         <div>
-                            <div class="font-bold text-white tracking-tight">{{ h.ticker }} <span class="text-xs text-slate-500 font-normal">x {{ h.qty }} 股</span></div>
+                            <div class="font-bold text-white">{{ h.ticker }} <span class="text-xs text-slate-500 font-normal">x {{ h.qty }}股</span></div>
                             <div class="text-[10px] text-slate-500 font-mono mt-1">買: {{ h.entry }} → 賣: {{ h.exit }}</div>
                         </div>
                         <div :class="h.pnl >= 0 ? 'profit-text' : 'loss-text'" class="font-mono font-bold text-lg">${{ h.pnl.toFixed(2) }}</div>
@@ -170,95 +147,69 @@
                 </div>
             </div>
 
-            <!-- 在庫倉位 (首頁) -->
+            <!-- 4. 在庫倉位 (首頁) -->
             <section v-if="currentTab === 'open'" class="animate-in fade-in duration-500">
                 <div class="flex justify-between items-end mb-6 px-2 mt-4">
                     <div>
-                        <h2 class="text-2xl lg:text-3xl font-black text-white tracking-widest">在庫倉位</h2>
-                        <p class="text-slate-500 text-xs mt-1">透過 Finnhub API 穩定抓取時價</p>
+                        <h2 class="text-3xl font-black text-white tracking-widest">在庫倉位</h2>
+                        <p class="text-slate-500 text-xs mt-1">自動追蹤中 (最後更新: {{ lastUpdateTime }})</p>
                     </div>
-                    <button @click="openModal('entry')" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all">
-                        + 新增倉位
-                    </button>
+                    <button @click="openModal('entry')" class="bg-emerald-500 text-black px-6 py-3 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all">+ 新增持倉</button>
                 </div>
                 
-                <div v-if="!apiKey" class="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-500 text-sm font-bold flex items-center justify-between">
-                    <span>⚠️ 尚未設定 API 金鑰，無法自動抓取股價。</span>
-                    <button @click="currentTab = 'settings'" class="bg-amber-500 text-black px-4 py-2 rounded-lg text-xs">前往設定</button>
-                </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div v-if="openPositions.length === 0" class="col-span-full py-20 text-center glass-card rounded-[2.5rem] border-slate-900 border-2 text-slate-700">尚未建立持倉。</div>
-                    
-                    <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-[2rem] p-6 hover:border-slate-700 transition-all group flex flex-col justify-between">
+                    <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-[2rem] p-6 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center gap-4">
                                     <div class="w-12 h-12 bg-black rounded-2xl border border-slate-800 flex items-center justify-center font-black text-emerald-500 text-lg">{{ p.ticker.substring(0,2) }}</div>
-                                    <div>
-                                        <h4 class="font-black text-white text-xl tracking-tight leading-none">{{ p.ticker }}</h4>
-                                        <span class="text-[10px] text-slate-500 font-bold tracking-widest">{{ p.qty }} 股</span>
-                                    </div>
+                                    <div><h4 class="font-black text-white text-xl">{{ p.ticker }}</h4><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ p.qty }} 股</span></div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-[9px] text-slate-600 font-bold tracking-widest">市場時價</span>
-                                    <div v-if="p.currentPrice">
-                                        <p class="font-mono text-white font-bold text-lg">${{ Number(p.currentPrice).toFixed(2) }}</p>
-                                    </div>
+                                    <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">現價</span>
+                                    <div v-if="p.currentPrice"><p class="font-mono text-white font-bold text-lg">${{ Number(p.currentPrice).toFixed(2) }}</p></div>
                                     <div v-else class="text-xs text-slate-500 animate-pulse mt-1">抓取中...</div>
                                 </div>
                             </div>
-                            
                             <div class="bg-black/50 rounded-xl p-3 mb-4 flex justify-between items-center border border-slate-800/50">
-                                <div>
-                                    <span class="text-[9px] text-slate-500 block mb-1">單位成本</span>
-                                    <span class="font-mono text-slate-300 text-sm">${{ Number(p.entry).toFixed(2) }}</span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-[9px] text-slate-500 block mb-1">未實現損益</span>
-                                    <span class="font-mono font-bold text-sm" :class="((p.currentPrice || p.entry) - p.entry) * p.qty >= 0 ? 'profit-text' : 'loss-text'">
-                                        ${{ (((p.currentPrice || p.entry) - p.entry) * p.qty).toFixed(2) }}
-                                    </span>
-                                </div>
+                                <div><span class="text-[9px] text-slate-500 block">成本</span><span class="font-mono text-slate-300 text-sm">${{ Number(p.entry).toFixed(2) }}</span></div>
+                                <div class="text-right"><span class="text-[9px] text-slate-500 block">未實現損益</span><span class="font-mono font-bold text-sm" :class="((p.currentPrice || p.entry) - p.entry) * p.qty >= 0 ? 'profit-text' : 'loss-text'">${{ (((p.currentPrice || p.entry) - p.entry) * p.qty).toFixed(2) }}</span></div>
                             </div>
                         </div>
-
                         <div class="flex gap-2">
-                            <button @click="openModal('edit', p)" class="flex-1 bg-slate-900 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:bg-slate-800 transition-all">修改</button>
-                            <button @click="startExit(p)" class="flex-[1] bg-rose-500/10 text-rose-500 border border-rose-500/20 py-3 rounded-xl text-[11px] font-black hover:bg-rose-500 hover:text-white transition-all">結清</button>
+                            <button @click="openModal('edit', p)" class="flex-1 bg-slate-900 py-3 rounded-xl text-[11px] font-bold text-slate-300">修改</button>
+                            <button @click="startExit(p)" class="flex-1 bg-rose-500/10 text-rose-500 border border-rose-500/20 py-3 rounded-xl text-[11px] font-black">結清</button>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+
+        <!-- 儲存安全提醒 (功能回歸) -->
+        <footer class="mt-16 pt-8 border-t border-slate-900/50 text-center">
+            <div class="inline-block bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-lg mb-2">
+                <p class="text-[10px] text-amber-500 font-bold flex items-center gap-2 justify-center tracking-widest uppercase">⚠️ 本地儲存安全提醒</p>
+            </div>
+            <p class="text-[10px] text-slate-500 max-w-lg mx-auto leading-relaxed">
+                數據僅儲存於此瀏覽器的 LocalStorage 中。清除瀏覽記錄或更換設備將導致數據遺失。<br>
+                建議定期點擊側邊欄的「導出備份」按鈕進行手動存檔。
+            </p>
+        </footer>
     </main>
 
-    <!-- 彈窗組件 (不變) -->
+    <!-- 彈窗系統 -->
     <div v-if="modal.show" class="fixed inset-0 z-[300] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
-        <div class="bg-[#0b111d] w-full max-w-sm rounded-[2.5rem] p-8 border border-slate-800 shadow-2xl">
-            <h3 class="text-xl font-black text-white mb-6 tracking-widest border-l-4 border-emerald-500 pl-4">{{ modal.title }}</h3>
+        <div class="bg-[#0b111d] w-full max-w-sm rounded-[2.5rem] p-8 border border-slate-800">
+            <h3 class="text-xl font-black text-white mb-6 border-l-4 border-emerald-500 pl-4">{{ modal.title }}</h3>
             <div class="space-y-5">
-                <div v-if="modal.mode !== 'exit'">
-                    <label class="text-[10px] font-bold text-slate-500 tracking-widest mb-2 block">股票代碼</label>
-                    <input v-model="form.ticker" class="input-field uppercase font-black text-xl">
-                </div>
+                <div v-if="modal.mode !== 'exit'"><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">股票代碼</label><input v-model="form.ticker" class="input-field uppercase font-black text-xl"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div v-if="modal.mode === 'entry' || modal.mode === 'edit'">
-                        <label class="text-[10px] font-bold text-slate-500 tracking-widest mb-2 block">成本價</label>
-                        <input v-model.number="form.price" type="number" step="0.01" class="input-field font-mono">
-                    </div>
-                    <div v-if="modal.mode === 'exit'">
-                        <label class="text-[10px] font-bold text-slate-500 tracking-widest mb-2 block">賣出價</label>
-                        <input v-model.number="form.price" type="number" step="0.01" class="input-field font-mono">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 tracking-widest mb-2 block">數量</label>
-                        <input v-model.number="form.qty" type="number" class="input-field font-mono">
-                    </div>
+                    <div><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">{{ modal.mode === 'exit' ? '賣出價' : '成本價' }}</label><input v-model.number="form.price" type="number" class="input-field font-mono"></div>
+                    <div><label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">數量</label><input v-model.number="form.qty" type="number" class="input-field font-mono"></div>
                 </div>
                 <div class="flex gap-3 pt-4">
                     <button @click="modal.show = false" class="flex-1 bg-slate-900 text-slate-400 font-bold py-4 rounded-2xl">取消</button>
-                    <button @click="handleAction" class="flex-[2] bg-emerald-500 text-black font-black py-4 rounded-2xl">確認</button>
+                    <button @click="handleAction" class="flex-[2] bg-emerald-500 text-black font-black py-4 rounded-2xl">確認儲存</button>
                 </div>
             </div>
         </div>
@@ -267,7 +218,6 @@
 
 <script>
 const { createApp, ref, computed, onMounted } = Vue;
-
 const KEY_OPEN = 'M400_STATION_OPEN_DATA';
 const KEY_HISTORY = 'M400_STATION_HISTORY_DATA';
 const KEY_API = 'M400_FINNHUB_API_KEY';
@@ -284,13 +234,11 @@ createApp({
         const newsList = ref([]);
         const apiKey = ref('');
         const tempApiKey = ref('');
-        const saveMsg = ref('');
         
-        // 使用高度連動的 ETF 取代直接抓指數 (因為免費 API 支援度較好)
         const marketIndices = ref([
             { symbol: 'SPY', name: 'S&P 500 ETF', price: null, change: null },
             { symbol: 'DIA', name: '道瓊 ETF', price: null, change: null },
-            { symbol: 'QQQ', name: '納斯達克 ETF', price: null, change: null }
+            { symbol: 'QQQ', name: '納指 ETF', price: null, change: null }
         ]);
 
         const modal = ref({ show: false, mode: 'entry', title: '', targetId: null });
@@ -304,111 +252,93 @@ createApp({
         const saveApiKey = () => {
             apiKey.value = tempApiKey.value;
             localStorage.setItem(KEY_API, apiKey.value);
-            saveMsg.value = '金鑰已儲存！';
-            setTimeout(() => saveMsg.value = '', 3000);
             fetchAllData();
+            currentTab.value = 'open';
         };
 
-        // 核心：透過 Finnhub 穩定抓取數據
         const fetchMarketData = async () => {
             if (!apiKey.value) return;
             isFetching.value = true;
             try {
                 const uniqueStocks = [...new Set(openPositions.value.map(p => p.ticker))];
                 const allSymbols = [...marketIndices.value.map(i => i.symbol), ...uniqueStocks];
-
-                if (allSymbols.length === 0) { isFetching.value = false; return; }
-
-                // 利用 Promise.all 同時發送請求 (Finnhub 免費額度 60次/分鐘，非常夠用)
                 const requests = allSymbols.map(sym => 
-                    fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${apiKey.value}`)
-                    .then(res => res.json())
+                    fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${apiKey.value}`).then(res => res.json())
                 );
-
                 const results = await Promise.all(requests);
-
-                // 更新大盤 ETF 數據
+                
                 marketIndices.value.forEach((idx, index) => {
-                    const data = results[index];
-                    if (data && data.c) { // c 是當前價格, dp 是漲跌幅比例
-                        idx.price = data.c;
-                        idx.change = data.dp;
-                    }
+                    if (results[index]?.c) { idx.price = results[index].c; idx.change = results[index].dp; }
                 });
 
-                // 更新持倉時價
                 const offset = marketIndices.value.length;
                 openPositions.value.forEach(p => {
-                    const stockIndex = uniqueStocks.indexOf(p.ticker);
-                    if (stockIndex !== -1) {
-                        const data = results[offset + stockIndex];
-                        if (data && data.c) {
-                            p.currentPrice = data.c;
-                        }
-                    }
+                    const sIdx = uniqueStocks.indexOf(p.ticker);
+                    if (sIdx !== -1 && results[offset + sIdx]?.c) p.currentPrice = results[offset + sIdx].c;
                 });
-
+                
                 save();
-                const now = new Date();
-                lastUpdateTime.value = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-
-            } catch (error) {
-                console.error('API 抓取失敗，請確認金鑰是否正確', error);
-            }
+                lastUpdateTime.value = new Date().toLocaleTimeString();
+            } catch (e) { console.error(e); }
             isFetching.value = false;
         };
 
-        // 新聞 RSS 抓取 (RSS 仍使用 rss2json 公共代理，不受 API 限制)
         const fetchNewsData = async () => {
-            const stockSymbols = [...new Set(openPositions.value.map(p => p.ticker))];
-            if (stockSymbols.length === 0) return;
+            const symbols = [...new Set(openPositions.value.map(p => p.ticker))];
+            if (symbols.length === 0) return;
             try {
-                const rssUrl = `https://feeds.finance.yahoo.com/rss/2.0/headline?s=${stockSymbols.join(',')}&region=US&lang=en-US`;
-                const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-                const res = await fetch(proxyUrl);
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://feeds.finance.yahoo.com/rss/2.0/headline?s=' + symbols.join(','))}`);
                 const data = await res.json();
                 if (data.items) newsList.value = data.items.slice(0, 10);
-            } catch (error) {
-                console.error('新聞抓取失敗:', error);
-            }
+            } catch (e) { console.error(e); }
         };
 
-        const fetchAllData = async () => {
-            await fetchMarketData();
-            await fetchNewsData();
+        const fetchAllData = () => { fetchMarketData(); fetchNewsData(); };
+
+        const exportData = () => {
+            const data = { open: openPositions.value, history: history.value, apiKey: apiKey.value };
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `M400_Backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        };
+
+        const importData = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = JSON.parse(e.target.result);
+                if (confirm('導入將覆蓋現有所有數據，確定嗎？')) {
+                    openPositions.value = data.open || [];
+                    history.value = data.history || [];
+                    apiKey.value = data.apiKey || '';
+                    save();
+                    location.reload();
+                }
+            };
+            reader.readAsText(file);
         };
 
         onMounted(() => {
-            const savedOpen = localStorage.getItem(KEY_OPEN);
-            const savedHistory = localStorage.getItem(KEY_HISTORY);
-            const savedApi = localStorage.getItem(KEY_API);
-            
-            if (savedOpen) openPositions.value = JSON.parse(savedOpen);
-            if (savedHistory) history.value = JSON.parse(savedHistory);
-            if (savedApi) {
-                apiKey.value = savedApi;
-                tempApiKey.value = savedApi;
-            }
-            
+            const sOpen = localStorage.getItem(KEY_OPEN);
+            const sHist = localStorage.getItem(KEY_HISTORY);
+            const sApi = localStorage.getItem(KEY_API);
+            if (sOpen) openPositions.value = JSON.parse(sOpen);
+            if (sHist) history.value = JSON.parse(sHist);
+            if (sApi) { apiKey.value = sApi; tempApiKey.value = sApi; }
             if (apiKey.value) fetchAllData();
-            
-            // 每 60 秒刷新股價，每 5 分鐘刷新新聞
             setInterval(fetchMarketData, 60000);
-            setInterval(fetchNewsData, 300000);
         });
 
-        // Computed 屬性與操作邏輯 (沿用上一版)
         const annualProfit = computed(() => history.value.reduce((sum, h) => sum + h.pnl, 0));
-        const monthlyProfit = computed(() => history.value.filter(h => h.closedMonth === selectedMonth.value).reduce((s, h) => s + h.pnl, 0));
-        const monthlyWinRate = computed(() => {
-            const m = history.value.filter(h => h.closedMonth === selectedMonth.value);
-            return m.length ? ((m.filter(h => h.pnl > 0).length / m.length) * 100).toFixed(1) : '0.0';
-        });
         const filteredHistory = computed(() => history.value.filter(h => h.closedMonth === selectedMonth.value).reverse());
 
         const openModal = (mode, target = null) => {
-            modal.value = { show: true, mode, title: mode === 'entry' ? '新增庫存倉位' : (mode === 'edit' ? '修改持倉資訊' : '結清部位'), targetId: target ? target.id : null };
-            form.value = { ticker: target ? target.ticker : '', price: mode === 'edit' ? target.entry : '', qty: target ? target.qty : '' };
+            modal.value = { show: true, mode, title: mode==='entry'?'新增持倉':(mode==='edit'?'修改持倉':'結清部位'), targetId: target?.id };
+            form.value = { ticker: target?.ticker || '', price: mode==='edit'?target.entry:'', qty: target?.qty || '' };
         };
 
         const handleAction = () => {
@@ -417,22 +347,20 @@ createApp({
                 fetchMarketData();
             } else if (modal.value.mode === 'edit') {
                 const p = openPositions.value.find(x => x.id === modal.value.targetId);
-                const oldTicker = p.ticker;
                 p.ticker = form.value.ticker.toUpperCase(); p.entry = form.value.price; p.qty = form.value.qty;
-                if (oldTicker !== p.ticker) fetchMarketData();
+                fetchMarketData();
             } else if (modal.value.mode === 'exit') {
                 const p = openPositions.value.find(x => x.id === modal.value.targetId);
-                const exitQty = Math.min(form.value.qty, p.qty);
-                const now = new Date();
-                history.value.push({ ticker: p.ticker, entry: p.entry, exit: form.value.price, qty: exitQty, pnl: (form.value.price - p.entry) * exitQty, closedMonth: now.getMonth() + 1, closedDate: `${now.getMonth() + 1}/${now.getDate()}`, id: Date.now() });
-                p.qty -= exitQty;
+                const qty = Math.min(form.value.qty, p.qty);
+                history.value.push({ ticker: p.ticker, entry: p.entry, exit: form.value.price, qty, pnl: (form.value.price - p.entry)*qty, closedMonth: new Date().getMonth()+1, id: Date.now() });
+                p.qty -= qty;
                 if (p.qty <= 0) openPositions.value = openPositions.value.filter(x => x.id !== modal.value.targetId);
             }
             save();
             modal.value.show = false;
         };
 
-        return { currentTab, selectedMonth, openPositions, history, isMobileMenuOpen, modal, form, annualProfit, monthlyProfit, monthlyWinRate, filteredHistory, openModal, startExit: (p) => openModal('exit', p), handleAction, marketIndices, isFetching, lastUpdateTime, fetchAllData, newsList, apiKey, tempApiKey, saveApiKey, saveMsg };
+        return { currentTab, selectedMonth, openPositions, history, isMobileMenuOpen, modal, form, annualProfit, filteredHistory, openModal, startExit: (p) => openModal('exit', p), handleAction, marketIndices, isFetching, lastUpdateTime, newsList, apiKey, tempApiKey, saveApiKey, exportData, importData };
     }
 }).mount('#app');
 </script>
