@@ -17,6 +17,7 @@
         .mobile-nav.open { transform: translateX(0); }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 150; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .annual-glow { text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
     </style>
 </head>
 <body class="antialiased">
@@ -34,7 +35,7 @@
         </button>
     </div>
 
-    <!-- 側邊導航欄 -->
+    <!-- 側邊導航欄 (包含永恆金鑰讀取與備份功能) -->
     <div v-if="isMobileMenuOpen" @click="isMobileMenuOpen = false" class="overlay lg:hidden"></div>
     <aside :class="{'open': isMobileMenuOpen}" class="mobile-nav lg:static lg:transform-none lg:flex lg:flex-col p-8 sidebar justify-between">
         <div>
@@ -42,7 +43,6 @@
                 <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-black font-black text-sm">M</div>
                 <h1 class="font-bold tracking-tighter text-xl text-white">M400 PRO</h1>
             </div>
-
             <nav class="space-y-8">
                 <div>
                     <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">核心選單</p>
@@ -51,76 +51,106 @@
                         <button @click="currentTab = 'history'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'history'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">獲利分析系統</button>
                     </div>
                 </div>
-
                 <div>
                     <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">數據備份與還原</p>
                     <div class="grid grid-cols-1 gap-2">
-                        <button @click="exportData" class="flex items-center gap-3 text-[11px] font-bold bg-slate-900 hover:bg-slate-800 p-3 rounded-xl transition-all text-slate-300">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            導出 JSON 備份檔
-                        </button>
-                        <button @click="$refs.fileInput.click()" class="flex items-center gap-3 text-[11px] font-bold bg-slate-900 hover:bg-slate-800 p-3 rounded-xl transition-all text-slate-300">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l4-4m0 0l4 4m-4-4v12"></path></svg>
-                            導入備份還原
-                        </button>
+                        <button @click="exportData" class="flex items-center gap-3 text-[11px] font-bold bg-slate-900 hover:bg-slate-800 p-3 rounded-xl transition-all text-slate-300">導出 JSON 備份檔</button>
+                        <button @click="$refs.fileInput.click()" class="flex items-center gap-3 text-[11px] font-bold bg-slate-900 hover:bg-slate-800 p-3 rounded-xl transition-all text-slate-300">導入備份還原</button>
                         <input type="file" ref="fileInput" @change="importData" class="hidden" accept=".json">
                     </div>
                 </div>
             </nav>
         </div>
-
         <div class="pt-8 mt-8 border-t border-slate-900">
-            <button @click="wipeAllData" class="text-[10px] text-rose-900 hover:text-rose-500 font-bold flex items-center gap-2 transition-colors">
-                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                清除所有本地數據
-            </button>
+            <button @click="wipeAllData" class="text-[10px] text-rose-900 hover:text-rose-500 font-bold flex items-center gap-2 transition-colors">清除所有本地數據</button>
         </div>
     </aside>
 
     <!-- 主內容區 -->
     <main class="main-content flex-1 p-6 lg:p-12">
         <div class="max-w-5xl mx-auto">
-            <!-- 頂部區 -->
+            
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl lg:text-3xl font-black text-white tracking-tighter italic uppercase">{{ currentTab === 'open' ? 'Positions' : 'Performance' }}</h2>
+                <h2 class="text-2xl lg:text-3xl font-black text-white tracking-tighter italic uppercase">{{ currentTab === 'open' ? 'Positions' : 'Analytics' }}</h2>
                 <button @click="openModal('entry')" class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all active:scale-95">
                     + NEW ENTRY
                 </button>
             </div>
 
-            <!-- 分析視窗 (歷史分頁) -->
-            <div v-if="currentTab === 'history'" class="mb-10 animate-in fade-in duration-500">
+            <!-- 分析視窗 -->
+            <div v-if="currentTab === 'history'" class="animate-in fade-in duration-500">
+                <!-- 年度總獲利看板 (新增) -->
+                <div class="glass-card rounded-[2.5rem] p-8 mb-8 border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                        <div>
+                            <span class="text-[10px] text-emerald-500 font-black uppercase tracking-[0.3em]">Annual Total Revenue / 年度總結算</span>
+                            <div class="text-6xl font-black mt-2 text-white font-mono tracking-tighter annual-glow" :class="annualProfit >= 0 ? 'text-emerald-400' : 'text-rose-500'">
+                                ${{ annualProfit.toLocaleString(undefined, {minimumFractionDigits: 2}) }}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-8 border-l border-slate-800 pl-0 md:pl-8">
+                            <div>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">總成交筆數</p>
+                                <p class="text-2xl font-black text-white font-mono">{{ history.length }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">平均單筆損益</p>
+                                <p class="text-2xl font-black text-white font-mono">${{ history.length > 0 ? (annualProfit / history.length).toFixed(2) : '0.00' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 月份切換 -->
                 <div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
                     <button v-for="m in 12" :key="m" @click="selectedMonth = m" 
-                            :class="selectedMonth === m ? 'bg-emerald-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'bg-slate-900 text-slate-500'"
+                            :class="selectedMonth === m ? 'bg-emerald-500 text-black' : 'bg-slate-900 text-slate-500'"
                             class="px-5 py-2 rounded-xl text-[10px] font-black transition-all flex-shrink-0">
                         {{ m }}月
                     </button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+
+                <!-- 當月詳細統計 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 mb-10">
                     <div class="glass-card md:col-span-2 rounded-[2rem] p-8">
-                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ selectedMonth }}月 已實現損益</span>
-                        <div class="text-5xl font-black mt-2 text-white font-mono tracking-tighter">${{ monthlyProfit.toFixed(2) }}</div>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ selectedMonth }}月 實現損益</span>
+                        <div class="text-4xl font-black mt-2 text-white font-mono">${{ monthlyProfit.toFixed(2) }}</div>
                         <div class="mt-8 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                            <div class="h-full bg-emerald-500 transition-all duration-1000" :style="{ width: Math.min((monthlyProfit/400)*100, 100) + '%' }"></div>
+                            <div class="h-full bg-emerald-500" :style="{ width: Math.min(Math.max((monthlyProfit/400)*100, 0), 100) + '%' }"></div>
                         </div>
                     </div>
-                    <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-center items-center">
-                        <span class="text-[10px] text-slate-500 font-bold uppercase mb-2">月達成率</span>
-                        <div class="text-3xl font-black text-emerald-400 font-mono">{{ ((monthlyProfit/400)*100).toFixed(1) }}%</div>
+                    <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase mb-2">月度勝率</span>
+                        <div class="text-3xl font-black text-emerald-400 font-mono">{{ monthlyWinRate }}%</div>
+                    </div>
+                </div>
+
+                <!-- 歷史明細 -->
+                <div class="space-y-3">
+                    <div v-for="h in filteredHistory" :key="h.id" class="glass-card rounded-2xl p-5 flex justify-between items-center group">
+                        <div>
+                            <div class="font-bold text-white tracking-tight flex items-center gap-2">
+                                {{ h.ticker }}
+                                <span class="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-500">{{ h.qty }} 股</span>
+                            </div>
+                            <div class="text-[9px] text-slate-600 font-mono mt-1 uppercase tracking-tighter">入: {{ h.entry }} | 出: {{ h.exit }} | {{ h.closedDate }}</div>
+                        </div>
+                        <div :class="h.pnl >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-mono font-bold text-lg">
+                            {{ h.pnl >= 0 ? '+' : '' }}{{ h.pnl.toFixed(2) }}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 在庫列表 -->
+            <!-- 在庫倉位 (維持原功能) -->
             <section v-if="currentTab === 'open'" class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-bottom-4 duration-500">
                 <div v-if="openPositions.length === 0" class="col-span-full py-20 text-center border-2 border-dashed border-slate-900 rounded-[2.5rem] text-slate-700">
                     目前無持倉紀錄。
                 </div>
-                <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-3xl p-6 hover:border-slate-700 transition-all group">
+                <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-3xl p-6 hover:border-slate-700 transition-all group relative">
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-black rounded-2xl border border-slate-800 flex items-center justify-center font-black text-emerald-400 text-lg shadow-inner">{{ p.ticker }}</div>
+                            <div class="w-12 h-12 bg-black rounded-2xl border border-slate-800 flex items-center justify-center font-black text-emerald-500 text-lg shadow-inner">{{ p.ticker }}</div>
                             <div>
                                 <h4 class="font-black text-white text-xl tracking-tight">{{ p.ticker }}</h4>
                                 <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">持有 {{ p.qty }} 股</p>
@@ -133,36 +163,20 @@
                     </div>
                     <div class="flex gap-2 pt-4 border-t border-slate-800/50">
                         <button @click="openModal('edit', p)" class="flex-1 bg-slate-900 hover:bg-slate-800 py-3 rounded-xl text-[10px] font-bold text-slate-400 transition-all">修改</button>
-                        <button @click="startExit(p)" class="flex-[2] bg-emerald-500 text-black py-3 rounded-xl text-[10px] font-black shadow-lg shadow-emerald-900/20 active:scale-95 transition-all uppercase">Exit Position</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 歷史紀錄 -->
-            <section v-if="currentTab === 'history'" class="space-y-3 animate-in slide-in-from-bottom-4 duration-500">
-                <div v-for="h in filteredHistory" :key="h.id" class="glass-card rounded-2xl p-5 flex justify-between items-center">
-                    <div>
-                        <div class="font-bold text-white tracking-tight flex items-center gap-2">
-                            {{ h.ticker }}
-                            <span class="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-500">{{ h.qty }} 股</span>
-                        </div>
-                        <div class="text-[9px] text-slate-600 font-mono mt-1 uppercase">入: {{ h.entry }} | 出: {{ h.exit }} | {{ h.closedDate }}</div>
-                    </div>
-                    <div :class="h.pnl >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-mono font-bold text-lg">
-                        {{ h.pnl >= 0 ? '+' : '' }}{{ h.pnl.toFixed(2) }}
+                        <button @click="startExit(p)" class="flex-[2] bg-emerald-500 text-black py-3 rounded-xl text-[10px] font-black shadow-lg shadow-emerald-900/20 active:scale-95 transition-all">EXIT POSITION</button>
                     </div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- 彈窗控制 -->
+    <!-- 彈窗 (維持原功能) -->
     <div v-if="modal.show" class="fixed inset-0 z-[300] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
-        <div class="bg-[#0b111d] w-full max-w-sm rounded-[2.5rem] p-10 border border-slate-800 shadow-2xl">
+        <div class="bg-[#0b111d] w-full max-sm:max-w-full max-w-sm rounded-[2.5rem] p-10 border border-slate-800 shadow-2xl">
             <h3 class="text-xl font-black text-white mb-8 tracking-tighter italic uppercase border-l-4 border-emerald-500 pl-4">{{ modal.title }}</h3>
             <div class="space-y-6">
                 <div v-if="modal.mode !== 'exit'">
-                    <label class="text-[10px] font-bold text-slate-600 uppercase mb-2 block tracking-widest">Symbol</label>
+                    <label class="text-[10px] font-bold text-slate-600 uppercase mb-2 block tracking-widest">Ticker</label>
                     <input v-model="form.ticker" placeholder="NVDA" class="input-field uppercase font-black text-xl">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -171,14 +185,13 @@
                         <input v-model.number="form.price" type="number" step="0.01" class="input-field font-mono">
                     </div>
                     <div>
-                        <label class="text-[10px] font-bold text-slate-600 uppercase mb-2 block tracking-widest">{{ modal.mode === 'exit' ? '結清股數' : '持有股數' }}</label>
+                        <label class="text-[10px] font-bold text-slate-600 uppercase mb-2 block tracking-widest">數量</label>
                         <input v-model.number="form.qty" type="number" class="input-field font-mono">
-                        <p v-if="modal.mode === 'exit'" class="text-[9px] text-slate-500 mt-2 italic">最大可結清: {{ modal.maxQty }}</p>
                     </div>
                 </div>
                 <div class="flex gap-4 pt-4">
                     <button @click="modal.show = false" class="flex-1 text-slate-600 font-bold text-xs uppercase">Cancel</button>
-                    <button @click="handleAction" class="flex-[2] bg-white text-black font-black py-4 rounded-2xl hover:bg-emerald-400 transition-all uppercase shadow-lg">Confirm</button>
+                    <button @click="handleAction" class="flex-[2] bg-white text-black font-black py-4 rounded-2xl hover:bg-emerald-500 transition-all uppercase">Confirm</button>
                 </div>
             </div>
         </div>
@@ -188,7 +201,6 @@
 <script>
 const { createApp, ref, computed, onMounted } = Vue;
 
-// 【永恆金鑰定義】 - 只要不改這兩個名稱，資料永不遺失
 const KEY_OPEN = 'M400_STATION_OPEN_DATA';
 const KEY_HISTORY = 'M400_STATION_HISTORY_DATA';
 
@@ -203,7 +215,6 @@ createApp({
         const form = ref({ ticker: '', price: '', qty: '' });
 
         onMounted(() => {
-            // 從永恆金鑰讀取資料
             const savedOpen = localStorage.getItem(KEY_OPEN);
             const savedHistory = localStorage.getItem(KEY_HISTORY);
             if (savedOpen) openPositions.value = JSON.parse(savedOpen);
@@ -211,20 +222,33 @@ createApp({
         });
 
         const save = () => {
-            // 寫入永恆金鑰
             localStorage.setItem(KEY_OPEN, JSON.stringify(openPositions.value));
             localStorage.setItem(KEY_HISTORY, JSON.stringify(history.value));
         };
 
-        const monthlyProfit = computed(() => history.value.filter(h => h.closedMonth === selectedMonth.value).reduce((s, h) => s + h.pnl, 0));
+        // --- 年度總和計算 ---
+        const annualProfit = computed(() => {
+            return history.value.reduce((sum, h) => sum + h.pnl, 0);
+        });
+
+        const monthlyProfit = computed(() => {
+            return history.value.filter(h => h.closedMonth === selectedMonth.value).reduce((s, h) => s + h.pnl, 0);
+        });
+
+        const monthlyWinRate = computed(() => {
+            const monthTrades = history.value.filter(h => h.closedMonth === selectedMonth.value);
+            if (monthTrades.length === 0) return '0.0';
+            const wins = monthTrades.filter(h => h.pnl > 0).length;
+            return ((wins / monthTrades.length) * 100).toFixed(1);
+        });
+
         const filteredHistory = computed(() => history.value.filter(h => h.closedMonth === selectedMonth.value).reverse());
 
+        // --- 核心操作邏輯 ---
         const openModal = (mode, target = null) => {
             modal.value = { show: true, mode, title: mode === 'entry' ? 'New Position' : (mode === 'edit' ? 'Edit Data' : 'Exit Position'), targetId: target ? target.id : null, maxQty: target ? target.qty : 0 };
             form.value = { ticker: target ? target.ticker : '', price: mode === 'edit' ? target.entry : '', qty: mode === 'edit' ? target.qty : (mode === 'exit' ? target.qty : '') };
         };
-
-        const startExit = (p) => openModal('exit', p);
 
         const handleAction = () => {
             if (modal.value.mode === 'entry') {
@@ -245,12 +269,12 @@ createApp({
         };
 
         const exportData = () => {
-            const data = { open: openPositions.value, history: history.value, version: '6.0', time: new Date().toISOString() };
+            const data = { open: openPositions.value, history: history.value };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `M400_Backup_${new Date().toLocaleDateString().replace(/\//g,'-')}.json`;
+            link.download = `M400_Backup_${new Date().toLocaleDateString()}.json`;
             link.click();
             URL.revokeObjectURL(url);
         };
@@ -262,21 +286,18 @@ createApp({
             reader.onload = (e) => {
                 try {
                     const imported = JSON.parse(e.target.result);
-                    if (confirm('導入將會覆蓋當前資料，建議先進行備份。確定繼續？')) {
-                        openPositions.value = imported.open || [];
-                        history.value = imported.history || [];
-                        save();
-                        alert('還原成功！');
-                        location.reload();
-                    }
-                } catch (err) { alert('檔案解析失敗，請提供正確的備份檔。'); }
+                    openPositions.value = imported.open || [];
+                    history.value = imported.history || [];
+                    save();
+                    location.reload();
+                } catch (err) { alert('導入失敗'); }
             };
             reader.readAsText(file);
         };
 
-        const wipeAllData = () => { if (confirm('🚨 警告：這將徹底清除此設備上的所有紀錄，不可恢復！')) { localStorage.clear(); location.reload(); } };
+        const wipeAllData = () => { if (confirm('確定清除？')) { localStorage.clear(); location.reload(); } };
 
-        return { currentTab, selectedMonth, openPositions, history, isMobileMenuOpen, modal, form, monthlyProfit, filteredHistory, openModal, startExit, handleAction, exportData, importData, wipeAllData };
+        return { currentTab, selectedMonth, openPositions, history, isMobileMenuOpen, modal, form, annualProfit, monthlyProfit, monthlyWinRate, filteredHistory, openModal, startExit: (p) => openModal('exit', p), handleAction, exportData, importData, wipeAllData };
     }
 }).mount('#app');
 </script>
