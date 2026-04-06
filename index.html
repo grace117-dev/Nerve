@@ -3,126 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M400 Executive Dashboard</title>
+    <title>M400 Strategic Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         [v-cloak] { display: none !important; }
-        body { font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif; background-color: #020408; color: #e2e8f0; margin: 0; display: flex; min-height: 100vh; }
-        .sidebar { width: 260px; background: #05080f; border-right: 1px solid #1e293b; }
-        .main-content { flex: 1; background: radial-gradient(circle at 50% 0%, #0c1524 0%, #020408 100%); overflow-y: auto; padding-bottom: 100px; }
+        body { font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif; background-color: #020408; color: #e2e8f0; margin: 0; min-height: 100vh; }
         .glass-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
-        .input-field { background: #000; border: 1px solid #1e293b; padding: 12px; border-radius: 12px; color: white; outline: none; width: 100%; transition: all 0.3s; }
+        .input-field { background: #000; border: 1px solid #1e293b; padding: 12px; border-radius: 12px; color: white; outline: none; width: 100%; transition: all 0.3s; font-size: 16px; }
         .input-field:focus { border-color: #10b981; box-shadow: 0 0 15px rgba(16,185,129,0.2); }
-        .tab-btn { padding: 12px 24px; font-weight: bold; font-size: 14px; color: #64748b; transition: all 0.3s; border-bottom: 2px solid transparent; }
-        .tab-active { color: #10b981; border-bottom-color: #10b981; background: rgba(16,185,129,0.05); }
+        /* 移動端側邊欄抽屜 */
+        .mobile-nav { position: fixed; left: 0; top: 0; height: 100%; width: 280px; background: #05080f; z-index: 200; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-right: 1px solid #1e293b; }
+        .mobile-nav.open { transform: translateX(0); }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 150; }
     </style>
 </head>
 <body class="antialiased">
 
-<div id="app" v-cloak class="flex w-full">
-    <!-- 側邊欄 -->
-    <aside class="sidebar hidden lg:flex flex-col p-8 border-r border-slate-800">
-        <div class="flex items-center gap-3 mb-12">
+<div id="app" v-cloak class="flex flex-col lg:flex-row w-full min-h-screen">
+    
+    <!-- 移動端頂部列 -->
+    <div class="lg:hidden flex justify-between items-center p-6 border-b border-slate-900 bg-[#05080f]">
+        <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-emerald-500 rounded flex items-center justify-center text-black font-black text-[10px]">M</div>
+            <h1 class="font-bold text-sm tracking-tighter">M400 TERMINAL</h1>
+        </div>
+        <button @click="isMobileMenuOpen = true" class="p-2 text-slate-400">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+    </div>
+
+    <!-- 側邊導航 (電腦與手機共用邏輯) -->
+    <div v-if="isMobileMenuOpen" @click="isMobileMenuOpen = false" class="overlay lg:hidden"></div>
+    <aside :class="{'open': isMobileMenuOpen}" class="mobile-nav lg:static lg:transform-none lg:flex lg:flex-col p-8 sidebar">
+        <div class="hidden lg:flex items-center gap-3 mb-12">
             <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-black font-black text-sm">M</div>
             <h1 class="font-bold tracking-tighter text-xl text-white">M400 PRO</h1>
         </div>
-        <nav class="space-y-6">
+
+        <nav class="space-y-8">
             <div>
-                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">核心管理</p>
-                <button @click="currentTab = 'open'" :class="{'text-emerald-400': currentTab === 'open'}" class="flex items-center gap-3 text-sm font-bold py-2 transition-colors w-full text-left">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                    在庫倉位 ({{ openPositions.length }})
-                </button>
-                <button @click="currentTab = 'history'" :class="{'text-emerald-400': currentTab === 'history'}" class="flex items-center gap-3 text-sm font-bold py-2 mt-4 transition-colors w-full text-left">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                    歷史獲利分析
-                </button>
+                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mb-4">核心選單</p>
+                <div class="space-y-2">
+                    <button @click="currentTab = 'open'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'open'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">
+                        在庫倉位 ({{ openPositions.length }})
+                    </button>
+                    <button @click="currentTab = 'history'; isMobileMenuOpen = false" :class="{'text-emerald-400 bg-emerald-400/5': currentTab === 'history'}" class="flex items-center gap-3 text-sm font-bold p-3 rounded-xl w-full text-left transition-all">
+                        年度獲利分析
+                    </button>
+                </div>
             </div>
-            
-            <div class="pt-10">
-                <p class="text-[10px] text-rose-900 font-bold uppercase tracking-[0.2em] mb-4">危險區域</p>
-                <button @click="wipeAllData" class="text-[10px] text-rose-700 hover:text-rose-500 font-bold flex items-center gap-2">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    清除全系統記錄
+
+            <div>
+                <p class="text-[10px] text-rose-900 font-bold uppercase tracking-[0.2em] mb-4">系統管理</p>
+                <button @click="wipeAllData" class="text-xs text-rose-700 hover:text-rose-500 font-bold flex items-center gap-3 p-3 w-full transition-all">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    清除所有歷史紀錄
                 </button>
             </div>
         </nav>
     </aside>
 
-    <!-- 主內容 -->
-    <main class="main-content p-6 lg:p-12">
+    <!-- 主內容區 -->
+    <main class="main-content flex-1 p-6 lg:p-12 overflow-x-hidden">
         <div class="max-w-5xl mx-auto">
             
-            <!-- 頂部標題與建倉 -->
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl font-black text-white tracking-tighter italic">COMMAND CENTER</h2>
-                <button @click="openModal('entry')" class="bg-white text-black px-6 py-3 rounded-2xl font-black text-xs hover:bg-emerald-400 transition-all shadow-xl active:scale-95">
-                    + NEW POSITION 建倉
+            <!-- 頂部區 -->
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl lg:text-3xl font-black text-white tracking-tighter italic uppercase">{{ currentTab === 'open' ? 'Position' : 'Analytics' }}</h2>
+                <button @click="openModal('entry')" class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-xs hover:bg-emerald-400 transition-all active:scale-95">
+                    + NEW ENTRY
                 </button>
             </div>
 
-            <!-- 月份選擇與獲利總覽 (僅在歷史分頁顯示) -->
+            <!-- 年度/月分析 (在歷史分頁顯示) -->
             <div v-if="currentTab === 'history'" class="mb-10">
-                <div class="flex items-center gap-4 mb-6 overflow-x-auto pb-2">
+                <div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
                     <button v-for="m in 12" :key="m" @click="selectedMonth = m" 
-                            :class="selectedMonth === m ? 'bg-emerald-500 text-black' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'"
-                            class="px-4 py-2 rounded-xl text-xs font-black transition-all min-w-[60px]">
+                            :class="selectedMonth === m ? 'bg-emerald-500 text-black shadow-[0_0_15px_#10b981]' : 'bg-slate-900 text-slate-500'"
+                            class="px-5 py-2 rounded-xl text-[10px] font-black transition-all flex-shrink-0">
                         {{ m }}月
                     </button>
                 </div>
                 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="glass-card col-span-2 rounded-[2.5rem] p-8">
-                        <span class="text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase">{{ selectedMonth }}月 已實現損益總額</span>
-                        <div class="text-6xl font-black mt-2 text-white font-mono">${{ monthlyProfit.toFixed(2) }}</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mt-4">
+                    <div class="glass-card md:col-span-2 rounded-[2rem] p-8">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ selectedMonth }}月 累計淨利 (USD)</span>
+                        <div class="text-5xl font-black mt-2 text-white font-mono tracking-tighter">${{ monthlyProfit.toFixed(2) }}</div>
                         <div class="mt-8 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
                             <div class="h-full bg-emerald-500 transition-all duration-1000" :style="{ width: Math.min((monthlyProfit/400)*100, 100) + '%' }"></div>
                         </div>
                     </div>
-                    <div class="glass-card rounded-[2.5rem] p-8 flex flex-col justify-center text-center">
-                        <span class="text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase mb-2">月度目標達成率</span>
-                        <div class="text-4xl font-black text-emerald-400 font-mono">{{ ((monthlyProfit/400)*100).toFixed(1) }}%</div>
+                    <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-center items-center">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase mb-2">勝場次數</span>
+                        <div class="text-3xl font-black text-emerald-400 font-mono">{{ filteredHistory.filter(h=>h.pnl > 0).length }}</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 庫存列表 -->
-            <section v-if="currentTab === 'open'" class="space-y-4">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6 border-l-2 border-emerald-500 pl-4">庫存倉位管理 (可編輯)</h3>
-                <div v-if="openPositions.length === 0" class="py-20 text-center border border-dashed border-slate-900 rounded-[2rem] text-slate-700 text-sm">
-                    目前無在庫倉位。
+            <!-- 在庫倉位列表 -->
+            <section v-if="currentTab === 'open'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div v-if="openPositions.length === 0" class="col-span-full py-20 text-center border-2 border-dashed border-slate-900 rounded-[2.5rem] text-slate-700">
+                    目前無持倉紀錄。
                 </div>
-                <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-2xl p-6 flex flex-wrap lg:flex-nowrap justify-between items-center hover:border-slate-700 transition-all group">
-                    <div class="flex items-center gap-6">
-                        <div class="w-12 h-12 bg-black rounded-xl border border-slate-800 flex items-center justify-center font-black text-emerald-500">{{ p.ticker }}</div>
-                        <div>
-                            <div class="font-bold text-white text-lg">{{ p.ticker }}</div>
-                            <div class="text-[10px] text-slate-500 font-mono">成本: ${{ p.entry }} | 股數: {{ p.qty }}</div>
+                <div v-for="p in openPositions" :key="p.id" class="glass-card rounded-3xl p-6 hover:border-slate-700 transition-all group relative">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-black rounded-2xl border border-slate-800 flex items-center justify-center font-black text-emerald-500 text-lg shadow-inner">{{ p.ticker }}</div>
+                            <div>
+                                <h4 class="font-black text-white text-xl tracking-tight">{{ p.ticker }}</h4>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">持有 {{ p.qty }} 股</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] text-slate-600 font-bold uppercase mb-1 tracking-tighter">單位成本 Cost</p>
+                            <p class="font-mono text-emerald-500 font-bold">${{ p.entry.toFixed(2) }}</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 mt-4 lg:mt-0 opacity-40 group-hover:opacity-100 transition-opacity">
-                        <button @click="openModal('edit', p)" class="p-3 hover:bg-white/10 rounded-xl text-slate-400">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                        </button>
-                        <button @click="startExit(p)" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-6 py-2.5 rounded-xl text-[10px] font-black hover:bg-emerald-500 hover:text-black transition-all">
-                            SELL 執行結清
-                        </button>
+                    
+                    <div class="flex gap-2 pt-4 border-t border-slate-800/50">
+                        <button @click="openModal('edit', p)" class="flex-1 bg-slate-900 hover:bg-slate-800 py-3 rounded-xl text-[10px] font-bold text-slate-400 transition-all">修改資料</button>
+                        <button @click="startExit(p)" class="flex-1 bg-emerald-500 text-black py-3 rounded-xl text-[10px] font-black shadow-lg shadow-emerald-900/20 active:scale-95 transition-all">分批/全額結清</button>
                     </div>
                 </div>
             </section>
 
             <!-- 歷史列表 -->
             <section v-if="currentTab === 'history'" class="space-y-3">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6 border-l-2 border-slate-800 pl-4">{{ selectedMonth }}月 交易明細</h3>
-                <div v-if="filteredHistory.length === 0" class="py-12 text-center text-slate-700 italic text-sm">
-                    此月份無結清記錄。
-                </div>
-                <div v-for="h in filteredHistory" :key="h.id" class="glass-card rounded-2xl p-5 flex justify-between items-center">
+                <div v-for="h in filteredHistory" :key="h.id" class="glass-card rounded-2xl p-5 flex justify-between items-center group">
                     <div>
-                        <div class="font-bold text-white tracking-tight">{{ h.ticker }}</div>
-                        <div class="text-[9px] text-slate-500 font-mono mt-1 uppercase">{{ h.entry }} → {{ h.exit }} | {{ h.qty }} 股 | {{ h.closedDate }}</div>
+                        <div class="font-bold text-white tracking-tight flex items-center gap-2">
+                            {{ h.ticker }}
+                            <span class="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-500">{{ h.qty }} 股</span>
+                        </div>
+                        <div class="text-[9px] text-slate-600 font-mono mt-1 uppercase tracking-tighter">入: {{ h.entry }} | 出: {{ h.exit }} | {{ h.closedDate }}</div>
                     </div>
                     <div :class="h.pnl >= 0 ? 'text-emerald-400' : 'text-rose-500'" class="font-mono font-bold text-lg">
                         {{ h.pnl >= 0 ? '+' : '' }}{{ h.pnl.toFixed(2) }}
@@ -132,37 +147,37 @@
         </div>
     </main>
 
-    <!-- 彈窗控制 (建倉 / 修改 / 結清) -->
-    <div v-if="modal.show" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
+    <!-- 彈窗控制 (分批結清邏輯注入) -->
+    <div v-if="modal.show" class="fixed inset-0 z-[300] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
         <div class="bg-[#0b111d] w-full max-w-sm rounded-[2.5rem] p-10 border border-slate-800 shadow-2xl">
-            <h3 class="text-2xl font-black text-white mb-8 tracking-tighter italic uppercase">{{ modal.title }}</h3>
+            <h3 class="text-xl font-black text-white mb-8 tracking-tighter italic uppercase border-l-4 border-emerald-500 pl-4">{{ modal.title }}</h3>
             
             <div class="space-y-6">
-                <!-- 標的代碼 (僅建倉或編輯顯示) -->
                 <div v-if="modal.mode !== 'exit'">
-                    <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2 block">Ticker 標的代碼</label>
-                    <input v-model="form.ticker" placeholder="如: NVDA" class="input-field uppercase font-bold text-xl">
+                    <label class="text-[10px] font-bold text-slate-600 uppercase mb-2 block tracking-widest">標代碼 Symbol</label>
+                    <input v-model="form.ticker" placeholder="NVDA" class="input-field uppercase font-black text-xl">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <!-- 價格輸入：根據模式改變標籤 -->
                     <div>
-                        <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2 block">
-                            {{ modal.mode === 'exit' ? 'Sell Price 賣出價' : 'Entry Price 買入價' }}
+                        <label class="text-[10px] font-bold text-slate-600 uppercase mb-2 block tracking-widest">
+                            {{ modal.mode === 'exit' ? '賣出價格' : '單位成本' }}
                         </label>
                         <input v-model.number="form.price" type="number" step="0.01" class="input-field font-mono">
                     </div>
-                    <!-- 股數輸入：結清模式下不可改 -->
                     <div>
-                        <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2 block">Quantity 股數</label>
-                        <input v-model.number="form.qty" type="number" :disabled="modal.mode === 'exit'" :class="{'opacity-50': modal.mode === 'exit'}" class="input-field font-mono">
+                        <label class="text-[10px] font-bold text-slate-600 uppercase mb-2 block tracking-widest">
+                            {{ modal.mode === 'exit' ? '結清股數' : '持有股數' }}
+                        </label>
+                        <input v-model.number="form.qty" type="number" class="input-field font-mono">
+                        <p v-if="modal.mode === 'exit'" class="text-[9px] text-slate-500 mt-2 italic">最大可結清: {{ modal.maxQty }}</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 pt-6">
-                    <button @click="modal.show = false" class="flex-1 text-slate-600 font-bold text-xs uppercase tracking-widest">Dismiss</button>
-                    <button @click="handleAction" class="flex-[2] bg-white text-black font-black py-4 rounded-2xl hover:bg-emerald-500 transition-all shadow-xl">
-                        {{ modal.mode === 'exit' ? 'EXECUTE SELL' : 'SAVE CHANGES' }}
+                <div class="flex gap-4 pt-4">
+                    <button @click="modal.show = false" class="flex-1 text-slate-600 font-bold text-xs">取消</button>
+                    <button @click="handleAction" class="flex-[2] bg-white text-black font-black py-4 rounded-2xl hover:bg-emerald-400 transition-all">
+                        {{ modal.mode === 'exit' ? '確認賣出' : '儲存變更' }}
                     </button>
                 </div>
             </div>
@@ -178,94 +193,87 @@ createApp({
         const selectedMonth = ref(new Date().getMonth() + 1);
         const openPositions = ref([]);
         const history = ref([]);
-        const modal = ref({ show: false, mode: 'entry', title: '', targetId: null });
+        const isMobileMenuOpen = ref(false);
+        const modal = ref({ show: false, mode: 'entry', title: '', targetId: null, maxQty: 0 });
         const form = ref({ ticker: '', price: '', qty: '' });
 
         onMounted(() => {
-            const savedOpen = localStorage.getItem('m400_open_v4');
-            const savedHistory = localStorage.getItem('m400_history_v4');
-            if (savedOpen) openPositions.value = JSON.parse(savedOpen);
+            const savedOpen = localStorage.getItem('m400_open_v5');
+            const savedHistory = localStorage.getItem('m400_history_v5');
+            if (savedOpen) openPositions.value = JSON.parse(savedOpen).map(p => ({...p, entry: Number(p.entry)}));
             if (savedHistory) history.value = JSON.parse(savedHistory);
         });
 
-        // 核心計算邏輯
-        const monthlyProfit = computed(() => {
-            return history.value
-                .filter(h => h.closedMonth === selectedMonth.value)
-                .reduce((sum, h) => sum + h.pnl, 0);
-        });
-
-        const filteredHistory = computed(() => {
-            return history.value.filter(h => h.closedMonth === selectedMonth.value).reverse();
-        });
+        const monthlyProfit = computed(() => history.value.filter(h => h.closedMonth === selectedMonth.value).reduce((s, h) => s + h.pnl, 0));
+        const filteredHistory = computed(() => history.value.filter(h => h.closedMonth === selectedMonth.value).reverse());
 
         const openModal = (mode, target = null) => {
             modal.value = {
                 show: true,
-                mode: mode,
-                title: mode === 'entry' ? 'New Position' : (mode === 'edit' ? 'Edit Position' : 'Exit Position'),
-                targetId: target ? target.id : null
+                mode,
+                title: mode === 'entry' ? 'New Entry' : (mode === 'edit' ? 'Edit Data' : 'Partial Exit'),
+                targetId: target ? target.id : null,
+                maxQty: target ? target.qty : 0
             };
-            if (mode === 'exit') {
-                form.value = { ticker: target.ticker, price: '', qty: target.qty };
-            } else if (mode === 'edit') {
-                form.value = { ticker: target.ticker, price: target.entry, qty: target.qty };
-            } else {
-                form.value = { ticker: '', price: '', qty: '' };
-            }
+            form.value = {
+                ticker: target ? target.ticker : '',
+                price: mode === 'edit' ? target.entry : '',
+                qty: mode === 'edit' ? target.qty : (mode === 'exit' ? target.qty : '')
+            };
         };
 
         const startExit = (p) => openModal('exit', p);
 
         const handleAction = () => {
             if (modal.value.mode === 'entry') {
-                openPositions.value.push({
-                    id: Date.now(),
-                    ticker: form.value.ticker.toUpperCase(),
-                    entry: form.value.price,
-                    qty: form.value.qty
-                });
-            } else if (modal.value.mode === 'edit') {
-                const idx = openPositions.value.findIndex(p => p.id === modal.value.targetId);
-                openPositions.value[idx] = { 
-                    ...openPositions.value[idx], 
-                    ticker: form.value.ticker.toUpperCase(),
-                    entry: form.value.price,
-                    qty: form.value.qty
-                };
-            } else if (modal.value.mode === 'exit') {
-                const idx = openPositions.value.findIndex(p => p.id === modal.value.targetId);
-                const p = openPositions.value[idx];
+                openPositions.value.push({ id: Date.now(), ticker: form.value.ticker.toUpperCase(), entry: form.value.price, qty: form.value.qty });
+            } 
+            else if (modal.value.mode === 'edit') {
+                const p = openPositions.value.find(x => x.id === modal.value.targetId);
+                p.ticker = form.value.ticker.toUpperCase();
+                p.entry = form.value.price;
+                p.qty = form.value.qty;
+            } 
+            else if (modal.value.mode === 'exit') {
+                const p = openPositions.value.find(x => x.id === modal.value.targetId);
+                const exitQty = Math.min(form.value.qty, p.qty);
                 const now = new Date();
+                
+                // 紀錄賣出的部分
                 history.value.push({
-                    ...p,
+                    ticker: p.ticker,
+                    entry: p.entry,
                     exit: form.value.price,
-                    pnl: (form.value.price - p.entry) * p.qty,
+                    qty: exitQty,
+                    pnl: (form.value.price - p.entry) * exitQty,
                     closedMonth: now.getMonth() + 1,
-                    closedDate: `${now.getMonth() + 1}/${now.getDate()}`
+                    closedDate: `${now.getMonth() + 1}/${now.getDate()}`,
+                    id: Date.now()
                 });
-                openPositions.value.splice(idx, 1);
+
+                // 更新剩餘股數或移除倉位
+                p.qty -= exitQty;
+                if (p.qty <= 0) {
+                    openPositions.value = openPositions.value.filter(x => x.id !== modal.value.targetId);
+                }
             }
             save();
             modal.value.show = false;
         };
 
         const save = () => {
-            localStorage.setItem('m400_open_v4', JSON.stringify(openPositions.value));
-            localStorage.setItem('m400_history_v4', JSON.stringify(history.value));
+            localStorage.setItem('m400_open_v5', JSON.stringify(openPositions.value));
+            localStorage.setItem('m400_history_v5', JSON.stringify(history.value));
         };
 
         const wipeAllData = () => {
-            if (confirm('🚨 危險操作：這將會清除您所有的庫存倉位與歷史獲利紀錄！確定要執行嗎？')) {
-                openPositions.value = [];
-                history.value = [];
+            if (confirm('🚨 確定要清除所有數據？')) {
                 localStorage.clear();
-                alert('系統已完全重置。');
                 location.reload();
             }
         };
 
-        return { currentTab, selectedMonth, openPositions, history, modal, form, monthlyProfit, filteredHistory, openModal, startExit, handleAction, wipeAllData };
+        return { currentTab, selectedMonth, openPositions, history, isMobileMenuOpen, modal, form, monthlyProfit, filteredHistory, openModal, startExit, handleAction, wipeAllData };
     }
 }).mount('#app');
 </script>
