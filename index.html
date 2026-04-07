@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -31,51 +30,51 @@
 html{height:100%}
 
 body{
-font-family:var(–body);
-background:var(–black);
-color:var(–txt);
-min-height:100vh;
-padding-bottom:56px;
-position:relative;
+  font-family:var(--body);
+  background:var(--black);
+  color:var(--txt);
+  min-height:100vh;
+  padding-bottom:56px;
+  position:relative;
 }
 
 body::before{
-content:’’;
-position:fixed;inset:0;
-background-image:
-radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,159,10,.06) 0%,transparent 60%),
-radial-gradient(ellipse 30% 50% at 100% 60%,rgba(48,209,88,.03) 0%,transparent 50%);
-pointer-events:none;z-index:0;
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,159,10,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 30% 50% at 100% 60%,rgba(48,209,88,.03) 0%,transparent 50%);
+  pointer-events:none;z-index:0;
 }
 
-.mono{font-family:var(–mono)}
-.head{font-family:var(–head)}
-.g{color:var(–green)}
-.r{color:var(–red)}
-.a{color:var(–amber)}
+.mono{font-family:var(--mono)}
+.head{font-family:var(--head)}
+.g{color:var(--green)}
+.r{color:var(--red)}
+.a{color:var(--amber)}
 
 /* ── SIDEBAR ── */
 .sidebar{
-position:fixed;left:0;top:0;
-width:280px;height:100%;
-background:var(–surface);
-border-right:1px solid var(–line);
-transform:translateX(-100%);
-transition:transform .28s cubic-bezier(.4,0,.2,1);
-z-index:300;
-display:flex;flex-direction:column;
-overflow-y:auto;overflow-x:hidden;
+  position:fixed;left:0;top:0;
+  width:280px;height:100%;
+  background:var(--surface);
+  border-right:1px solid var(--line);
+  transform:translateX(-100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  z-index:300;
+  display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
 }
 .sidebar::-webkit-scrollbar{display:none}
 .sidebar.open{transform:translateX(0)}
 
 @media(min-width:1024px){
-.sidebar{
-position:sticky;top:0;
-height:100vh;
-transform:none;
-flex-shrink:0;
-}
+  .sidebar{
+    position:sticky;top:0;
+    height:100vh;
+    transform:none;
+    flex-shrink:0;
+  }
 }
 
 /* ── OVERLAY ── */
@@ -83,82 +82,82 @@ flex-shrink:0;
 
 /* ── NAV ITEM ── */
 .ni{
-display:flex;align-items:center;gap:10px;
-padding:11px 14px;border-radius:10px;
-font-size:13px;font-weight:700;font-family:var(–body);
-color:var(–muted);width:100%;text-align:left;
-border:1px solid transparent;
-transition:all .15s;cursor:pointer;
-letter-spacing:.02em;
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:10px;
+  font-size:13px;font-weight:700;font-family:var(--body);
+  color:var(--muted);width:100%;text-align:left;
+  border:1px solid transparent;
+  transition:all .15s;cursor:pointer;
+  letter-spacing:.02em;
 }
-.ni:hover{color:var(–txt);background:rgba(255,255,255,.04)}
-.ni.ao{color:var(–green);background:var(–green-dim);border-color:rgba(48,209,88,.18)}
+.ni:hover{color:var(--txt);background:rgba(255,255,255,.04)}
+.ni.ao{color:var(--green);background:var(--green-dim);border-color:rgba(48,209,88,.18)}
 .ni.ah{color:#64B5F6;background:rgba(100,181,246,.08);border-color:rgba(100,181,246,.18)}
 .ni.an{color:#B39DDB;background:rgba(179,157,219,.08);border-color:rgba(179,157,219,.18)}
-.ni.as{color:var(–amber);background:var(–amber-dim);border-color:rgba(255,159,10,.2)}
+.ni.as{color:var(--amber);background:var(--amber-dim);border-color:rgba(255,159,10,.2)}
 
 /* ── SECTION LABEL ── */
 .sec-lbl{
-font-size:9px;font-weight:700;letter-spacing:.2em;
-text-transform:uppercase;color:rgba(255,255,255,.2);
-padding:0 14px;margin-bottom:8px;margin-top:24px;
-font-family:var(–head);
+  font-size:9px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.2);
+  padding:0 14px;margin-bottom:8px;margin-top:24px;
+  font-family:var(--head);
 }
 
 /* ── CARD ── */
 .card{
-background:var(–card);
-border:1px solid var(–line);
-border-radius:20px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
 }
 .card-lg{border-radius:24px}
 
 /* ── INDEX TILE ── */
 .ix{
-background:var(–card);
-border:1px solid var(–line);
-border-radius:16px;
-padding:12px;
-position:relative;overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  position:relative;overflow:hidden;
 }
 .ix::after{
-content:’’;position:absolute;bottom:0;left:0;right:0;
-height:2px;
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;
 }
-.ix.up::after{background:var(–green)}
-.ix.dn::after{background:var(–red)}
+.ix.up::after{background:var(--green)}
+.ix.dn::after{background:var(--red)}
 
 /* ── POSITION CARD ── */
 .pos-card{
-background:var(–card);
-border:1px solid var(–line);
-border-radius:22px;
-padding:22px;
-transition:border-color .3s,box-shadow .3s;
-position:relative;overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px;
+  transition:border-color .3s,box-shadow .3s;
+  position:relative;overflow:hidden;
 }
 .pos-card.alert{
-border-color:rgba(48,209,88,.35);
-box-shadow:0 0 0 1px rgba(48,209,88,.12),inset 0 0 40px rgba(48,209,88,.04);
+  border-color:rgba(48,209,88,.35);
+  box-shadow:0 0 0 1px rgba(48,209,88,.12),inset 0 0 40px rgba(48,209,88,.04);
 }
 @keyframes ambientPulse{
-0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,.25),inset 0 0 40px rgba(48,209,88,.04)}
-50%{box-shadow:0 0 0 6px rgba(48,209,88,.0),inset 0 0 40px rgba(48,209,88,.04)}
+  0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,.25),inset 0 0 40px rgba(48,209,88,.04)}
+  50%{box-shadow:0 0 0 6px rgba(48,209,88,.0),inset 0 0 40px rgba(48,209,88,.04)}
 }
 .pos-card.alert{animation:ambientPulse 2.5s ease infinite}
 
 /* ── STAT BOX ── */
 .stat{
-background:rgba(0,0,0,.35);
-border:1px solid rgba(255,255,255,.05);
-border-radius:12px;
-padding:10px 12px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:12px;
+  padding:10px 12px;
 }
 .stat-lbl{
-font-size:8px;font-weight:700;
-letter-spacing:.12em;text-transform:uppercase;
-color:rgba(255,255,255,.25);margin-bottom:5px;
-font-family:var(–head);
+  font-size:8px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);margin-bottom:5px;
+  font-family:var(--head);
 }
 
 /* ── PROGRESS BAR ── */
@@ -167,89 +166,89 @@ font-family:var(–head);
 
 /* ── INPUT ── */
 .inp{
-background:rgba(0,0,0,.5);
-border:1px solid rgba(255,255,255,.1);
-border-radius:12px;padding:12px 14px;
-color:#fff;outline:none;width:100%;
-font-size:15px;font-family:var(–mono);
-transition:border-color .2s,box-shadow .2s;
+  background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:12px 14px;
+  color:#fff;outline:none;width:100%;
+  font-size:15px;font-family:var(--mono);
+  transition:border-color .2s,box-shadow .2s;
 }
-.inp:focus{border-color:var(–amber);box-shadow:0 0 0 3px rgba(255,159,10,.1)}
+.inp:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,159,10,.1)}
 
 /* ── MONTH TAB ── */
 .mtab{
-padding:7px 16px;border-radius:8px;
-font-size:11px;font-weight:700;
-flex-shrink:0;transition:all .15s;
-color:var(–muted);
-background:rgba(255,255,255,.03);
-border:1px solid transparent;cursor:pointer;
-font-family:var(–head);letter-spacing:.05em;
+  padding:7px 16px;border-radius:8px;
+  font-size:11px;font-weight:700;
+  flex-shrink:0;transition:all .15s;
+  color:var(--muted);
+  background:rgba(255,255,255,.03);
+  border:1px solid transparent;cursor:pointer;
+  font-family:var(--head);letter-spacing:.05em;
 }
-.mtab.on{background:var(–amber);color:#000;font-weight:800}
+.mtab.on{background:var(--amber);color:#000;font-weight:800}
 
 /* ── BUTTON ── */
 .btn-primary{
-background:var(–amber);color:#000;
-font-weight:800;font-size:13px;
-padding:11px 20px;border-radius:12px;
-transition:opacity .15s;cursor:pointer;
-display:inline-flex;align-items:center;gap:6px;
-font-family:var(–head);letter-spacing:.05em;
+  background:var(--amber);color:#000;
+  font-weight:800;font-size:13px;
+  padding:11px 20px;border-radius:12px;
+  transition:opacity .15s;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--head);letter-spacing:.05em;
 }
 .btn-primary:hover{opacity:.85}
 
 .btn-ghost{
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.08);
-color:var(–muted);font-weight:700;font-size:11px;
-padding:10px;border-radius:12px;
-transition:all .15s;cursor:pointer;
-font-family:var(–body);
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  color:var(--muted);font-weight:700;font-size:11px;
+  padding:10px;border-radius:12px;
+  transition:all .15s;cursor:pointer;
+  font-family:var(--body);
 }
-.btn-ghost:hover{color:var(–txt);border-color:rgba(255,255,255,.18)}
+.btn-ghost:hover{color:var(--txt);border-color:rgba(255,255,255,.18)}
 
 .btn-danger{
-background:var(–red-dim);color:var(–red);
-border:1px solid rgba(255,55,95,.22);
-font-weight:800;font-size:12px;
-padding:11px;border-radius:12px;
-transition:all .15s;cursor:pointer;width:100%;
-font-family:var(–body);
+  background:var(--red-dim);color:var(--red);
+  border:1px solid rgba(255,55,95,.22);
+  font-weight:800;font-size:12px;
+  padding:11px;border-radius:12px;
+  transition:all .15s;cursor:pointer;width:100%;
+  font-family:var(--body);
 }
-.btn-danger:hover{background:var(–red);color:#fff}
+.btn-danger:hover{background:var(--red);color:#fff}
 
 .btn-exit{
-background:var(–red-dim);color:var(–red);
-border:1px solid rgba(255,55,95,.2);
-font-weight:800;font-size:11px;
-padding:10px;border-radius:12px;
-transition:all .15s;cursor:pointer;
-font-family:var(–body);
+  background:var(--red-dim);color:var(--red);
+  border:1px solid rgba(255,55,95,.2);
+  font-weight:800;font-size:11px;
+  padding:10px;border-radius:12px;
+  transition:all .15s;cursor:pointer;
+  font-family:var(--body);
 }
-.btn-exit:hover{background:var(–red);color:#fff}
+.btn-exit:hover{background:var(--red);color:#fff}
 
 /* ── BADGE ── */
 .badge{
-font-size:9px;font-weight:800;letter-spacing:.1em;
-padding:4px 10px;border-radius:99px;text-transform:uppercase;
-font-family:var(–head);
+  font-size:9px;font-weight:800;letter-spacing:.1em;
+  padding:4px 10px;border-radius:99px;text-transform:uppercase;
+  font-family:var(--head);
 }
 
 /* ── MODAL ── */
 .modal-bg{
-position:fixed;inset:0;z-index:500;
-display:flex;align-items:flex-end;
-padding:0;background:rgba(0,0,0,.88);
-backdrop-filter:blur(12px);
+  position:fixed;inset:0;z-index:500;
+  display:flex;align-items:flex-end;
+  padding:0;background:rgba(0,0,0,.88);
+  backdrop-filter:blur(12px);
 }
 @media(min-width:640px){.modal-bg{align-items:center;padding:16px}}
 .modal-box{
-background:#0E1220;
-border:1px solid rgba(255,255,255,.1);
-border-radius:24px 24px 0 0;
-padding:28px;width:100%;max-width:400px;
-box-shadow:0 -20px 60px rgba(0,0,0,.6);
+  background:#0E1220;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:24px 24px 0 0;
+  padding:28px;width:100%;max-width:400px;
+  box-shadow:0 -20px 60px rgba(0,0,0,.6);
 }
 @media(min-width:640px){.modal-box{border-radius:24px;margin:auto}}
 
@@ -258,22 +257,22 @@ box-shadow:0 -20px 60px rgba(0,0,0,.6);
 @keyframes tIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
 @keyframes tOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(24px)}}
 .toast{
-background:rgba(16,20,31,.97);
-border:1px solid rgba(48,209,88,.4);
-border-radius:12px;padding:10px 14px;
-font-size:12px;color:var(–green);font-weight:700;
-animation:tIn .24s ease;
-box-shadow:0 4px 20px rgba(0,0,0,.5);
-font-family:var(–body);
+  background:rgba(16,20,31,.97);
+  border:1px solid rgba(48,209,88,.4);
+  border-radius:12px;padding:10px 14px;
+  font-size:12px;color:var(--green);font-weight:700;
+  animation:tIn .24s ease;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  font-family:var(--body);
 }
 .toast.out{animation:tOut .24s ease forwards}
 
 /* ── BOTTOM BAR ── */
 .bbar{
-position:fixed;bottom:0;left:0;right:0;
-background:rgba(6,8,14,.97);
-border-top:1px solid rgba(255,159,10,.15);
-padding:10px 20px;text-align:center;z-index:100;
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(6,8,14,.97);
+  border-top:1px solid rgba(255,159,10,.15);
+  padding:10px 20px;text-align:center;z-index:100;
 }
 
 /* ── ANIMATIONS ── */
@@ -290,53 +289,51 @@ padding:10px 20px;text-align:center;z-index:100;
 
 /* ── TITLE ── */
 .page-title{
-font-family:var(–head);
-font-weight:800;font-style:italic;
-font-size:clamp(2rem,7vw,2.8rem);
-letter-spacing:.04em;color:#fff;
-line-height:1;
+  font-family:var(--head);
+  font-weight:800;font-style:italic;
+  font-size:clamp(2rem,7vw,2.8rem);
+  letter-spacing:.04em;color:#fff;
+  line-height:1;
 }
 
 /* ── HISTORY ROW ── */
 .hist-row{
-background:var(–card);
-border:1px solid var(–line);
-border-radius:16px;padding:18px;
-display:flex;justify-content:space-between;align-items:center;
-transition:border-color .15s;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;padding:18px;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:border-color .15s;
 }
 .hist-row:hover{border-color:rgba(255,255,255,.12)}
 
 /* ── SCORE DISPLAY ── */
 .score-display{
-background:rgba(0,0,0,.4);
-border-radius:14px;padding:14px;text-align:center;
+  background:rgba(0,0,0,.4);
+  border-radius:14px;padding:14px;text-align:center;
 }
 
 /* ── TICKER AVATAR ── */
 .ticker-av{
-width:44px;height:44px;border-radius:14px;
-display:flex;align-items:center;justify-content:center;
-font-family:var(–head);font-weight:800;font-style:italic;font-size:16px;
-color:var(–amber);
-background:var(–amber-dim);
-border:1px solid rgba(255,159,10,.15);
-flex-shrink:0;letter-spacing:.02em;
+  width:44px;height:44px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--head);font-weight:800;font-style:italic;font-size:16px;
+  color:var(--amber);
+  background:var(--amber-dim);
+  border:1px solid rgba(255,159,10,.15);
+  flex-shrink:0;letter-spacing:.02em;
 }
 
 /* ── STATUS DOT ── */
 .sdot{width:6px;height:6px;border-radius:99px;flex-shrink:0}
-.sdot.on{background:var(–green);box-shadow:0 0 6px var(–green)}
-.sdot.off{background:var(–red)}
+.sdot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
+.sdot.off{background:var(--red)}
 </style>
-
 </head>
 
 <body>
 <div id="app" v-cloak style="position:relative;z-index:1" class="flex flex-col lg:flex-row min-h-screen">
 
   <!-- TOASTS -->
-
   <div class="tc">
     <div v-for="t in toasts" :key="t.id" :class="['toast',t.out?'out':'']">
       <span class="g">●</span> {{ t.msg }}
@@ -344,7 +341,6 @@ flex-shrink:0;letter-spacing:.02em;
   </div>
 
   <!-- MOBILE TOPBAR -->
-
   <header class="lg:hidden sticky top-0 z-50 flex items-center justify-between px-5 py-4" style="background:rgba(6,8,14,.97);border-bottom:1px solid var(--line)">
     <div class="flex items-center gap-3">
       <div style="width:34px;height:34px;background:var(--amber);border-radius:10px;display:flex;align-items:center;justify-content:center">
@@ -365,296 +361,286 @@ flex-shrink:0;letter-spacing:.02em;
   </header>
 
   <!-- OVERLAY -->
-
   <div v-if="menuOpen" @click="menuOpen=false" class="ov lg:hidden"></div>
 
   <!-- SIDEBAR -->
-
   <aside :class="['sidebar',menuOpen?'open':'']">
     <div style="padding:28px 20px;display:flex;flex-direction:column;min-height:100%">
 
-```
-  <!-- Logo -->
-  <div class="hidden lg:flex items-center gap-3" style="margin-bottom:36px">
-    <div style="width:42px;height:42px;background:var(--amber);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <span style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#000">M</span>
-    </div>
-    <div>
-      <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.06em;line-height:1">M400 PRO</div>
-      <div style="font-size:9px;color:var(--muted);font-weight:700;letter-spacing:.15em;font-family:var(--head)">STRATEGY TERMINAL</div>
-    </div>
-  </div>
-
-  <!-- Nav -->
-  <div>
-    <div class="sec-lbl" style="margin-top:0">主選單</div>
-    <div style="display:flex;flex-direction:column;gap:3px">
-      <button @click="go('open')"     :class="['ni',tab==='open'    ?'ao':'']">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-        在庫倉位管理
-      </button>
-      <button @click="go('history')"  :class="['ni',tab==='history' ?'ah':'']">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        獲利分析報表
-      </button>
-      <button @click="go('news')"     :class="['ni',tab==='news'    ?'an':'']">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        華爾街機構評等
-      </button>
-      <button @click="go('settings')" :class="['ni',tab==='settings'?'as':'']">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 19.07a10 10 0 010-14.14"/></svg>
-        API 連線設定
-      </button>
-    </div>
-  </div>
-
-  <div>
-    <div class="sec-lbl">數據管理</div>
-    <div style="display:flex;flex-direction:column;gap:3px">
-      <button @click="exportData" class="ni">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        導出備份 JSON
-      </button>
-      <button @click="$refs.fi.click()" class="ni">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        導入數據備份
-      </button>
-      <input type="file" ref="fi" @change="importData" style="display:none" accept=".json">
-      <button @click="clearAll" class="ni" style="color:var(--red)">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-        清空交易紀錄
-      </button>
-    </div>
-  </div>
-
-  <!-- System status -->
-  <div style="margin-top:auto;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:16px;padding:16px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span style="font-size:10px;color:var(--muted);font-weight:700;font-family:var(--head);letter-spacing:.1em;text-transform:uppercase">系統狀態</span>
-      <div style="display:flex;align-items:center;gap:6px">
-        <div :class="['sdot',apiKey?'on':'off']"></div>
-        <span style="font-size:10px;font-family:var(--mono);font-weight:600" :class="apiKey?'g':'r'">{{ apiKey?'ONLINE':'OFFLINE' }}</span>
+      <!-- Logo -->
+      <div class="hidden lg:flex items-center gap-3" style="margin-bottom:36px">
+        <div style="width:42px;height:42px;background:var(--amber);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <span style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#000">M</span>
+        </div>
+        <div>
+          <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.06em;line-height:1">M400 PRO</div>
+          <div style="font-size:9px;color:var(--muted);font-weight:700;letter-spacing:.15em;font-family:var(--head)">STRATEGY TERMINAL</div>
+        </div>
       </div>
-    </div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-      <span style="font-size:10px;color:var(--muted);font-family:var(--mono)">STORAGE</span>
-      <span style="font-size:10px;font-family:var(--mono);color:var(--txt)">{{ storageUsage }}%</span>
-    </div>
-    <div class="bar" style="margin-bottom:14px"><div class="bar-fill" :style="{width:storageUsage+'%',background:'var(--amber)'}"></div></div>
-    <button @click="fetchAll" :disabled="!apiKey||fetching"
-      style="width:100%;background:var(--amber-dim);border:1px solid rgba(255,159,10,.2);border-radius:10px;padding:9px;color:var(--amber);font-weight:700;font-size:11px;display:flex;justify-content:center;align-items:center;gap:6px;transition:all .15s;cursor:pointer;font-family:var(--head);letter-spacing:.08em;text-transform:uppercase"
-      :style="(!apiKey||fetching)?'opacity:.3;cursor:not-allowed':''">
-      <svg :class="fetching?'spin':''" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-      </svg>
-      同步最新數據
-    </button>
-  </div>
 
-</div>
-```
+      <!-- Nav -->
+      <div>
+        <div class="sec-lbl" style="margin-top:0">主選單</div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <button @click="go('open')"     :class="['ni',tab==='open'    ?'ao':'']">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            在庫倉位管理
+          </button>
+          <button @click="go('history')"  :class="['ni',tab==='history' ?'ah':'']">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            獲利分析報表
+          </button>
+          <button @click="go('news')"     :class="['ni',tab==='news'    ?'an':'']">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            華爾街機構評等
+          </button>
+          <button @click="go('settings')" :class="['ni',tab==='settings'?'as':'']">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 19.07a10 10 0 010-14.14"/></svg>
+            API 連線設定
+          </button>
+        </div>
+      </div>
 
+      <div>
+        <div class="sec-lbl">數據管理</div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <button @click="exportData" class="ni">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            導出備份 JSON
+          </button>
+          <button @click="$refs.fi.click()" class="ni">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            導入數據備份
+          </button>
+          <input type="file" ref="fi" @change="importData" style="display:none" accept=".json">
+          <button @click="clearAll" class="ni" style="color:var(--red)">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            清空交易紀錄
+          </button>
+        </div>
+      </div>
+
+      <!-- System status -->
+      <div style="margin-top:auto;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:16px;padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="font-size:10px;color:var(--muted);font-weight:700;font-family:var(--head);letter-spacing:.1em;text-transform:uppercase">系統狀態</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div :class="['sdot',apiKey?'on':'off']"></div>
+            <span style="font-size:10px;font-family:var(--mono);font-weight:600" :class="apiKey?'g':'r'">{{ apiKey?'ONLINE':'OFFLINE' }}</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:10px;color:var(--muted);font-family:var(--mono)">STORAGE</span>
+          <span style="font-size:10px;font-family:var(--mono);color:var(--txt)">{{ storageUsage }}%</span>
+        </div>
+        <div class="bar" style="margin-bottom:14px"><div class="bar-fill" :style="{width:storageUsage+'%',background:'var(--amber)'}"></div></div>
+        <button @click="fetchAll" :disabled="!apiKey||fetching"
+          style="width:100%;background:var(--amber-dim);border:1px solid rgba(255,159,10,.2);border-radius:10px;padding:9px;color:var(--amber);font-weight:700;font-size:11px;display:flex;justify-content:center;align-items:center;gap:6px;transition:all .15s;cursor:pointer;font-family:var(--head);letter-spacing:.08em;text-transform:uppercase"
+          :style="(!apiKey||fetching)?'opacity:.3;cursor:not-allowed':''">
+          <svg :class="fetching?'spin':''" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          同步最新數據
+        </button>
+      </div>
+
+    </div>
   </aside>
 
   <!-- MAIN -->
-
   <main style="flex:1;padding:20px;overflow-y:auto;position:relative;z-index:1" class="lg:p-10">
     <div style="max-width:900px;margin:0 auto">
 
-```
-  <!-- INDEX TICKER -->
-  <div v-if="tab!=='settings'" class="fu" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:28px" :style="'grid-template-columns:repeat(6,1fr)'">
-    <div v-for="ix in indices" :key="ix.symbol" :class="['ix', ix.change===null?'':(ix.change>=0?'up':'dn')]">
-      <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-family:var(--head);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ix.name }}</div>
-      <div class="mono" style="font-size:13px;font-weight:600;color:#fff;line-height:1.2">{{ ix.price?ix.price.toFixed(2):'—' }}</div>
-      <div class="mono" style="font-size:9px;font-weight:600;margin-top:3px" :class="(ix.change||0)>=0?'g':'r'">
-        {{ ix.change!==null?((ix.change>=0?'+':'')+ix.change.toFixed(2)+'%'):'—' }}
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════ 在庫倉位管理 ══════ -->
-  <section v-if="tab==='open'">
-    <div class="fu" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
-      <div>
-        <div class="page-title">在庫倉位</div>
-        <div style="margin-top:6px;font-size:12px;color:var(--muted);font-family:var(--mono)">
-          {{ openPos.length }} POSITIONS &nbsp;·&nbsp;
-          <span style="color:var(--txt)">${{ totalValue.toLocaleString(undefined,{minimumFractionDigits:2}) }}</span>
-        </div>
-      </div>
-      <button @click="openModal('entry')" class="btn-primary">
-        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        新增持倉
-      </button>
-    </div>
-
-    <div v-if="openPos.length===0" class="fu2 card card-lg" style="padding:60px 20px;text-align:center">
-      <div style="font-size:36px;margin-bottom:12px">📊</div>
-      <div style="font-family:var(--head);font-size:16px;color:var(--muted);font-weight:700">尚無持倉標的</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.2);margin-top:4px">點擊右上角「新增持倉」開始記錄</div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
-      <div v-for="(p,i) in openPos" :key="p.id" :class="['pos-card fu',pct(p)>=3?'alert':'']" :style="'animation-delay:'+(i*.05)+'s'">
-
-        <!-- Alert badge -->
-        <div v-if="pct(p)>=3" style="display:flex;justify-content:flex-end;margin-bottom:12px">
-          <span class="badge g" style="background:var(--green-dim);border:1px solid rgba(48,209,88,.25)">
-            🚀 +{{ pct(p).toFixed(1) }}% — 提醒平倉
-          </span>
-        </div>
-
-        <!-- Header row -->
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div class="ticker-av">{{ p.ticker.substring(0,2) }}</div>
-            <div>
-              <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.04em;line-height:1">{{ p.ticker }}</div>
-              <div class="mono" style="font-size:10px;color:var(--muted);margin-top:3px">{{ p.qty.toLocaleString() }} SHS</div>
-            </div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-family:var(--head);margin-bottom:4px">即時報價</div>
-            <div class="mono" style="font-size:20px;font-weight:600;color:#fff;line-height:1">
-              {{ p.currentPrice?'$'+Number(p.currentPrice).toFixed(2):'—' }}
-            </div>
+      <!-- INDEX TICKER -->
+      <div v-if="tab!=='settings'" class="fu" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:28px" :style="'grid-template-columns:repeat(6,1fr)'">
+        <div v-for="ix in indices" :key="ix.symbol" :class="['ix', ix.change===null?'':(ix.change>=0?'up':'dn')]">
+          <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-family:var(--head);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ix.name }}</div>
+          <div class="mono" style="font-size:13px;font-weight:600;color:#fff;line-height:1.2">{{ ix.price?ix.price.toFixed(2):'—' }}</div>
+          <div class="mono" style="font-size:9px;font-weight:600;margin-top:3px" :class="(ix.change||0)>=0?'g':'r'">
+            {{ ix.change!==null?((ix.change>=0?'+':'')+ix.change.toFixed(2)+'%'):'—' }}
           </div>
         </div>
-
-        <!-- Stats -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
-          <div class="stat">
-            <div class="stat-lbl">成本</div>
-            <div class="mono" style="font-size:13px;font-weight:600;color:var(--txt)">${{ Number(p.entry).toFixed(2) }}</div>
-          </div>
-          <div class="stat">
-            <div class="stat-lbl">未實現</div>
-            <div class="mono" style="font-size:13px;font-weight:600" :class="unrealized(p)>=0?'g':'r'">${{ unrealized(p).toFixed(2) }}</div>
-          </div>
-          <div class="stat">
-            <div class="stat-lbl">漲跌幅</div>
-            <div class="mono" style="font-size:13px;font-weight:600" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div>
-          </div>
-        </div>
-
-        <!-- Progress bar -->
-        <div class="bar" style="margin-bottom:16px">
-          <div class="bar-fill" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--green)':'var(--red)'}"></div>
-        </div>
-
-        <!-- Actions -->
-        <div style="display:flex;gap:8px">
-          <button @click="openModal('edit',p)" class="btn-ghost" style="flex:1">修改 / 刪除</button>
-          <button @click="openModal('exit',p)" class="btn-exit" style="flex:1">結清獲利</button>
-        </div>
-
       </div>
-    </div>
-  </section>
 
-  <!-- ══════ 獲利分析報表 ══════ -->
-  <section v-if="tab==='history'">
-    <div class="fu page-title" style="margin-bottom:24px">獲利分析</div>
-
-    <div class="fu2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:20px" class="lg:grid-cols-3">
-      <div class="card" style="padding:28px;border-color:rgba(48,209,88,.1)">
-        <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px" :class="annualPnl>=0?'g':'r'">年度累計損益</div>
-        <div class="mono" style="font-size:clamp(1.8rem,6vw,3rem);font-weight:700;line-height:1" :class="annualPnl>=0?'g':'r'">
-          ${{ annualPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}
-        </div>
-        <div class="bar" style="margin-top:18px">
-          <div class="bar-fill" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--green)':'var(--red)'}"></div>
-        </div>
-      </div>
-      <div class="card" style="padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-        <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">{{ selMonth }} 月結算</div>
-        <div class="mono" style="font-size:1.8rem;font-weight:700" :class="monthPnl>=0?'g':'r'">${{ monthPnl.toFixed(2) }}</div>
-        <div class="mono" style="font-size:10px;color:var(--muted);margin-top:6px">{{ filteredHist.length }} 筆</div>
-      </div>
-    </div>
-
-    <div class="fu3 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px">
-      <button v-for="m in 12" :key="m" @click="selMonth=m" :class="['mtab',selMonth===m?'on':'']">{{ m }}月</button>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <div v-if="filteredHist.length===0" class="card" style="padding:40px;text-align:center;color:var(--muted);font-size:14px;font-weight:700">本月無交易紀錄</div>
-      <div v-for="h in filteredHist" :key="h.id" class="hist-row">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div class="ticker-av" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
+      <!-- ══════ 在庫倉位管理 ══════ -->
+      <section v-if="tab==='open'">
+        <div class="fu" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
           <div>
-            <div style="font-family:var(--head);font-weight:800;font-size:17px;color:#fff;font-style:italic;letter-spacing:.04em">{{ h.ticker }}</div>
-            <div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px">
-              {{ Number(h.entry).toFixed(2) }} → {{ Number(h.exit).toFixed(2) }} &nbsp;·&nbsp; {{ h.qty }} 股
+            <div class="page-title">在庫倉位</div>
+            <div style="margin-top:6px;font-size:12px;color:var(--muted);font-family:var(--mono)">
+              {{ openPos.length }} POSITIONS &nbsp;·&nbsp;
+              <span style="color:var(--txt)">${{ totalValue.toLocaleString(undefined,{minimumFractionDigits:2}) }}</span>
+            </div>
+          </div>
+          <button @click="openModal('entry')" class="btn-primary">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            新增持倉
+          </button>
+        </div>
+
+        <div v-if="openPos.length===0" class="fu2 card card-lg" style="padding:60px 20px;text-align:center">
+          <div style="font-size:36px;margin-bottom:12px">📊</div>
+          <div style="font-family:var(--head);font-size:16px;color:var(--muted);font-weight:700">尚無持倉標的</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.2);margin-top:4px">點擊右上角「新增持倉」開始記錄</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+          <div v-for="(p,i) in openPos" :key="p.id" :class="['pos-card fu',pct(p)>=3?'alert':'']" :style="'animation-delay:'+(i*.05)+'s'">
+
+            <!-- Alert badge -->
+            <div v-if="pct(p)>=3" style="display:flex;justify-content:flex-end;margin-bottom:12px">
+              <span class="badge g" style="background:var(--green-dim);border:1px solid rgba(48,209,88,.25)">
+                🚀 +{{ pct(p).toFixed(1) }}% — 提醒平倉
+              </span>
+            </div>
+
+            <!-- Header row -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div class="ticker-av">{{ p.ticker.substring(0,2) }}</div>
+                <div>
+                  <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.04em;line-height:1">{{ p.ticker }}</div>
+                  <div class="mono" style="font-size:10px;color:var(--muted);margin-top:3px">{{ p.qty.toLocaleString() }} SHS</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-family:var(--head);margin-bottom:4px">即時報價</div>
+                <div class="mono" style="font-size:20px;font-weight:600;color:#fff;line-height:1">
+                  {{ p.currentPrice?'$'+Number(p.currentPrice).toFixed(2):'—' }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+              <div class="stat">
+                <div class="stat-lbl">成本</div>
+                <div class="mono" style="font-size:13px;font-weight:600;color:var(--txt)">${{ Number(p.entry).toFixed(2) }}</div>
+              </div>
+              <div class="stat">
+                <div class="stat-lbl">未實現</div>
+                <div class="mono" style="font-size:13px;font-weight:600" :class="unrealized(p)>=0?'g':'r'">${{ unrealized(p).toFixed(2) }}</div>
+              </div>
+              <div class="stat">
+                <div class="stat-lbl">漲跌幅</div>
+                <div class="mono" style="font-size:13px;font-weight:600" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div>
+              </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="bar" style="margin-bottom:16px">
+              <div class="bar-fill" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--green)':'var(--red)'}"></div>
+            </div>
+
+            <!-- Actions -->
+            <div style="display:flex;gap:8px">
+              <button @click="openModal('edit',p)" class="btn-ghost" style="flex:1">修改 / 刪除</button>
+              <button @click="openModal('exit',p)" class="btn-exit" style="flex:1">結清獲利</button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════ 獲利分析報表 ══════ -->
+      <section v-if="tab==='history'">
+        <div class="fu page-title" style="margin-bottom:24px">獲利分析</div>
+
+        <div class="fu2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:20px" class="lg:grid-cols-3">
+          <div class="card" style="padding:28px;border-color:rgba(48,209,88,.1)">
+            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px" :class="annualPnl>=0?'g':'r'">年度累計損益</div>
+            <div class="mono" style="font-size:clamp(1.8rem,6vw,3rem);font-weight:700;line-height:1" :class="annualPnl>=0?'g':'r'">
+              ${{ annualPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}
+            </div>
+            <div class="bar" style="margin-top:18px">
+              <div class="bar-fill" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--green)':'var(--red)'}"></div>
+            </div>
+          </div>
+          <div class="card" style="padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">{{ selMonth }} 月結算</div>
+            <div class="mono" style="font-size:1.8rem;font-weight:700" :class="monthPnl>=0?'g':'r'">${{ monthPnl.toFixed(2) }}</div>
+            <div class="mono" style="font-size:10px;color:var(--muted);margin-top:6px">{{ filteredHist.length }} 筆</div>
+          </div>
+        </div>
+
+        <div class="fu3 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px">
+          <button v-for="m in 12" :key="m" @click="selMonth=m" :class="['mtab',selMonth===m?'on':'']">{{ m }}月</button>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div v-if="filteredHist.length===0" class="card" style="padding:40px;text-align:center;color:var(--muted);font-size:14px;font-weight:700">本月無交易紀錄</div>
+          <div v-for="h in filteredHist" :key="h.id" class="hist-row">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="ticker-av" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
+              <div>
+                <div style="font-family:var(--head);font-weight:800;font-size:17px;color:#fff;font-style:italic;letter-spacing:.04em">{{ h.ticker }}</div>
+                <div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px">
+                  {{ Number(h.entry).toFixed(2) }} → {{ Number(h.exit).toFixed(2) }} &nbsp;·&nbsp; {{ h.qty }} 股
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div class="mono" style="font-size:18px;font-weight:700" :class="h.pnl>=0?'g':'r'">${{ h.pnl.toFixed(2) }}</div>
+              <div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(1) }}%</div>
             </div>
           </div>
         </div>
-        <div style="text-align:right">
-          <div class="mono" style="font-size:18px;font-weight:700" :class="h.pnl>=0?'g':'r'">${{ h.pnl.toFixed(2) }}</div>
-          <div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(1) }}%</div>
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- ══════ 機構評等 ══════ -->
-  <section v-if="tab==='news'">
-    <div class="fu page-title" style="margin-bottom:24px">機構評等</div>
-    <div v-if="!Object.keys(recs).length" class="fu2 card" style="padding:48px;text-align:center">
-      <div style="font-size:13px;color:var(--muted);font-weight:700">尚無評等數據</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.15);margin-top:6px">請先設定 API 金鑰並同步數據</div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
-      <div v-for="(rec,tk) in recs" :key="tk" class="fu2 card" style="padding:22px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.04em">{{ tk }}</div>
-          <div class="mono" style="font-size:9px;color:var(--muted)">{{ rec.period }}</div>
+      <!-- ══════ 機構評等 ══════ -->
+      <section v-if="tab==='news'">
+        <div class="fu page-title" style="margin-bottom:24px">機構評等</div>
+        <div v-if="!Object.keys(recs).length" class="fu2 card" style="padding:48px;text-align:center">
+          <div style="font-size:13px;color:var(--muted);font-weight:700">尚無評等數據</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.15);margin-top:6px">請先設定 API 金鑰並同步數據</div>
         </div>
-        <!-- Rating bar -->
-        <div style="display:flex;gap:2px;height:6px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.05);margin-bottom:10px">
-          <div :style="{width:(rec.strongBuy+rec.buy)/rec.total*100+'%',background:'var(--green)'}"></div>
-          <div :style="{width:rec.hold/rec.total*100+'%',background:'var(--muted)'}"></div>
-          <div :style="{width:(rec.sell+rec.strongSell)/rec.total*100+'%',background:'var(--red)'}"></div>
-        </div>
-        <div class="mono" style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:16px">
-          <span class="g">買入 {{ rec.strongBuy+rec.buy }}</span>
-          <span style="color:var(--muted)">持有 {{ rec.hold }}</span>
-          <span class="r">賣出 {{ rec.sell+rec.strongSell }}</span>
-        </div>
-        <div class="score-display">
-          <div style="font-size:8px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">綜合評分</div>
-          <div class="mono" style="font-size:26px;font-weight:700;line-height:1" :class="score(rec)>=4?'g':score(rec)>=3?'a':'r'">
-            {{ score(rec).toFixed(1) }}
-            <span style="font-size:13px;color:var(--muted);font-weight:400">&nbsp;/ 5.0</span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+          <div v-for="(rec,tk) in recs" :key="tk" class="fu2 card" style="padding:22px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.04em">{{ tk }}</div>
+              <div class="mono" style="font-size:9px;color:var(--muted)">{{ rec.period }}</div>
+            </div>
+            <!-- Rating bar -->
+            <div style="display:flex;gap:2px;height:6px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.05);margin-bottom:10px">
+              <div :style="{width:(rec.strongBuy+rec.buy)/rec.total*100+'%',background:'var(--green)'}"></div>
+              <div :style="{width:rec.hold/rec.total*100+'%',background:'var(--muted)'}"></div>
+              <div :style="{width:(rec.sell+rec.strongSell)/rec.total*100+'%',background:'var(--red)'}"></div>
+            </div>
+            <div class="mono" style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:16px">
+              <span class="g">買入 {{ rec.strongBuy+rec.buy }}</span>
+              <span style="color:var(--muted)">持有 {{ rec.hold }}</span>
+              <span class="r">賣出 {{ rec.sell+rec.strongSell }}</span>
+            </div>
+            <div class="score-display">
+              <div style="font-size:8px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">綜合評分</div>
+              <div class="mono" style="font-size:26px;font-weight:700;line-height:1" :class="score(rec)>=4?'g':score(rec)>=3?'a':'r'">
+                {{ score(rec).toFixed(1) }}
+                <span style="font-size:13px;color:var(--muted);font-weight:400">&nbsp;/ 5.0</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- ══════ API 設定 ══════ -->
+      <section v-if="tab==='settings'">
+        <div class="fu page-title" style="margin-bottom:24px">連線設定</div>
+        <div class="fu2 card" style="padding:28px;max-width:440px">
+          <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:12px">Finnhub API 金鑰</div>
+          <input v-model="tempKey" type="password" placeholder="貼上 API Key ..." class="inp" style="margin-bottom:8px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:20px">
+            前往 <a href="https://finnhub.io" target="_blank" style="color:var(--amber);text-decoration:underline">finnhub.io</a> 免費申請 · 每分鐘 60 次請求
+          </div>
+          <button @click="saveKey" class="btn-primary" style="width:100%;justify-content:center;padding:13px">
+            儲存金鑰並重新連線
+          </button>
+        </div>
+      </section>
+
     </div>
-  </section>
-
-  <!-- ══════ API 設定 ══════ -->
-  <section v-if="tab==='settings'">
-    <div class="fu page-title" style="margin-bottom:24px">連線設定</div>
-    <div class="fu2 card" style="padding:28px;max-width:440px">
-      <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:12px">Finnhub API 金鑰</div>
-      <input v-model="tempKey" type="password" placeholder="貼上 API Key ..." class="inp" style="margin-bottom:8px">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:20px">
-        前往 <a href="https://finnhub.io" target="_blank" style="color:var(--amber);text-decoration:underline">finnhub.io</a> 免費申請 · 每分鐘 60 次請求
-      </div>
-      <button @click="saveKey" class="btn-primary" style="width:100%;justify-content:center;padding:13px">
-        儲存金鑰並重新連線
-      </button>
-    </div>
-  </section>
-
-</div>
-```
-
   </main>
 
   <!-- BOTTOM BAR -->
-
   <div class="bbar">
     <div class="mono" style="font-size:10px;color:rgba(255,159,10,.7);font-weight:600">
       ⚠ 數據僅存於本地瀏覽器快取。清除快取將永久遺失。請定期「導出備份」。
@@ -662,59 +648,55 @@ flex-shrink:0;letter-spacing:.02em;
   </div>
 
   <!-- MODAL -->
-
   <div v-if="modal.show" class="modal-bg" @click.self="modal.show=false">
     <div class="modal-box">
 
-```
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:4px;height:22px;background:var(--amber);border-radius:99px"></div>
-      <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:20px;color:#fff;letter-spacing:.05em;text-transform:uppercase">{{ modal.title }}</div>
-    </div>
-    <button @click="modal.show=false" style="color:var(--muted);padding:4px;transition:color .15s">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-
-  <div style="display:flex;flex-direction:column;gap:14px">
-    <div v-if="modal.mode!=='exit'">
-      <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">股票代碼</div>
-      <input v-model="form.ticker" class="inp" placeholder="AAPL" style="text-transform:uppercase;font-weight:700;font-size:18px">
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div>
-        <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">{{ modal.mode==='exit'?'賣出價格':'成交價格' }}</div>
-        <input v-model.number="form.price" type="number" step="0.01" class="inp" placeholder="0.00">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:4px;height:22px;background:var(--amber);border-radius:99px"></div>
+          <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:20px;color:#fff;letter-spacing:.05em;text-transform:uppercase">{{ modal.title }}</div>
+        </div>
+        <button @click="modal.show=false" style="color:var(--muted);padding:4px;transition:color .15s">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
       </div>
-      <div>
-        <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">股數</div>
-        <input v-model.number="form.qty" type="number" class="inp" placeholder="100">
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div v-if="modal.mode!=='exit'">
+          <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">股票代碼</div>
+          <input v-model="form.ticker" class="inp" placeholder="AAPL" style="text-transform:uppercase;font-weight:700;font-size:18px">
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">{{ modal.mode==='exit'?'賣出價格':'成交價格' }}</div>
+            <input v-model.number="form.price" type="number" step="0.01" class="inp" placeholder="0.00">
+          </div>
+          <div>
+            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">股數</div>
+            <input v-model.number="form.qty" type="number" class="inp" placeholder="100">
+          </div>
+        </div>
+
+        <!-- Exit PnL preview -->
+        <div v-if="modal.mode==='exit'&&form.price&&form.qty"
+          style="background:rgba(0,0,0,.4);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,.06)">
+          <div style="font-size:8px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">預估損益</div>
+          <div class="mono" style="font-size:28px;font-weight:700" :class="exitPv>=0?'g':'r'">${{ exitPv.toFixed(2) }}</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
+          <button @click="doAction" class="btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:14px">
+            {{ modal.mode==='entry'?'新增持倉':modal.mode==='exit'?'確認平倉':'儲存修改' }}
+          </button>
+          <button v-if="modal.mode==='edit'" @click="deletePos" class="btn-danger">🗑 刪除此持倉</button>
+          <button @click="modal.show=false" style="color:var(--muted);font-size:13px;font-weight:700;padding:8px;transition:color .15s;background:none;border:none;cursor:pointer;font-family:var(--body)">
+            取消返回
+          </button>
+        </div>
       </div>
+
     </div>
-
-    <!-- Exit PnL preview -->
-    <div v-if="modal.mode==='exit'&&form.price&&form.qty"
-      style="background:rgba(0,0,0,.4);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,.06)">
-      <div style="font-size:8px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">預估損益</div>
-      <div class="mono" style="font-size:28px;font-weight:700" :class="exitPv>=0?'g':'r'">${{ exitPv.toFixed(2) }}</div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
-      <button @click="doAction" class="btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:14px">
-        {{ modal.mode==='entry'?'新增持倉':modal.mode==='exit'?'確認平倉':'儲存修改' }}
-      </button>
-      <button v-if="modal.mode==='edit'" @click="deletePos" class="btn-danger">🗑 刪除此持倉</button>
-      <button @click="modal.show=false" style="color:var(--muted);font-size:13px;font-weight:700;padding:8px;transition:color .15s;background:none;border:none;cursor:pointer;font-family:var(--body)">
-        取消返回
-      </button>
-    </div>
-  </div>
-
-</div>
-```
-
   </div>
 
 </div>
@@ -950,6 +932,5 @@ var _vueApp = (function(){
   }).mount('#app');
 })();
 </script>
-
 </body>
 </html>
