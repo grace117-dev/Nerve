@@ -3,441 +3,455 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>M400 戰略終端</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>M400</title>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,600;0,700;0,800;1,800&family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --black:#06080E;
-  --surface:#0C0F18;
-  --card:#10141F;
-  --line:rgba(255,255,255,0.07);
-  --amber:#FF9F0A;
-  --amber-dim:rgba(255,159,10,0.12);
-  --green:#30D158;
-  --green-dim:rgba(48,209,88,0.1);
-  --red:#FF375F;
-  --red-dim:rgba(255,55,95,0.1);
-  --txt:#E5E8F0;
-  --muted:#4A5568;
-  --mono:'IBM Plex Mono',monospace;
-  --head:'Barlow Condensed','Noto Sans TC',sans-serif;
-  --body:'Noto Sans TC',sans-serif;
-}
-[v-cloak]{display:none!important}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%}
-
-body{
-  font-family:var(--body);
-  background:var(--black);
-  color:var(--txt);
-  min-height:100vh;
-  padding-bottom:56px;
-  position:relative;
+:root {
+  --bg:       #0D0B09;
+  --s1:       #131109;
+  --s2:       #1A1612;
+  --s3:       #221D18;
+  --line:     rgba(255,238,210,0.07);
+  --line2:    rgba(255,238,210,0.12);
+  --sakura:   #C8788A;
+  --sakura2:  rgba(200,120,138,0.1);
+  --sakura3:  rgba(200,120,138,0.18);
+  --sage:     #7BA882;
+  --sage2:    rgba(123,168,130,0.1);
+  --sage3:    rgba(123,168,130,0.18);
+  --umber:    #C07858;
+  --umber2:   rgba(192,120,88,0.1);
+  --cream:    #EDE6DA;
+  --warm:     #8C7B6A;
+  --dim:      #4A3F35;
+  --mono:     'IBM Plex Mono', monospace;
+  --serif:    'DM Serif Display', 'Noto Serif JP', serif;
+  --sans:     'Noto Sans TC', sans-serif;
 }
 
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:
-    radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,159,10,.06) 0%,transparent 60%),
-    radial-gradient(ellipse 30% 50% at 100% 60%,rgba(48,209,88,.03) 0%,transparent 50%);
-  pointer-events:none;z-index:0;
+[v-cloak] { display:none!important }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--cream);
+  min-height: 100vh;
+  padding-bottom: 52px;
 }
 
-.mono{font-family:var(--mono)}
-.head{font-family:var(--head)}
-.g{color:var(--green)}
-.r{color:var(--red)}
-.a{color:var(--amber)}
-
-/* ── SIDEBAR ── */
-.sidebar{
-  position:fixed;left:0;top:0;
-  width:280px;height:100%;
-  background:var(--surface);
-  border-right:1px solid var(--line);
-  transform:translateX(-100%);
-  transition:transform .28s cubic-bezier(.4,0,.2,1);
-  z-index:300;
-  display:flex;flex-direction:column;
-  overflow-y:auto;overflow-x:hidden;
-}
-.sidebar::-webkit-scrollbar{display:none}
-.sidebar.open{transform:translateX(0)}
-
-@media(min-width:1024px){
-  .sidebar{
-    position:sticky;top:0;
-    height:100vh;
-    transform:none;
-    flex-shrink:0;
-  }
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 30% -10%, rgba(200,120,138,.05) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 90% 90%,  rgba(123,168,130,.03) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 30% at 80% 20%,  rgba(192,120,88,.025) 0%, transparent 40%);
 }
 
-/* ── OVERLAY ── */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;backdrop-filter:blur(3px)}
+.mono  { font-family: var(--mono) }
+.serif { font-family: var(--serif) }
+.g  { color: var(--sage) }
+.r  { color: var(--umber) }
+.sk { color: var(--sakura) }
+.warm-txt { color: var(--warm) }
 
-/* ── NAV ITEM ── */
-.ni{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;border-radius:10px;
-  font-size:13px;font-weight:700;font-family:var(--body);
-  color:var(--muted);width:100%;text-align:left;
-  border:1px solid transparent;
-  transition:all .15s;cursor:pointer;
-  letter-spacing:.02em;
+/* ─── SIDEBAR ─── */
+.sidebar {
+  position: fixed; left:0; top:0; width:268px; height:100%;
+  background: var(--s1);
+  border-right: 1px solid var(--line);
+  transform: translateX(-100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  z-index: 300;
+  display: flex; flex-direction: column;
+  overflow-y: auto; overflow-x: hidden;
 }
-.ni:hover{color:var(--txt);background:rgba(255,255,255,.04)}
-.ni.ao{color:var(--green);background:var(--green-dim);border-color:rgba(48,209,88,.18)}
-.ni.ah{color:#64B5F6;background:rgba(100,181,246,.08);border-color:rgba(100,181,246,.18)}
-.ni.an{color:#B39DDB;background:rgba(179,157,219,.08);border-color:rgba(179,157,219,.18)}
-.ni.as{color:var(--amber);background:var(--amber-dim);border-color:rgba(255,159,10,.2)}
+.sidebar::-webkit-scrollbar { display:none }
+.sidebar.open { transform: translateX(0) }
 
-/* ── SECTION LABEL ── */
-.sec-lbl{
-  font-size:9px;font-weight:700;letter-spacing:.2em;
-  text-transform:uppercase;color:rgba(255,255,255,.2);
-  padding:0 14px;margin-bottom:8px;margin-top:24px;
-  font-family:var(--head);
+@media (min-width:1024px) {
+  .sidebar { position:sticky; top:0; height:100vh; transform:none; flex-shrink:0 }
 }
 
-/* ── CARD ── */
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:20px;
-}
-.card-lg{border-radius:24px}
+.ov { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:200; backdrop-filter:blur(4px) }
 
-/* ── INDEX TILE ── */
-.ix{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:12px;
-  position:relative;overflow:hidden;
+/* ─── NAV ITEM ─── */
+.ni {
+  display: flex; align-items: center; gap:10px;
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 500; font-family: var(--sans);
+  color: var(--dim); width: 100%; text-align: left;
+  border: 1px solid transparent; transition: all .2s; cursor: pointer;
+  letter-spacing: .03em;
 }
-.ix::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;
-  height:2px;
-}
-.ix.up::after{background:var(--green)}
-.ix.dn::after{background:var(--red)}
+.ni:hover { color: var(--cream); background: rgba(255,238,210,.04) }
+.ni.a1 { color: var(--sage);   background: var(--sage2);   border-color: rgba(123,168,130,.2) }
+.ni.a2 { color: #9BBDD4;       background: rgba(155,189,212,.08); border-color: rgba(155,189,212,.18) }
+.ni.a3 { color: #C9B8A8;       background: rgba(201,184,168,.07); border-color: rgba(201,184,168,.15) }
+.ni.a4 { color: var(--sakura); background: var(--sakura2); border-color: rgba(200,120,138,.2) }
 
-/* ── POSITION CARD ── */
-.pos-card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:22px;
-  transition:border-color .3s,box-shadow .3s;
-  position:relative;overflow:hidden;
-}
-.pos-card.alert{
-  border-color:rgba(48,209,88,.35);
-  box-shadow:0 0 0 1px rgba(48,209,88,.12),inset 0 0 40px rgba(48,209,88,.04);
-}
-@keyframes ambientPulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,.25),inset 0 0 40px rgba(48,209,88,.04)}
-  50%{box-shadow:0 0 0 6px rgba(48,209,88,.0),inset 0 0 40px rgba(48,209,88,.04)}
-}
-.pos-card.alert{animation:ambientPulse 2.5s ease infinite}
-
-/* ── STAT BOX ── */
-.stat{
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:12px;
-  padding:10px 12px;
-}
-.stat-lbl{
-  font-size:8px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(255,255,255,.25);margin-bottom:5px;
-  font-family:var(--head);
+/* ─── SECTION LABEL ─── */
+.slbl {
+  font-size: 9px; font-weight: 500; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim);
+  padding: 0 14px; margin-bottom: 8px;
+  font-family: var(--mono);
 }
 
-/* ── PROGRESS BAR ── */
-.bar{height:2px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
-.bar-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-
-/* ── INPUT ── */
-.inp{
-  background:rgba(0,0,0,.5);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;padding:12px 14px;
-  color:#fff;outline:none;width:100%;
-  font-size:15px;font-family:var(--mono);
-  transition:border-color .2s,box-shadow .2s;
+/* ─── INDEX TILE ─── */
+.ixtile {
+  background: var(--s2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 12px;
+  position: relative; overflow: hidden;
+  transition: border-color .2s;
 }
-.inp:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,159,10,.1)}
-
-/* ── MONTH TAB ── */
-.mtab{
-  padding:7px 16px;border-radius:8px;
-  font-size:11px;font-weight:700;
-  flex-shrink:0;transition:all .15s;
-  color:var(--muted);
-  background:rgba(255,255,255,.03);
-  border:1px solid transparent;cursor:pointer;
-  font-family:var(--head);letter-spacing:.05em;
+.ixtile::after {
+  content: ''; position: absolute; bottom:0; left:0; right:0; height:1px;
 }
-.mtab.on{background:var(--amber);color:#000;font-weight:800}
+.ixtile.up::after { background: linear-gradient(90deg, transparent, var(--sage), transparent) }
+.ixtile.dn::after { background: linear-gradient(90deg, transparent, var(--umber), transparent) }
 
-/* ── BUTTON ── */
-.btn-primary{
-  background:var(--amber);color:#000;
-  font-weight:800;font-size:13px;
-  padding:11px 20px;border-radius:12px;
-  transition:opacity .15s;cursor:pointer;
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--head);letter-spacing:.05em;
-}
-.btn-primary:hover{opacity:.85}
-
-.btn-ghost{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  color:var(--muted);font-weight:700;font-size:11px;
-  padding:10px;border-radius:12px;
-  transition:all .15s;cursor:pointer;
-  font-family:var(--body);
-}
-.btn-ghost:hover{color:var(--txt);border-color:rgba(255,255,255,.18)}
-
-.btn-danger{
-  background:var(--red-dim);color:var(--red);
-  border:1px solid rgba(255,55,95,.22);
-  font-weight:800;font-size:12px;
-  padding:11px;border-radius:12px;
-  transition:all .15s;cursor:pointer;width:100%;
-  font-family:var(--body);
-}
-.btn-danger:hover{background:var(--red);color:#fff}
-
-.btn-exit{
-  background:var(--red-dim);color:var(--red);
-  border:1px solid rgba(255,55,95,.2);
-  font-weight:800;font-size:11px;
-  padding:10px;border-radius:12px;
-  transition:all .15s;cursor:pointer;
-  font-family:var(--body);
-}
-.btn-exit:hover{background:var(--red);color:#fff}
-
-/* ── BADGE ── */
-.badge{
-  font-size:9px;font-weight:800;letter-spacing:.1em;
-  padding:4px 10px;border-radius:99px;text-transform:uppercase;
-  font-family:var(--head);
+/* ─── CARDS ─── */
+.card {
+  background: var(--s2);
+  border: 1px solid var(--line);
+  border-radius: 20px;
 }
 
-/* ── MODAL ── */
-.modal-bg{
-  position:fixed;inset:0;z-index:500;
-  display:flex;align-items:flex-end;
-  padding:0;background:rgba(0,0,0,.88);
-  backdrop-filter:blur(12px);
+/* ─── POSITION CARD ─── */
+.pc {
+  background: var(--s2);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 22px;
+  transition: border-color .4s, box-shadow .4s;
 }
-@media(min-width:640px){.modal-bg{align-items:center;padding:16px}}
-.modal-box{
-  background:#0E1220;
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:24px 24px 0 0;
-  padding:28px;width:100%;max-width:400px;
-  box-shadow:0 -20px 60px rgba(0,0,0,.6);
+@keyframes breathe {
+  0%,100% { box-shadow: 0 0 0 0 rgba(123,168,130,.2) }
+  50%      { box-shadow: 0 0 0 8px rgba(123,168,130,.0) }
 }
-@media(min-width:640px){.modal-box{border-radius:24px;margin:auto}}
-
-/* ── TOAST ── */
-.tc{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:6px;max-width:260px}
-@keyframes tIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
-@keyframes tOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(24px)}}
-.toast{
-  background:rgba(16,20,31,.97);
-  border:1px solid rgba(48,209,88,.4);
-  border-radius:12px;padding:10px 14px;
-  font-size:12px;color:var(--green);font-weight:700;
-  animation:tIn .24s ease;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-  font-family:var(--body);
-}
-.toast.out{animation:tOut .24s ease forwards}
-
-/* ── BOTTOM BAR ── */
-.bbar{
-  position:fixed;bottom:0;left:0;right:0;
-  background:rgba(6,8,14,.97);
-  border-top:1px solid rgba(255,159,10,.15);
-  padding:10px 20px;text-align:center;z-index:100;
+.pc.alert {
+  border-color: rgba(123,168,130,.35);
+  animation: breathe 3s ease infinite;
 }
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.fu{animation:fadeUp .35s ease both}
-.fu2{animation:fadeUp .35s .06s ease both}
-.fu3{animation:fadeUp .35s .12s ease both}
-
-@keyframes spin{to{transform:rotate(360deg)}}
-.spin{animation:spin 1s linear infinite}
-
-.nsb::-webkit-scrollbar{display:none}
-.nsb{scrollbar-width:none}
-
-/* ── TITLE ── */
-.page-title{
-  font-family:var(--head);
-  font-weight:800;font-style:italic;
-  font-size:clamp(2rem,7vw,2.8rem);
-  letter-spacing:.04em;color:#fff;
-  line-height:1;
+/* ─── STAT BOX ─── */
+.stat {
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,238,210,.05);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.stat-lbl {
+  font-size: 8px; font-weight: 500; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 5px;
+  font-family: var(--mono);
 }
 
-/* ── HISTORY ROW ── */
-.hist-row{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;padding:18px;
-  display:flex;justify-content:space-between;align-items:center;
-  transition:border-color .15s;
-}
-.hist-row:hover{border-color:rgba(255,255,255,.12)}
+/* ─── PROGRESS BAR ─── */
+.bar { height: 1px; border-radius:99px; background: rgba(255,238,210,.06); overflow:hidden }
+.bar-f { height:100%; border-radius:99px; transition: width .9s cubic-bezier(.4,0,.2,1) }
 
-/* ── SCORE DISPLAY ── */
-.score-display{
-  background:rgba(0,0,0,.4);
-  border-radius:14px;padding:14px;text-align:center;
-}
-
-/* ── TICKER AVATAR ── */
-.ticker-av{
-  width:44px;height:44px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--head);font-weight:800;font-style:italic;font-size:16px;
-  color:var(--amber);
-  background:var(--amber-dim);
-  border:1px solid rgba(255,159,10,.15);
-  flex-shrink:0;letter-spacing:.02em;
+/* ─── TICKER AVATAR ─── */
+.av {
+  width: 42px; height: 42px; border-radius: 14px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-style: italic;
+  font-size: 15px; font-weight: 400;
+  color: var(--sakura);
+  background: var(--sakura2);
+  border: 1px solid rgba(200,120,138,.14);
+  letter-spacing: .02em;
 }
 
-/* ── STATUS DOT ── */
-.sdot{width:6px;height:6px;border-radius:99px;flex-shrink:0}
-.sdot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
-.sdot.off{background:var(--red)}
+/* ─── INPUT ─── */
+.inp {
+  background: rgba(0,0,0,.4);
+  border: 1px solid rgba(255,238,210,.1);
+  border-radius: 12px; padding: 12px 14px;
+  color: var(--cream); outline: none; width: 100%;
+  font-size: 15px; font-family: var(--mono);
+  transition: border-color .2s, box-shadow .2s;
+}
+.inp:focus { border-color: var(--sakura); box-shadow: 0 0 0 3px rgba(200,120,138,.1) }
+.inp::placeholder { color: var(--dim) }
+
+/* ─── MONTH TAB ─── */
+.mtab {
+  padding: 7px 16px; border-radius: 8px;
+  font-size: 11px; font-weight: 500;
+  flex-shrink: 0; transition: all .18s; color: var(--dim);
+  background: rgba(255,255,255,.03); border: 1px solid transparent;
+  cursor: pointer; font-family: var(--mono); letter-spacing: .05em;
+}
+.mtab.on { background: var(--s3); color: var(--cream); border-color: var(--line2) }
+
+/* ─── BUTTONS ─── */
+.btn-main {
+  background: var(--sakura);
+  color: #1A0D10;
+  font-weight: 700; font-size: 13px; letter-spacing: .04em;
+  padding: 11px 20px; border-radius: 12px;
+  transition: opacity .15s; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--sans); border: none;
+}
+.btn-main:hover { opacity: .85 }
+
+.btn-ghost {
+  background: rgba(255,238,210,.03);
+  border: 1px solid rgba(255,238,210,.08);
+  color: var(--warm); font-weight: 500; font-size: 12px;
+  padding: 10px; border-radius: 12px;
+  transition: all .18s; cursor: pointer; font-family: var(--sans);
+}
+.btn-ghost:hover { color: var(--cream); border-color: rgba(255,238,210,.16) }
+
+.btn-exit {
+  background: var(--umber2); color: var(--umber);
+  border: 1px solid rgba(192,120,88,.2);
+  font-weight: 600; font-size: 12px;
+  padding: 10px; border-radius: 12px;
+  transition: all .18s; cursor: pointer; font-family: var(--sans);
+}
+.btn-exit:hover { background: var(--umber); color: #fff }
+
+.btn-del {
+  background: var(--umber2); color: var(--umber);
+  border: 1px solid rgba(192,120,88,.2);
+  font-weight: 600; font-size: 12px;
+  padding: 11px; border-radius: 12px;
+  transition: all .18s; cursor: pointer; width: 100%; font-family: var(--sans);
+}
+.btn-del:hover { background: var(--umber); color: #fff }
+
+/* ─── BADGE ─── */
+.badge {
+  font-size: 9px; font-weight: 600; letter-spacing: .1em;
+  padding: 4px 10px; border-radius: 99px; text-transform: uppercase;
+  font-family: var(--mono);
+}
+
+/* ─── MODAL ─── */
+.modal-bg {
+  position: fixed; inset:0; z-index:500;
+  display: flex; align-items: flex-end;
+  background: rgba(0,0,0,.82); backdrop-filter: blur(14px);
+}
+@media (min-width:640px) { .modal-bg { align-items:center; padding:16px } }
+.modal-box {
+  background: #131009;
+  border: 1px solid rgba(255,238,210,.1);
+  border-radius: 24px 24px 0 0;
+  padding: 28px; width:100%; max-width:400px;
+  box-shadow: 0 -24px 80px rgba(0,0,0,.7);
+}
+@media (min-width:640px) { .modal-box { border-radius:24px; margin:auto } }
+
+/* ─── TOAST ─── */
+.tc { position:fixed; top:16px; right:16px; z-index:9999; display:flex; flex-direction:column; gap:6px; max-width:260px }
+@keyframes tIn  { from { opacity:0; transform:translateY(-8px) } to { opacity:1; transform:none } }
+@keyframes tOut { from { opacity:1; transform:none } to { opacity:0; transform:translateY(-8px) } }
+.toast {
+  background: var(--s3);
+  border: 1px solid rgba(123,168,130,.3);
+  border-radius: 12px; padding: 11px 14px;
+  font-size: 12px; color: var(--sage); font-weight: 500;
+  animation: tIn .25s ease;
+  box-shadow: 0 4px 24px rgba(0,0,0,.5);
+  font-family: var(--sans);
+}
+.toast.out { animation: tOut .25s ease forwards }
+
+/* ─── BOTTOM BAR ─── */
+.bbar {
+  position: fixed; bottom:0; left:0; right:0;
+  background: rgba(13,11,9,.97);
+  border-top: 1px solid rgba(200,120,138,.1);
+  padding: 10px 20px; text-align:center; z-index:100;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes rise { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:none } }
+.r1 { animation: rise .4s .00s ease both }
+.r2 { animation: rise .4s .07s ease both }
+.r3 { animation: rise .4s .14s ease both }
+
+@keyframes sp { to { transform:rotate(360deg) } }
+.spin { animation: sp 1s linear infinite }
+
+.nsb::-webkit-scrollbar { display:none }
+.nsb { scrollbar-width:none }
+
+/* ─── DECORATIVE PETAL ─── */
+.petal-line {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 9px; color: var(--dim); letter-spacing: .15em;
+}
+.petal-line::before,
+.petal-line::after {
+  content: ''; flex:1; height:1px; background: var(--line);
+}
+
+/* ─── STATUS DOT ─── */
+.sdot { width:5px; height:5px; border-radius:99px; flex-shrink:0 }
+.sdot.on  { background: var(--sage);   box-shadow: 0 0 5px var(--sage) }
+.sdot.off { background: var(--umber) }
+
+/* ─── PAGE TITLE ─── */
+.pg-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  letter-spacing: .03em;
+  color: var(--cream);
+  line-height: 1;
+}
+
+/* ─── HIST ROW ─── */
+.hrow {
+  background: var(--s2); border: 1px solid var(--line);
+  border-radius: 16px; padding: 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: border-color .18s;
+}
+.hrow:hover { border-color: rgba(255,238,210,.13) }
+
+/* ─── DIVIDER ─── */
+.div { height:1px; background: var(--line); margin: 20px 0 }
 </style>
 </head>
 
 <body>
-<div id="app" v-cloak style="position:relative;z-index:1" class="flex flex-col lg:flex-row min-h-screen">
+<div id="app" v-cloak style="position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh" class="lg-row">
+
+  <style>
+    @media (min-width:1024px) { .lg-row { flex-direction:row !important } }
+  </style>
 
   <!-- TOASTS -->
   <div class="tc">
-    <div v-for="t in toasts" :key="t.id" :class="['toast',t.out?'out':'']">
-      <span class="g">●</span> {{ t.msg }}
+    <div v-for="t in toasts" :key="t.id" :class="['toast', t.out ? 'out' : '']">
+      <span class="g">&#x2665;</span>  {{ t.msg }}
     </div>
   </div>
 
   <!-- MOBILE TOPBAR -->
-  <header class="lg:hidden sticky top-0 z-50 flex items-center justify-between px-5 py-4" style="background:rgba(6,8,14,.97);border-bottom:1px solid var(--line)">
-    <div class="flex items-center gap-3">
-      <div style="width:34px;height:34px;background:var(--amber);border-radius:10px;display:flex;align-items:center;justify-content:center">
-        <span style="font-family:var(--head);font-weight:800;font-style:italic;font-size:18px;color:#000;letter-spacing:-.02em">M</span>
+  <header class="lg-hide" style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(13,11,9,.97);border-bottom:1px solid var(--line)">
+    <style>.lg-hide { display:flex } @media(min-width:1024px){.lg-hide{display:none!important}}</style>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:32px;height:32px;background:var(--sakura);border-radius:10px;display:flex;align-items:center;justify-content:center">
+        <span style="font-family:var(--serif);font-style:italic;font-size:18px;color:#1A0D10;font-weight:400">M</span>
       </div>
       <div>
-        <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:17px;color:#fff;letter-spacing:.06em;line-height:1">M400 PRO</div>
-        <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.15em;font-family:var(--head)">STRATEGY TERMINAL</div>
+        <div style="font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cream);letter-spacing:.04em;line-height:1">M400</div>
+        <div style="font-size:8px;color:var(--dim);font-family:var(--mono);letter-spacing:.15em;margin-top:2px">STRATEGY TERMINAL</div>
       </div>
     </div>
-    <button @click="menuOpen=true" style="color:var(--muted);padding:6px">
-      <svg width="20" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 20 16">
-        <line x1="0" y1="2" x2="20" y2="2"/>
-        <line x1="0" y1="8" x2="20" y2="8"/>
-        <line x1="4" y1="14" x2="20" y2="14"/>
+    <button @click="menuOpen=true" style="padding:6px;color:var(--warm);background:none;border:none;cursor:pointer">
+      <svg width="18" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 18 14">
+        <line x1="0" y1="1" x2="18" y2="1"/>
+        <line x1="0" y1="7" x2="18" y2="7"/>
+        <line x1="3" y1="13" x2="18" y2="13"/>
       </svg>
     </button>
   </header>
 
   <!-- OVERLAY -->
-  <div v-if="menuOpen" @click="menuOpen=false" class="ov lg:hidden"></div>
+  <div v-if="menuOpen" @click="menuOpen=false" class="ov lg-hide"></div>
 
   <!-- SIDEBAR -->
-  <aside :class="['sidebar',menuOpen?'open':'']">
+  <aside :class="['sidebar', menuOpen ? 'open' : '']">
     <div style="padding:28px 20px;display:flex;flex-direction:column;min-height:100%">
 
-      <!-- Logo -->
-      <div class="hidden lg:flex items-center gap-3" style="margin-bottom:36px">
-        <div style="width:42px;height:42px;background:var(--amber);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <span style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#000">M</span>
-        </div>
-        <div>
-          <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.06em;line-height:1">M400 PRO</div>
-          <div style="font-size:9px;color:var(--muted);font-weight:700;letter-spacing:.15em;font-family:var(--head)">STRATEGY TERMINAL</div>
+      <!-- Logo (desktop) -->
+      <div class="lg-show" style="margin-bottom:36px;display:none">
+        <style>.lg-show{display:block!important} @media(min-width:1024px){.lg-show{display:block!important}}</style>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;background:var(--sakura);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <span style="font-family:var(--serif);font-style:italic;font-size:22px;color:#1A0D10;font-weight:400">M</span>
+          </div>
+          <div>
+            <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream);letter-spacing:.04em;line-height:1">M400</div>
+            <div style="font-size:8px;color:var(--dim);font-family:var(--mono);letter-spacing:.15em;margin-top:3px">STRATEGY TERMINAL</div>
+          </div>
         </div>
       </div>
 
+      <!-- Sakura ornament -->
+      <div style="text-align:center;font-size:16px;margin-bottom:24px;opacity:.3">&#x273F; &#x2741; &#x273F;</div>
+
       <!-- Nav -->
-      <div>
-        <div class="sec-lbl" style="margin-top:0">主選單</div>
+      <div style="margin-bottom:8px">
+        <div class="slbl">主選單</div>
         <div style="display:flex;flex-direction:column;gap:3px">
-          <button @click="go('open')"     :class="['ni',tab==='open'    ?'ao':'']">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <button @click="go('open')"     :class="['ni', tab==='open'    ?'a1':'']">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
             在庫倉位管理
           </button>
-          <button @click="go('history')"  :class="['ni',tab==='history' ?'ah':'']">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <button @click="go('history')"  :class="['ni', tab==='history' ?'a2':'']">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             獲利分析報表
           </button>
-          <button @click="go('news')"     :class="['ni',tab==='news'    ?'an':'']">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            華爾街機構評等
+          <button @click="go('news')"     :class="['ni', tab==='news'    ?'a3':'']">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            機構評等
           </button>
-          <button @click="go('settings')" :class="['ni',tab==='settings'?'as':'']">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 19.07a10 10 0 010-14.14"/></svg>
+          <button @click="go('settings')" :class="['ni', tab==='settings'?'a4':'']">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
             API 連線設定
           </button>
         </div>
       </div>
 
-      <div>
-        <div class="sec-lbl">數據管理</div>
+      <div class="div"></div>
+
+      <!-- Data management -->
+      <div style="margin-bottom:8px">
+        <div class="slbl">數據管理</div>
         <div style="display:flex;flex-direction:column;gap:3px">
           <button @click="exportData" class="ni">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            導出備份 JSON
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            導出備份
           </button>
           <button @click="$refs.fi.click()" class="ni">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            導入數據備份
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            導入備份
           </button>
           <input type="file" ref="fi" @change="importData" style="display:none" accept=".json">
-          <button @click="clearAll" class="ni" style="color:var(--red)">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-            清空交易紀錄
+          <button @click="clearAll" class="ni" style="color:var(--umber)">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+            清空紀錄
           </button>
         </div>
       </div>
 
       <!-- System status -->
-      <div style="margin-top:auto;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:16px;padding:16px">
+      <div style="margin-top:auto;background:rgba(0,0,0,.2);border:1px solid var(--line);border-radius:16px;padding:16px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <span style="font-size:10px;color:var(--muted);font-weight:700;font-family:var(--head);letter-spacing:.1em;text-transform:uppercase">系統狀態</span>
+          <span style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase">SYSTEM</span>
           <div style="display:flex;align-items:center;gap:6px">
-            <div :class="['sdot',apiKey?'on':'off']"></div>
-            <span style="font-size:10px;font-family:var(--mono);font-weight:600" :class="apiKey?'g':'r'">{{ apiKey?'ONLINE':'OFFLINE' }}</span>
+            <div :class="['sdot', apiKey ? 'on' : 'off']"></div>
+            <span style="font-family:var(--mono);font-size:9px;font-weight:500" :class="apiKey ? 'g' : 'r'">{{ apiKey ? 'LIVE' : 'OFFLINE' }}</span>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <span style="font-size:10px;color:var(--muted);font-family:var(--mono)">STORAGE</span>
-          <span style="font-size:10px;font-family:var(--mono);color:var(--txt)">{{ storageUsage }}%</span>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+          <span style="font-family:var(--mono);font-size:9px;color:var(--dim)">STORAGE</span>
+          <span style="font-family:var(--mono);font-size:9px;color:var(--warm)">{{ storageUsage }}%</span>
         </div>
-        <div class="bar" style="margin-bottom:14px"><div class="bar-fill" :style="{width:storageUsage+'%',background:'var(--amber)'}"></div></div>
-        <button @click="fetchAll" :disabled="!apiKey||fetching"
-          style="width:100%;background:var(--amber-dim);border:1px solid rgba(255,159,10,.2);border-radius:10px;padding:9px;color:var(--amber);font-weight:700;font-size:11px;display:flex;justify-content:center;align-items:center;gap:6px;transition:all .15s;cursor:pointer;font-family:var(--head);letter-spacing:.08em;text-transform:uppercase"
-          :style="(!apiKey||fetching)?'opacity:.3;cursor:not-allowed':''">
-          <svg :class="fetching?'spin':''" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <div class="bar" style="margin-bottom:14px">
+          <div class="bar-f" :style="{width: storageUsage + '%', background: 'var(--sakura)'}"></div>
+        </div>
+        <button @click="fetchAll"
+          :disabled="!apiKey || fetching"
+          style="width:100%;background:var(--sakura2);border:1px solid rgba(200,120,138,.18);border-radius:10px;padding:9px;color:var(--sakura);font-size:11px;font-weight:500;display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;transition:all .18s;font-family:var(--sans)"
+          :style="(!apiKey || fetching) ? 'opacity:.3;cursor:not-allowed;pointer-events:none' : ''">
+          <svg :class="fetching ? 'spin' : ''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
           </svg>
           同步最新數據
@@ -447,67 +461,68 @@ body::before{
     </div>
   </aside>
 
-  <!-- MAIN -->
-  <main style="flex:1;padding:20px;overflow-y:auto;position:relative;z-index:1" class="lg:p-10">
-    <div style="max-width:900px;margin:0 auto">
+  <!-- MAIN CONTENT -->
+  <main style="flex:1;padding:20px;overflow-y:auto;position:relative;z-index:1" class="main-pad">
+    <style>@media(min-width:1024px){.main-pad{padding:40px!important}}</style>
+    <div style="max-width:880px;margin:0 auto">
 
-      <!-- INDEX TICKER -->
-      <div v-if="tab!=='settings'" class="fu" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:28px" :style="'grid-template-columns:repeat(6,1fr)'">
-        <div v-for="ix in indices" :key="ix.symbol" :class="['ix', ix.change===null?'':(ix.change>=0?'up':'dn')]">
-          <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-family:var(--head);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ix.name }}</div>
-          <div class="mono" style="font-size:13px;font-weight:600;color:#fff;line-height:1.2">{{ ix.price?ix.price.toFixed(2):'—' }}</div>
-          <div class="mono" style="font-size:9px;font-weight:600;margin-top:3px" :class="(ix.change||0)>=0?'g':'r'">
-            {{ ix.change!==null?((ix.change>=0?'+':'')+ix.change.toFixed(2)+'%'):'—' }}
+      <!-- 4 INDEX TILES -->
+      <div v-if="tab !== 'settings'" class="r1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:32px">
+        <div v-for="ix in indices" :key="ix.symbol" :class="['ixtile', ix.change === null ? '' : (ix.change >= 0 ? 'up' : 'dn')]">
+          <div style="font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ix.name }}</div>
+          <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--cream);line-height:1">{{ ix.price ? ix.price.toFixed(2) : '—' }}</div>
+          <div style="font-family:var(--mono);font-size:9px;margin-top:5px;font-weight:400" :class="(ix.change || 0) >= 0 ? 'g' : 'r'">
+            {{ ix.change !== null ? ((ix.change >= 0 ? '+' : '') + ix.change.toFixed(2) + '%') : '—' }}
           </div>
         </div>
       </div>
 
-      <!-- ══════ 在庫倉位管理 ══════ -->
-      <section v-if="tab==='open'">
-        <div class="fu" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
+      <!-- ═══ 在庫倉位管理 ═══ -->
+      <section v-if="tab === 'open'">
+        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px">
           <div>
-            <div class="page-title">在庫倉位</div>
-            <div style="margin-top:6px;font-size:12px;color:var(--muted);font-family:var(--mono)">
-              {{ openPos.length }} POSITIONS &nbsp;·&nbsp;
-              <span style="color:var(--txt)">${{ totalValue.toLocaleString(undefined,{minimumFractionDigits:2}) }}</span>
+            <div class="pg-title">在庫倉位</div>
+            <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--dim)">
+              {{ openPos.length }} positions
+              <span style="margin:0 8px;opacity:.3">|</span>
+              <span style="color:var(--warm)">${{ totalValue.toLocaleString(undefined, {minimumFractionDigits:2}) }}</span>
             </div>
           </div>
-          <button @click="openModal('entry')" class="btn-primary">
-            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          <button @click="openModal('entry')" class="btn-main">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             新增持倉
           </button>
         </div>
 
-        <div v-if="openPos.length===0" class="fu2 card card-lg" style="padding:60px 20px;text-align:center">
-          <div style="font-size:36px;margin-bottom:12px">📊</div>
-          <div style="font-family:var(--head);font-size:16px;color:var(--muted);font-weight:700">尚無持倉標的</div>
-          <div style="font-size:12px;color:rgba(255,255,255,.2);margin-top:4px">點擊右上角「新增持倉」開始記錄</div>
+        <!-- Empty state -->
+        <div v-if="openPos.length === 0" class="r2 card" style="padding:60px 20px;text-align:center">
+          <div style="font-size:28px;margin-bottom:14px;opacity:.4">&#x2741;</div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--warm)">尚無持倉標的</div>
+          <div style="font-size:12px;color:var(--dim);margin-top:6px;font-family:var(--mono)">點擊右上角「新增持倉」</div>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
-          <div v-for="(p,i) in openPos" :key="p.id" :class="['pos-card fu',pct(p)>=3?'alert':'']" :style="'animation-delay:'+(i*.05)+'s'">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px">
+          <div v-for="(p, i) in openPos" :key="p.id" :class="['pc r2', pct(p) >= 3 ? 'alert' : '']" :style="'animation-delay:' + (i * 0.06) + 's'">
 
-            <!-- Alert badge -->
-            <div v-if="pct(p)>=3" style="display:flex;justify-content:flex-end;margin-bottom:12px">
-              <span class="badge g" style="background:var(--green-dim);border:1px solid rgba(48,209,88,.25)">
-                🚀 +{{ pct(p).toFixed(1) }}% — 提醒平倉
+            <!-- Alert -->
+            <div v-if="pct(p) >= 3" style="display:flex;justify-content:flex-end;margin-bottom:12px">
+              <span class="badge g" style="background:var(--sage2);border:1px solid rgba(123,168,130,.22)">
+                &#x2665; +{{ pct(p).toFixed(1) }}% &#x2014; 考慮平倉
               </span>
             </div>
 
-            <!-- Header row -->
+            <!-- Header -->
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
               <div style="display:flex;align-items:center;gap:12px">
-                <div class="ticker-av">{{ p.ticker.substring(0,2) }}</div>
+                <div class="av">{{ p.ticker.substring(0, 2) }}</div>
                 <div>
-                  <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.04em;line-height:1">{{ p.ticker }}</div>
-                  <div class="mono" style="font-size:10px;color:var(--muted);margin-top:3px">{{ p.qty.toLocaleString() }} SHS</div>
+                  <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream);letter-spacing:.03em;line-height:1">{{ p.ticker }}</div>
+                  <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.08em">{{ Number(p.qty).toLocaleString() }} shares</div>
                 </div>
               </div>
               <div style="text-align:right">
-                <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-family:var(--head);margin-bottom:4px">即時報價</div>
-                <div class="mono" style="font-size:20px;font-weight:600;color:#fff;line-height:1">
-                  {{ p.currentPrice?'$'+Number(p.currentPrice).toFixed(2):'—' }}
-                </div>
+                <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px">市價</div>
+                <div style="font-family:var(--mono);font-size:19px;font-weight:500;color:var(--cream);line-height:1">{{ p.currentPrice ? '$' + Number(p.currentPrice).toFixed(2) : '—' }}</div>
               </div>
             </div>
 
@@ -515,125 +530,118 @@ body::before{
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
               <div class="stat">
                 <div class="stat-lbl">成本</div>
-                <div class="mono" style="font-size:13px;font-weight:600;color:var(--txt)">${{ Number(p.entry).toFixed(2) }}</div>
+                <div style="font-family:var(--mono);font-size:13px;font-weight:400;color:var(--cream)">${{ Number(p.entry).toFixed(2) }}</div>
               </div>
               <div class="stat">
-                <div class="stat-lbl">未實現</div>
-                <div class="mono" style="font-size:13px;font-weight:600" :class="unrealized(p)>=0?'g':'r'">${{ unrealized(p).toFixed(2) }}</div>
+                <div class="stat-lbl">損益</div>
+                <div style="font-family:var(--mono);font-size:13px;font-weight:400" :class="unrealized(p) >= 0 ? 'g' : 'r'">${{ unrealized(p).toFixed(2) }}</div>
               </div>
               <div class="stat">
-                <div class="stat-lbl">漲跌幅</div>
-                <div class="mono" style="font-size:13px;font-weight:600" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div>
+                <div class="stat-lbl">漲跌</div>
+                <div style="font-family:var(--mono);font-size:13px;font-weight:400" :class="pct(p) >= 0 ? 'g' : 'r'">{{ pct(p) >= 0 ? '+' : '' }}{{ pct(p).toFixed(2) }}%</div>
               </div>
             </div>
 
-            <!-- Progress bar -->
             <div class="bar" style="margin-bottom:16px">
-              <div class="bar-fill" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--green)':'var(--red)'}"></div>
+              <div class="bar-f" :style="{width: Math.min(Math.abs(pct(p)) * 8, 100) + '%', background: pct(p) >= 0 ? 'var(--sage)' : 'var(--umber)'}"></div>
             </div>
 
-            <!-- Actions -->
             <div style="display:flex;gap:8px">
-              <button @click="openModal('edit',p)" class="btn-ghost" style="flex:1">修改 / 刪除</button>
-              <button @click="openModal('exit',p)" class="btn-exit" style="flex:1">結清獲利</button>
+              <button @click="openModal('edit', p)" class="btn-ghost" style="flex:1">修改 / 刪除</button>
+              <button @click="openModal('exit', p)" class="btn-exit" style="flex:1">結清獲利</button>
             </div>
-
           </div>
         </div>
       </section>
 
-      <!-- ══════ 獲利分析報表 ══════ -->
-      <section v-if="tab==='history'">
-        <div class="fu page-title" style="margin-bottom:24px">獲利分析</div>
+      <!-- ═══ 獲利分析報表 ═══ -->
+      <section v-if="tab === 'history'">
+        <div class="r1 pg-title" style="margin-bottom:28px">獲利分析</div>
 
-        <div class="fu2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:20px" class="lg:grid-cols-3">
-          <div class="card" style="padding:28px;border-color:rgba(48,209,88,.1)">
-            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px" :class="annualPnl>=0?'g':'r'">年度累計損益</div>
-            <div class="mono" style="font-size:clamp(1.8rem,6vw,3rem);font-weight:700;line-height:1" :class="annualPnl>=0?'g':'r'">
-              ${{ annualPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}
+        <div class="r2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:24px">
+          <div class="card" style="padding:28px">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">ANNUAL P&amp;L</div>
+            <div style="font-family:var(--mono);font-size:clamp(2rem,7vw,3rem);font-weight:300;line-height:1" :class="annualPnl >= 0 ? 'g' : 'r'">
+              ${{ annualPnl.toLocaleString(undefined, {minimumFractionDigits:2}) }}
             </div>
-            <div class="bar" style="margin-top:18px">
-              <div class="bar-fill" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--green)':'var(--red)'}"></div>
+            <div class="bar" style="margin-top:16px">
+              <div class="bar-f" :style="{width: Math.min(Math.abs(annualPnl) / 300, 100) + '%', background: annualPnl >= 0 ? 'var(--sage)' : 'var(--umber)'}"></div>
             </div>
           </div>
           <div class="card" style="padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">{{ selMonth }} 月結算</div>
-            <div class="mono" style="font-size:1.8rem;font-weight:700" :class="monthPnl>=0?'g':'r'">${{ monthPnl.toFixed(2) }}</div>
-            <div class="mono" style="font-size:10px;color:var(--muted);margin-top:6px">{{ filteredHist.length }} 筆</div>
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">{{ selMonth }} 月</div>
+            <div style="font-family:var(--mono);font-size:1.8rem;font-weight:300" :class="monthPnl >= 0 ? 'g' : 'r'">${{ monthPnl.toFixed(2) }}</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:8px">{{ filteredHist.length }} trades</div>
           </div>
         </div>
 
-        <div class="fu3 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px">
-          <button v-for="m in 12" :key="m" @click="selMonth=m" :class="['mtab',selMonth===m?'on':'']">{{ m }}月</button>
+        <div class="r3 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px">
+          <button v-for="m in 12" :key="m" @click="selMonth = m" :class="['mtab', selMonth === m ? 'on' : '']">{{ m }}</button>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:8px">
-          <div v-if="filteredHist.length===0" class="card" style="padding:40px;text-align:center;color:var(--muted);font-size:14px;font-weight:700">本月無交易紀錄</div>
-          <div v-for="h in filteredHist" :key="h.id" class="hist-row">
+          <div v-if="filteredHist.length === 0" class="card" style="padding:40px;text-align:center;color:var(--dim);font-size:13px;font-family:var(--mono)">— 本月無交易紀錄 —</div>
+          <div v-for="h in filteredHist" :key="h.id" class="hrow">
             <div style="display:flex;align-items:center;gap:12px">
-              <div class="ticker-av" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
+              <div class="av" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0, 2) }}</div>
               <div>
-                <div style="font-family:var(--head);font-weight:800;font-size:17px;color:#fff;font-style:italic;letter-spacing:.04em">{{ h.ticker }}</div>
-                <div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px">
-                  {{ Number(h.entry).toFixed(2) }} → {{ Number(h.exit).toFixed(2) }} &nbsp;·&nbsp; {{ h.qty }} 股
+                <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--cream);letter-spacing:.03em">{{ h.ticker }}</div>
+                <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px">
+                  {{ Number(h.entry).toFixed(2) }} &#x2192; {{ Number(h.exit).toFixed(2) }} &nbsp; {{ h.qty }} shs
                 </div>
               </div>
             </div>
             <div style="text-align:right">
-              <div class="mono" style="font-size:18px;font-weight:700" :class="h.pnl>=0?'g':'r'">${{ h.pnl.toFixed(2) }}</div>
-              <div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(1) }}%</div>
+              <div style="font-family:var(--mono);font-size:18px;font-weight:400" :class="h.pnl >= 0 ? 'g' : 'r'">${{ h.pnl.toFixed(2) }}</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px">{{ h.pnl >= 0 ? '+' : '' }}{{ ((h.pnl / (h.entry * h.qty)) * 100).toFixed(1) }}%</div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ══════ 機構評等 ══════ -->
-      <section v-if="tab==='news'">
-        <div class="fu page-title" style="margin-bottom:24px">機構評等</div>
-        <div v-if="!Object.keys(recs).length" class="fu2 card" style="padding:48px;text-align:center">
-          <div style="font-size:13px;color:var(--muted);font-weight:700">尚無評等數據</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.15);margin-top:6px">請先設定 API 金鑰並同步數據</div>
+      <!-- ═══ 機構評等 ═══ -->
+      <section v-if="tab === 'news'">
+        <div class="r1 pg-title" style="margin-bottom:28px">機構評等</div>
+        <div v-if="!Object.keys(recs).length" class="r2 card" style="padding:48px;text-align:center">
+          <div style="font-family:var(--mono);font-size:12px;color:var(--dim)">— 尚無評等數據 —</div>
+          <div style="font-size:11px;color:rgba(255,238,210,.1);margin-top:6px;font-family:var(--mono)">請先設定 API 金鑰並同步數據</div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
-          <div v-for="(rec,tk) in recs" :key="tk" class="fu2 card" style="padding:22px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+          <div v-for="(rec, tk) in recs" :key="tk" class="r2 card" style="padding:22px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-              <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:22px;color:#fff;letter-spacing:.04em">{{ tk }}</div>
-              <div class="mono" style="font-size:9px;color:var(--muted)">{{ rec.period }}</div>
+              <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream);letter-spacing:.03em">{{ tk }}</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--dim)">{{ rec.period }}</div>
             </div>
-            <!-- Rating bar -->
-            <div style="display:flex;gap:2px;height:6px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.05);margin-bottom:10px">
-              <div :style="{width:(rec.strongBuy+rec.buy)/rec.total*100+'%',background:'var(--green)'}"></div>
-              <div :style="{width:rec.hold/rec.total*100+'%',background:'var(--muted)'}"></div>
-              <div :style="{width:(rec.sell+rec.strongSell)/rec.total*100+'%',background:'var(--red)'}"></div>
+            <div style="display:flex;height:3px;border-radius:99px;overflow:hidden;background:rgba(255,238,210,.05);margin-bottom:12px">
+              <div :style="{width: (rec.strongBuy + rec.buy) / rec.total * 100 + '%', background: 'var(--sage)'}"></div>
+              <div :style="{width: rec.hold / rec.total * 100 + '%', background: 'var(--s3)'}"></div>
+              <div :style="{width: (rec.sell + rec.strongSell) / rec.total * 100 + '%', background: 'var(--umber)'}"></div>
             </div>
-            <div class="mono" style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:16px">
-              <span class="g">買入 {{ rec.strongBuy+rec.buy }}</span>
-              <span style="color:var(--muted)">持有 {{ rec.hold }}</span>
-              <span class="r">賣出 {{ rec.sell+rec.strongSell }}</span>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;margin-bottom:16px">
+              <span class="g">buy {{ rec.strongBuy + rec.buy }}</span>
+              <span style="color:var(--dim)">hold {{ rec.hold }}</span>
+              <span class="r">sell {{ rec.sell + rec.strongSell }}</span>
             </div>
-            <div class="score-display">
-              <div style="font-size:8px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">綜合評分</div>
-              <div class="mono" style="font-size:26px;font-weight:700;line-height:1" :class="score(rec)>=4?'g':score(rec)>=3?'a':'r'">
-                {{ score(rec).toFixed(1) }}
-                <span style="font-size:13px;color:var(--muted);font-weight:400">&nbsp;/ 5.0</span>
+            <div style="background:rgba(0,0,0,.25);border-radius:12px;padding:14px;text-align:center">
+              <div style="font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">CONSENSUS</div>
+              <div style="font-family:var(--mono);font-size:26px;font-weight:300;line-height:1" :class="score(rec) >= 4 ? 'g' : score(rec) >= 3 ? 'sk' : 'r'">
+                {{ score(rec).toFixed(1) }}<span style="font-size:13px;color:var(--dim);font-weight:300"> / 5</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ══════ API 設定 ══════ -->
-      <section v-if="tab==='settings'">
-        <div class="fu page-title" style="margin-bottom:24px">連線設定</div>
-        <div class="fu2 card" style="padding:28px;max-width:440px">
-          <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:12px">Finnhub API 金鑰</div>
-          <input v-model="tempKey" type="password" placeholder="貼上 API Key ..." class="inp" style="margin-bottom:8px">
-          <div style="font-size:11px;color:var(--muted);margin-bottom:20px">
-            前往 <a href="https://finnhub.io" target="_blank" style="color:var(--amber);text-decoration:underline">finnhub.io</a> 免費申請 · 每分鐘 60 次請求
+      <!-- ═══ API 設定 ═══ -->
+      <section v-if="tab === 'settings'">
+        <div class="r1 pg-title" style="margin-bottom:28px">連線設定</div>
+        <div class="r2 card" style="padding:28px;max-width:420px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--sakura);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px">FINNHUB API KEY</div>
+          <input v-model="tempKey" type="password" placeholder="Paste your API key ..." class="inp" style="margin-bottom:8px">
+          <div style="font-size:11px;color:var(--dim);margin-bottom:22px;line-height:1.6">
+            前往 <a href="https://finnhub.io" target="_blank" style="color:var(--sakura);text-decoration:none;border-bottom:1px solid rgba(200,120,138,.3)">finnhub.io</a> 免費申請 &#x2014; 每分鐘 60 次
           </div>
-          <button @click="saveKey" class="btn-primary" style="width:100%;justify-content:center;padding:13px">
-            儲存金鑰並重新連線
-          </button>
+          <button @click="saveKey" class="btn-main" style="width:100%;justify-content:center;padding:13px;font-size:13px">儲存並重新連線</button>
         </div>
       </section>
 
@@ -642,281 +650,295 @@ body::before{
 
   <!-- BOTTOM BAR -->
   <div class="bbar">
-    <div class="mono" style="font-size:10px;color:rgba(255,159,10,.7);font-weight:600">
-      ⚠ 數據僅存於本地瀏覽器快取。清除快取將永久遺失。請定期「導出備份」。
+    <div style="font-family:var(--mono);font-size:9px;color:rgba(200,120,138,.5);letter-spacing:.06em">
+      &#x26A0; 數據僅存於本地快取 &#xB7; 清除快取將永久遺失 &#xB7; 請定期導出備份
     </div>
   </div>
 
   <!-- MODAL -->
-  <div v-if="modal.show" class="modal-bg" @click.self="modal.show=false">
+  <div v-if="modal.show" class="modal-bg" @click.self="modal.show = false">
     <div class="modal-box">
 
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:4px;height:22px;background:var(--amber);border-radius:99px"></div>
-          <div style="font-family:var(--head);font-weight:800;font-style:italic;font-size:20px;color:#fff;letter-spacing:.05em;text-transform:uppercase">{{ modal.title }}</div>
+          <div style="width:3px;height:20px;background:var(--sakura);border-radius:99px;opacity:.7"></div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--cream);letter-spacing:.04em">{{ modal.title }}</div>
         </div>
-        <button @click="modal.show=false" style="color:var(--muted);padding:4px;transition:color .15s">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <button @click="modal.show = false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer;transition:color .15s">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
       </div>
 
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div v-if="modal.mode!=='exit'">
-          <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">股票代碼</div>
-          <input v-model="form.ticker" class="inp" placeholder="AAPL" style="text-transform:uppercase;font-weight:700;font-size:18px">
+        <div v-if="modal.mode !== 'exit'">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">TICKER</div>
+          <input v-model="form.ticker" class="inp" placeholder="AAPL" style="text-transform:uppercase;font-size:18px;font-weight:500">
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
-            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">{{ modal.mode==='exit'?'賣出價格':'成交價格' }}</div>
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">{{ modal.mode === 'exit' ? 'SELL PRICE' : 'COST PRICE' }}</div>
             <input v-model.number="form.price" type="number" step="0.01" class="inp" placeholder="0.00">
           </div>
           <div>
-            <div style="font-size:9px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">股數</div>
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">SHARES</div>
             <input v-model.number="form.qty" type="number" class="inp" placeholder="100">
           </div>
         </div>
 
-        <!-- Exit PnL preview -->
-        <div v-if="modal.mode==='exit'&&form.price&&form.qty"
-          style="background:rgba(0,0,0,.4);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,.06)">
-          <div style="font-size:8px;font-family:var(--head);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">預估損益</div>
-          <div class="mono" style="font-size:28px;font-weight:700" :class="exitPv>=0?'g':'r'">${{ exitPv.toFixed(2) }}</div>
+        <!-- Exit preview -->
+        <div v-if="modal.mode === 'exit' && form.price && form.qty" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,238,210,.06);border-radius:14px;padding:16px;text-align:center">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">ESTIMATED P&amp;L</div>
+          <div style="font-family:var(--mono);font-size:28px;font-weight:300" :class="exitPv >= 0 ? 'g' : 'r'">${{ exitPv.toFixed(2) }}</div>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
-          <button @click="doAction" class="btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:14px">
-            {{ modal.mode==='entry'?'新增持倉':modal.mode==='exit'?'確認平倉':'儲存修改' }}
+          <button @click="doAction" class="btn-main" style="width:100%;justify-content:center;padding:13px;font-size:13px">
+            {{ modal.mode === 'entry' ? '新增持倉' : modal.mode === 'exit' ? '確認平倉' : '儲存修改' }}
           </button>
-          <button v-if="modal.mode==='edit'" @click="deletePos" class="btn-danger">🗑 刪除此持倉</button>
-          <button @click="modal.show=false" style="color:var(--muted);font-size:13px;font-weight:700;padding:8px;transition:color .15s;background:none;border:none;cursor:pointer;font-family:var(--body)">
-            取消返回
-          </button>
+          <button v-if="modal.mode === 'edit'" @click="deletePos" class="btn-del">&#x1F5D1; 刪除此持倉</button>
+          <button @click="modal.show = false" style="color:var(--dim);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);transition:color .15s">取消返回</button>
         </div>
       </div>
-
     </div>
   </div>
 
 </div>
 
 <script>
-var _vueApp = (function(){
-  var createApp = Vue.createApp;
-  var ref = Vue.ref;
-  var computed = Vue.computed;
-  var onMounted = Vue.onMounted;
-
-  var KO = 'M400v12_OPEN';
-  var KH = 'M400v12_HIST';
-  var KA = 'M400v12_API';
-
-  createApp({
+(function() {
+  var app = Vue.createApp({
     setup: function() {
-      var tab      = ref('open');
-      var menuOpen = ref(false);
-      var fetching = ref(false);
-      var selMonth = ref(new Date().getMonth() + 1);
-      var openPos  = ref([]);
-      var hist     = ref([]);
-      var apiKey   = ref('');
-      var tempKey  = ref('');
-      var recs     = ref({});
-      var storageUsage = ref(0);
-      var toasts   = ref([]);
-      var modal    = ref({ show:false, mode:'entry', title:'', targetId:null });
-      var form     = ref({ ticker:'', price:'', qty:'' });
+      var ref      = Vue.ref;
+      var computed = Vue.computed;
+      var onMounted = Vue.onMounted;
 
-      var indices  = ref([
-        { symbol:'SPY', name:'標普 500',  price:null, change:null },
-        { symbol:'GLD', name:'黃金現貨',  price:null, change:null },
-        { symbol:'UUP', name:'美元指數',  price:null, change:null },
-        { symbol:'VXX', name:'恐慌指數',  price:null, change:null },
-        { symbol:'QQQ', name:'納斯達克',  price:null, change:null },
-        { symbol:'DIA', name:'道瓊工業',  price:null, change:null }
+      var KO = 'M400v13_O';
+      var KH = 'M400v13_H';
+      var KA = 'M400v13_A';
+
+      var tab        = ref('open');
+      var menuOpen   = ref(false);
+      var fetching   = ref(false);
+      var selMonth   = ref(new Date().getMonth() + 1);
+      var openPos    = ref([]);
+      var hist       = ref([]);
+      var apiKey     = ref('');
+      var tempKey    = ref('');
+      var recs       = ref({});
+      var storageUsage = ref(0);
+      var toasts     = ref([]);
+      var modal      = ref({ show:false, mode:'entry', title:'', targetId:null });
+      var form       = ref({ ticker:'', price:'', qty:'' });
+
+      // Only 4 indices: SPY, QQQ, DIA, VXX
+      var indices = ref([
+        { symbol:'SPY', name:'S&P 500',    price:null, change:null },
+        { symbol:'QQQ', name:'NASDAQ',     price:null, change:null },
+        { symbol:'DIA', name:'DOW JONES',  price:null, change:null },
+        { symbol:'VXX', name:'VIX 恐慌',   price:null, change:null }
       ]);
 
-      function go(t){ tab.value = t; menuOpen.value = false; }
+      function go(t) { tab.value = t; menuOpen.value = false; }
 
-      function save(){
+      function save() {
         localStorage.setItem(KO, JSON.stringify(openPos.value));
         localStorage.setItem(KH, JSON.stringify(hist.value));
         calcStor();
       }
 
-      function calcStor(){
+      function calcStor() {
         var total = 0;
-        for(var k in localStorage){
-          if(Object.prototype.hasOwnProperty.call(localStorage,k))
-            total += (k.length + (localStorage[k] ? localStorage[k].length : 0)) * 2;
+        for (var k in localStorage) {
+          if (Object.prototype.hasOwnProperty.call(localStorage, k)) {
+            total += (k.length + ((localStorage[k] && localStorage[k].length) || 0)) * 2;
+          }
         }
         storageUsage.value = Math.min(100, Math.round(total / 5242880 * 100));
       }
 
-      function showToast(msg){
+      function showToast(msg) {
         var id = Date.now() + Math.random();
         toasts.value.push({ id:id, msg:msg, out:false });
-        setTimeout(function(){
-          var t = toasts.value.find(function(x){ return x.id === id; });
-          if(t) t.out = true;
-          setTimeout(function(){ toasts.value = toasts.value.filter(function(x){ return x.id !== id; }); }, 280);
+        setTimeout(function() {
+          var t = toasts.value.find(function(x) { return x.id === id; });
+          if (t) t.out = true;
+          setTimeout(function() {
+            toasts.value = toasts.value.filter(function(x) { return x.id !== id; });
+          }, 280);
         }, 4000);
       }
 
-      function unrealized(p){ return ((p.currentPrice || p.entry) - p.entry) * p.qty; }
-      function pct(p){ return p.currentPrice ? ((p.currentPrice - p.entry) / p.entry * 100) : 0; }
+      function unrealized(p) { return ((p.currentPrice || p.entry) - p.entry) * p.qty; }
+      function pct(p) { return p.currentPrice ? ((p.currentPrice - p.entry) / p.entry * 100) : 0; }
 
-      var totalValue = computed(function(){ return openPos.value.reduce(function(s,p){ return s + (p.currentPrice||p.entry)*p.qty; }, 0); });
-      var annualPnl  = computed(function(){ return hist.value.reduce(function(s,h){ return s + h.pnl; }, 0); });
-      var monthPnl   = computed(function(){ return hist.value.filter(function(h){ return h.closedMonth===selMonth.value; }).reduce(function(s,h){ return s+h.pnl; }, 0); });
-      var filteredHist = computed(function(){ return hist.value.filter(function(h){ return h.closedMonth===selMonth.value; }).reverse(); });
-      var exitPv = computed(function(){
-        var p = openPos.value.find(function(x){ return x.id === modal.value.targetId; });
-        if(!p || !form.value.price || !form.value.qty) return 0;
+      var totalValue = computed(function() {
+        return openPos.value.reduce(function(s, p) { return s + (p.currentPrice || p.entry) * p.qty; }, 0);
+      });
+      var annualPnl = computed(function() {
+        return hist.value.reduce(function(s, h) { return s + h.pnl; }, 0);
+      });
+      var monthPnl = computed(function() {
+        return hist.value.filter(function(h) { return h.closedMonth === selMonth.value; })
+          .reduce(function(s, h) { return s + h.pnl; }, 0);
+      });
+      var filteredHist = computed(function() {
+        return hist.value.filter(function(h) { return h.closedMonth === selMonth.value; }).reverse();
+      });
+      var exitPv = computed(function() {
+        var p = openPos.value.find(function(x) { return x.id === modal.value.targetId; });
+        if (!p || !form.value.price || !form.value.qty) return 0;
         return (form.value.price - p.entry) * Math.min(form.value.qty, p.qty);
       });
 
-      function score(rec){
-        if(!rec.total) return 0;
-        return (rec.strongBuy*5 + rec.buy*4 + rec.hold*3 + rec.sell*2 + rec.strongSell) / rec.total;
+      function score(rec) {
+        if (!rec.total) return 0;
+        return (rec.strongBuy * 5 + rec.buy * 4 + rec.hold * 3 + rec.sell * 2 + rec.strongSell) / rec.total;
       }
 
-      async function fetchMarket(){
-        if(!apiKey.value) return;
+      function fetchMarket() {
+        if (!apiKey.value) return;
         fetching.value = true;
-        try {
-          var unique = Array.from(new Set(openPos.value.map(function(p){ return p.ticker; })));
-          var syms = indices.value.map(function(i){ return i.symbol; }).concat(unique);
-          var results = await Promise.all(syms.map(function(s){
-            return fetch('https://finnhub.io/api/v1/quote?symbol='+s+'&token='+apiKey.value).then(function(r){ return r.json(); });
-          }));
-          indices.value.forEach(function(ix,i){ if(results[i] && results[i].c){ ix.price = results[i].c; ix.change = results[i].dp; } });
+        var unique = Array.from(new Set(openPos.value.map(function(p) { return p.ticker; })));
+        var syms = indices.value.map(function(i) { return i.symbol; }).concat(unique);
+        Promise.all(syms.map(function(s) {
+          return fetch('https://finnhub.io/api/v1/quote?symbol=' + s + '&token=' + apiKey.value)
+            .then(function(r) { return r.json(); });
+        })).then(function(results) {
+          indices.value.forEach(function(ix, i) {
+            if (results[i] && results[i].c) { ix.price = results[i].c; ix.change = results[i].dp; }
+          });
           var off = indices.value.length;
-          openPos.value.forEach(function(p){
+          openPos.value.forEach(function(p) {
             var si = unique.indexOf(p.ticker);
-            if(si !== -1 && results[off+si] && results[off+si].c) p.currentPrice = results[off+si].c;
+            if (si !== -1 && results[off + si] && results[off + si].c) {
+              p.currentPrice = results[off + si].c;
+            }
           });
           save();
-          openPos.value.forEach(function(p){
-            if(pct(p) >= 3) showToast(p.ticker + ' 獲利 ' + pct(p).toFixed(1) + '%，考慮平倉？');
+          openPos.value.forEach(function(p) {
+            if (pct(p) >= 3) showToast(p.ticker + ' 獲利 ' + pct(p).toFixed(1) + '%，考慮平倉？');
           });
-        } catch(e){ console.error(e); }
-        fetching.value = false;
+          fetching.value = false;
+        }).catch(function(e) { console.error(e); fetching.value = false; });
       }
 
-      async function fetchAnalyst(){
-        if(!apiKey.value) return;
-        var syms = Array.from(new Set(openPos.value.map(function(p){ return p.ticker; })));
-        if(!syms.length) return;
-        try {
-          var results = await Promise.all(syms.map(function(s){
-            return fetch('https://finnhub.io/api/v1/stock/recommendation?symbol='+s+'&token='+apiKey.value).then(function(r){ return r.json(); });
-          }));
+      function fetchAnalyst() {
+        if (!apiKey.value) return;
+        var syms = Array.from(new Set(openPos.value.map(function(p) { return p.ticker; })));
+        if (!syms.length) return;
+        Promise.all(syms.map(function(s) {
+          return fetch('https://finnhub.io/api/v1/stock/recommendation?symbol=' + s + '&token=' + apiKey.value)
+            .then(function(r) { return r.json(); });
+        })).then(function(results) {
           var nr = {};
-          results.forEach(function(data,i){
-            if(data && data.length > 0){
+          results.forEach(function(data, i) {
+            if (data && data.length > 0) {
               var t = data[0];
-              nr[syms[i]] = { strongBuy:t.strongBuy, buy:t.buy, hold:t.hold, sell:t.sell, strongSell:t.strongSell,
-                total:t.strongBuy+t.buy+t.hold+t.sell+t.strongSell, period:t.period };
+              nr[syms[i]] = {
+                strongBuy:t.strongBuy, buy:t.buy, hold:t.hold, sell:t.sell, strongSell:t.strongSell,
+                total: t.strongBuy + t.buy + t.hold + t.sell + t.strongSell, period:t.period
+              };
             }
           });
           recs.value = nr;
-        } catch(e){ console.error(e); }
+        }).catch(function(e) { console.error(e); });
       }
 
-      function fetchAll(){ fetchMarket(); fetchAnalyst(); }
+      function fetchAll() { fetchMarket(); fetchAnalyst(); }
 
-      function openModal(mode, target){
+      function openModal(mode, target) {
         target = target || null;
         modal.value = {
-          show:true, mode:mode, targetId: target ? target.id : null,
-          title: mode==='entry'?'新增持倉':mode==='edit'?'修改倉位':'結清獲利'
+          show: true, mode: mode,
+          targetId: target ? target.id : null,
+          title: mode === 'entry' ? '新增持倉' : mode === 'edit' ? '修改倉位' : '結清獲利'
         };
         form.value = {
           ticker: target ? target.ticker : '',
-          price:  mode==='edit' ? (target ? target.entry : '') : '',
+          price:  mode === 'edit' ? (target ? target.entry : '') : '',
           qty:    target ? target.qty : ''
         };
       }
 
-      function doAction(){
+      function doAction() {
         var mode = modal.value.mode;
-        var targetId = modal.value.targetId;
-        if(mode === 'entry'){
+        var tid  = modal.value.targetId;
+        if (mode === 'entry') {
           var tk = form.value.ticker.toUpperCase().trim();
-          if(!tk || !form.value.price || !form.value.qty) return;
+          if (!tk || !form.value.price || !form.value.qty) return;
           openPos.value.push({ id:Date.now(), ticker:tk, entry:form.value.price, currentPrice:null, qty:form.value.qty });
-          showToast('已新增 ' + tk + ' 持倉');
-        } else if(mode === 'edit'){
-          var p = openPos.value.find(function(x){ return x.id === targetId; });
-          if(p){ p.ticker = form.value.ticker.toUpperCase(); p.entry = form.value.price; p.qty = form.value.qty; }
+          showToast(tk + ' 已加入持倉');
+        } else if (mode === 'edit') {
+          var p = openPos.value.find(function(x) { return x.id === tid; });
+          if (p) { p.ticker = form.value.ticker.toUpperCase(); p.entry = form.value.price; p.qty = form.value.qty; }
           showToast('倉位已更新');
-        } else if(mode === 'exit'){
-          var p2 = openPos.value.find(function(x){ return x.id === targetId; });
-          if(p2){
-            var q = Math.min(form.value.qty || p2.qty, p2.qty);
+        } else if (mode === 'exit') {
+          var p2 = openPos.value.find(function(x) { return x.id === tid; });
+          if (p2) {
+            var q   = Math.min(form.value.qty || p2.qty, p2.qty);
             var pnl = (form.value.price - p2.entry) * q;
-            hist.value.push({ id:Date.now(), ticker:p2.ticker, entry:p2.entry, exit:form.value.price, qty:q, pnl:pnl, closedMonth:new Date().getMonth()+1 });
+            hist.value.push({ id:Date.now(), ticker:p2.ticker, entry:p2.entry, exit:form.value.price, qty:q, pnl:pnl, closedMonth:new Date().getMonth() + 1 });
             p2.qty -= q;
-            if(p2.qty <= 0) openPos.value = openPos.value.filter(function(x){ return x.id !== targetId; });
-            showToast(p2.ticker + ' 結清，損益 $' + pnl.toFixed(2));
+            if (p2.qty <= 0) openPos.value = openPos.value.filter(function(x) { return x.id !== tid; });
+            showToast(p2.ticker + ' 結清 $' + pnl.toFixed(2));
           }
         }
         save();
         modal.value.show = false;
       }
 
-      function deletePos(){
-        if(!confirm('確定刪除此持倉？此操作無法復原。')) return;
-        openPos.value = openPos.value.filter(function(x){ return x.id !== modal.value.targetId; });
+      function deletePos() {
+        if (!confirm('確定刪除此持倉？')) return;
+        openPos.value = openPos.value.filter(function(x) { return x.id !== modal.value.targetId; });
         save();
         modal.value.show = false;
         showToast('持倉已刪除');
       }
 
-      function clearAll(){
-        if(!confirm('確定清空所有交易紀錄？（API 金鑰保留）')) return;
+      function clearAll() {
+        if (!confirm('確定清空所有交易紀錄？')) return;
         openPos.value = []; hist.value = [];
         localStorage.removeItem(KO); localStorage.removeItem(KH);
         calcStor();
       }
 
-      function exportData(){
+      function exportData() {
         var blob = new Blob([JSON.stringify({ open:openPos.value, history:hist.value, apiKey:apiKey.value }, null, 2)], { type:'application/json' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'M400_backup_' + new Date().toISOString().slice(0,10) + '.json';
+        a.download = 'M400_' + new Date().toISOString().slice(0, 10) + '.json';
         a.click();
       }
 
-      function importData(e){
+      function importData(e) {
         var reader = new FileReader();
-        reader.onload = function(ev){
+        reader.onload = function(ev) {
           try {
             var d = JSON.parse(ev.target.result);
-            openPos.value = d.open || []; hist.value = d.history || [];
-            if(d.apiKey){ apiKey.value = d.apiKey; localStorage.setItem(KA, d.apiKey); }
+            openPos.value = d.open || [];
+            hist.value    = d.history || [];
+            if (d.apiKey) { apiKey.value = d.apiKey; localStorage.setItem(KA, d.apiKey); }
             save(); location.reload();
-          } catch(err){ alert('導入失敗，請確認檔案格式'); }
+          } catch (err) { alert('導入失敗，請確認檔案格式'); }
         };
         reader.readAsText(e.target.files[0]);
       }
 
-      function saveKey(){
+      function saveKey() {
         apiKey.value = tempKey.value;
         localStorage.setItem(KA, apiKey.value);
         location.reload();
       }
 
-      onMounted(function(){
+      onMounted(function() {
         var so = localStorage.getItem(KO);
         var sh = localStorage.getItem(KH);
         var sa = localStorage.getItem(KA);
-        if(so) openPos.value = JSON.parse(so);
-        if(sh) hist.value = JSON.parse(sh);
-        if(sa){ apiKey.value = sa; tempKey.value = sa; }
-        if(apiKey.value) fetchAll();
+        if (so) openPos.value = JSON.parse(so);
+        if (sh) hist.value    = JSON.parse(sh);
+        if (sa) { apiKey.value = sa; tempKey.value = sa; }
+        if (apiKey.value) fetchAll();
         calcStor();
         setInterval(fetchMarket, 60000);
       });
@@ -929,7 +951,8 @@ var _vueApp = (function(){
         unrealized, pct, totalValue, annualPnl, monthPnl, filteredHist, exitPv, score
       };
     }
-  }).mount('#app');
+  });
+  app.mount('#app');
 })();
 </script>
 </body>
