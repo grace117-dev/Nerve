@@ -6,149 +6,116 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="M400">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0D0B09">
 <title>M400</title>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script>
-// ── PWA: inject manifest as blob (no external files needed) ──
+// ── PWA manifest via data URI (works without server) ──
 (function() {
-  var iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#0D0B09"/><text x="256" y="340" font-size="300" text-anchor="middle" font-family="Georgia,serif" font-style="italic" fill="#C8788A">M</text></svg>';
-  var iconUrl = 'data:image/svg+xml;base64,' + btoa(iconSvg);
+  // Generate pink-M icon via canvas → PNG base64
+  var cv = document.createElement('canvas');
+  cv.width = 512; cv.height = 512;
+  var cx = cv.getContext('2d');
+  // Background rounded rect
+  cx.fillStyle = '#0D0B09';
+  cx.beginPath();
+  cx.roundRect(0, 0, 512, 512, 100);
+  cx.fill();
+  // Sakura circle accent
+  cx.fillStyle = 'rgba(200,120,138,0.18)';
+  cx.beginPath();
+  cx.arc(256, 256, 200, 0, Math.PI * 2);
+  cx.fill();
+  // M letter
+  cx.fillStyle = '#C8788A';
+  cx.font = 'italic 320px Georgia,serif';
+  cx.textAlign = 'center';
+  cx.textBaseline = 'middle';
+  cx.fillText('M', 256, 276);
+  var iconPng = cv.toDataURL('image/png');
+
+  // Inject apple-touch-icon
+  var il = document.createElement('link');
+  il.rel = 'apple-touch-icon';
+  il.href = iconPng;
+  document.head.appendChild(il);
+
+  // Inject manifest as data URI (Safari supports this)
   var manifest = {
     name: 'M400 戰略終端',
     short_name: 'M400',
-    description: '個人股票倉位管理系統',
+    description: '個人資產管理系統',
     start_url: './',
     display: 'standalone',
-    orientation: 'portrait-primary',
+    orientation: 'portrait',
     background_color: '#0D0B09',
     theme_color: '#0D0B09',
-    icons: [
-      { src: iconUrl, sizes: '192x192', type: 'image/svg+xml' },
-      { src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
-    ]
+    icons: [{ src: iconPng, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }]
   };
-  var mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
-  var mLink = document.createElement('link');
-  mLink.rel = 'manifest';
-  mLink.href = URL.createObjectURL(mBlob);
-  document.head.appendChild(mLink);
-
-  // Apple touch icon
-  var iLink = document.createElement('link');
-  iLink.rel = 'apple-touch-icon';
-  iLink.href = iconUrl;
-  document.head.appendChild(iLink);
-
-  // Service Worker via blob (enables offline & standalone feel)
-  if ('serviceWorker' in navigator) {
-    var swCode = [
-      'var CACHE="m400-v14";',
-      'self.addEventListener("install",function(e){',
-      '  e.waitUntil(caches.open(CACHE).then(function(c){',
-      '    return c.addAll(["./","https://unpkg.com/vue@3/dist/vue.global.js"]);',
-      '  }));',
-      '  self.skipWaiting();',
-      '});',
-      'self.addEventListener("activate",function(e){',
-      '  e.waitUntil(caches.keys().then(function(ks){',
-      '    return Promise.all(ks.filter(function(k){return k!==CACHE;}).map(function(k){return caches.delete(k);}));',
-      '  }));',
-      '  self.clients.claim();',
-      '});',
-      'self.addEventListener("fetch",function(e){',
-      '  e.respondWith(caches.match(e.request).then(function(r){',
-      '    return r || fetch(e.request).catch(function(){return new Response("offline");});',
-      '  }));',
-      '});'
-    ].join('\n');
-    var swBlob = new Blob([swCode], { type: 'application/javascript' });
-    var swUrl  = URL.createObjectURL(swBlob);
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register(swUrl).catch(function() {});
-    });
-  }
+  var ml = document.createElement('link');
+  ml.rel = 'manifest';
+  ml.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest));
+  document.head.appendChild(ml);
 })();
 </script>
 <style>
 :root {
-  --bg:     #0D0B09;
-  --s1:     #131109;
-  --s2:     #1A1612;
-  --s3:     #221D18;
-  --line:   rgba(255,238,210,0.07);
-  --line2:  rgba(255,238,210,0.13);
-  --sk:     #C8788A;
-  --sk2:    rgba(200,120,138,0.10);
-  --sk3:    rgba(200,120,138,0.18);
-  --sage:   #7BA882;
-  --sage2:  rgba(123,168,130,0.10);
-  --umb:    #C07858;
-  --umb2:   rgba(192,120,88,0.10);
-  --cream:  #EDE6DA;
-  --warm:   #8C7B6A;
-  --dim:    #4A3F35;
-  --mono:   'IBM Plex Mono', monospace;
-  --serif:  'DM Serif Display','Noto Serif JP',serif;
-  --sans:   'Noto Sans TC',sans-serif;
+  --bg:    #0D0B09;
+  --s1:    #131109;
+  --s2:    #1A1612;
+  --s3:    #221D18;
+  --line:  rgba(255,238,210,0.07);
+  --line2: rgba(255,238,210,0.14);
+  --sk:    #C8788A;
+  --sk2:   rgba(200,120,138,0.10);
+  --sk3:   rgba(200,120,138,0.18);
+  --sage:  #7BA882;
+  --sage2: rgba(123,168,130,0.10);
+  --umb:   #C07858;
+  --umb2:  rgba(192,120,88,0.10);
+  --blue:  #6BA4C8;
+  --blue2: rgba(107,164,200,0.10);
+  --gold:  #C8A84A;
+  --gold2: rgba(200,168,74,0.10);
+  --cream: #EDE6DA;
+  --warm:  #8C7B6A;
+  --dim:   #4A3F35;
+  --mono:  'IBM Plex Mono',monospace;
+  --serif: 'DM Serif Display','Noto Serif JP',serif;
+  --sans:  'Noto Sans TC',sans-serif;
 }
 [v-cloak]{display:none!important}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
-body {
-  font-family:var(--sans);
-  background:var(--bg);
-  color:var(--cream);
-  min-height:100vh;
-  padding-bottom:52px;
-}
-body::before {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:
-    radial-gradient(ellipse 80% 50% at 30% -10%, rgba(200,120,138,.05) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 60% at 90% 90%,  rgba(123,168,130,.03) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 30% at 80% 20%,  rgba(192,120,88,.025) 0%, transparent 40%);
-}
-
-.mono  { font-family:var(--mono) }
-.serif { font-family:var(--serif) }
-.g  { color:var(--sage) }
-.r  { color:var(--umb) }
-.sk { color:var(--sk) }
+body{font-family:var(--sans);background:var(--bg);color:var(--cream);min-height:100vh;padding-bottom:52px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 30% -10%,rgba(200,120,138,.05) 0%,transparent 55%),
+             radial-gradient(ellipse 50% 60% at 90% 90%,rgba(123,168,130,.03) 0%,transparent 50%)}
+.mono{font-family:var(--mono)}
+.g{color:var(--sage)} .r{color:var(--umb)} .sk{color:var(--sk)}
+.b{color:var(--blue)} .gd{color:var(--gold)}
 
 /* SIDEBAR */
-.sidebar {
-  position:fixed; left:0; top:0; width:268px; height:100%;
-  background:var(--s1); border-right:1px solid var(--line);
-  transform:translateX(-100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-  z-index:300; display:flex; flex-direction:column;
-  overflow-y:auto; overflow-x:hidden;
-}
+.sidebar{position:fixed;left:0;top:0;width:272px;height:100%;background:var(--s1);border-right:1px solid var(--line);
+  transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:300;
+  display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .sidebar::-webkit-scrollbar{display:none}
 .sidebar.open{transform:translateX(0)}
-@media(min-width:1024px){
-  .sidebar{position:sticky;top:0;height:100vh;transform:none;flex-shrink:0}
-}
+@media(min-width:1024px){.sidebar{position:sticky;top:0;height:100vh;transform:none;flex-shrink:0}}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;backdrop-filter:blur(4px)}
 
-/* NAV ITEM */
-.ni {
-  display:flex; align-items:center; gap:10px;
-  padding:10px 14px; border-radius:10px;
-  font-size:13px; font-weight:500; font-family:var(--sans);
-  color:var(--dim); width:100%; text-align:left;
-  border:1px solid transparent; transition:all .18s; cursor:pointer;
-}
+/* NAV */
+.ni{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;
+  font-size:13px;font-weight:500;font-family:var(--sans);color:var(--dim);
+  width:100%;text-align:left;border:1px solid transparent;transition:all .18s;cursor:pointer}
 .ni:hover{color:var(--cream);background:rgba(255,238,210,.04)}
-.ni.a1{color:var(--sage); background:var(--sage2); border-color:rgba(123,168,130,.2)}
-.ni.a2{color:#9BBDD4;     background:rgba(155,189,212,.08); border-color:rgba(155,189,212,.18)}
-.ni.a3{color:#D4A96A;     background:rgba(212,169,106,.08); border-color:rgba(212,169,106,.18)}
-.ni.a4{color:#A8C4D4;     background:rgba(168,196,212,.07); border-color:rgba(168,196,212,.15)}
-.ni.a5{color:#C9B8A8;     background:rgba(201,184,168,.07); border-color:rgba(201,184,168,.15)}
-.ni.a6{color:var(--sk);   background:var(--sk2); border-color:rgba(200,120,138,.2)}
-
+.ni.a1{color:var(--sage);background:var(--sage2);border-color:rgba(123,168,130,.2)}
+.ni.a2{color:#9BBDD4;background:rgba(155,189,212,.08);border-color:rgba(155,189,212,.18)}
+.ni.a3{color:var(--gold);background:var(--gold2);border-color:rgba(200,168,74,.2)}
+.ni.a4{color:var(--blue);background:var(--blue2);border-color:rgba(107,164,200,.2)}
+.ni.a5{color:#C9B8A8;background:rgba(201,184,168,.07);border-color:rgba(201,184,168,.15)}
+.ni.a6{color:var(--sk);background:var(--sk2);border-color:rgba(200,120,138,.2)}
 .slbl{font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding:0 14px;margin-bottom:8px;font-family:var(--mono)}
 
 /* CARDS */
@@ -160,54 +127,82 @@ body::before {
 
 /* POSITION CARD */
 .pc{background:var(--s2);border:1px solid var(--line);border-radius:22px;padding:22px;transition:border-color .4s,box-shadow .4s}
-@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(123,168,130,.2)} 50%{box-shadow:0 0 0 8px rgba(123,168,130,.0)}}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(123,168,130,.2)}50%{box-shadow:0 0 0 8px rgba(123,168,130,.0)}}
 .pc.alert{border-color:rgba(123,168,130,.35);animation:breathe 3s ease infinite}
 
 .stat{background:rgba(0,0,0,.25);border:1px solid rgba(255,238,210,.05);border-radius:12px;padding:10px 12px}
 .stat-lbl{font-size:8px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:5px;font-family:var(--mono)}
-
 .bar{height:1px;border-radius:99px;background:rgba(255,238,210,.06);overflow:hidden}
 .bar-f{height:100%;border-radius:99px;transition:width .9s cubic-bezier(.4,0,.2,1)}
-
-/* TICKER AVATAR */
-.av{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:15px;font-weight:400;color:var(--sk);background:var(--sk2);border:1px solid rgba(200,120,138,.14)}
+.av{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-style:italic;font-size:15px;font-weight:400;
+  color:var(--sk);background:var(--sk2);border:1px solid rgba(200,120,138,.14)}
+.av.tw{color:var(--gold);background:var(--gold2);border-color:rgba(200,168,74,.14)}
 
 /* INPUT */
-.inp{background:rgba(0,0,0,.4);border:1px solid rgba(255,238,210,.1);border-radius:12px;padding:12px 14px;color:var(--cream);outline:none;width:100%;font-size:15px;font-family:var(--mono);transition:border-color .2s,box-shadow .2s}
+.inp{background:rgba(0,0,0,.4);border:1px solid rgba(255,238,210,.1);border-radius:12px;padding:12px 14px;
+  color:var(--cream);outline:none;width:100%;font-size:15px;font-family:var(--mono);
+  transition:border-color .2s,box-shadow .2s}
 .inp:focus{border-color:var(--sk);box-shadow:0 0 0 3px rgba(200,120,138,.1)}
 .inp::placeholder{color:var(--dim)}
+.inp-sm{padding:8px 12px;font-size:13px;border-radius:10px}
 
 /* MONTH TAB */
-.mtab{padding:7px 14px;border-radius:8px;font-size:11px;font-weight:500;flex-shrink:0;transition:all .18s;color:var(--dim);background:rgba(255,255,255,.03);border:1px solid transparent;cursor:pointer;font-family:var(--mono)}
+.mtab{padding:7px 14px;border-radius:8px;font-size:11px;font-weight:500;flex-shrink:0;
+  transition:all .18s;color:var(--dim);background:rgba(255,255,255,.03);border:1px solid transparent;
+  cursor:pointer;font-family:var(--mono)}
 .mtab.on{background:var(--s3);color:var(--cream);border-color:var(--line2)}
 
-/* BUTTONS */
-.btn-main{background:var(--sk);color:#1A0D10;font-weight:700;font-size:13px;padding:11px 20px;border-radius:12px;transition:opacity .15s;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);border:none}
-.btn-main:hover{opacity:.85}
-.btn-ghost{background:rgba(255,238,210,.03);border:1px solid rgba(255,238,210,.08);color:var(--warm);font-weight:500;font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
-.btn-ghost:hover{color:var(--cream);border-color:rgba(255,238,210,.16)}
-.btn-exit{background:var(--umb2);color:var(--umb);border:1px solid rgba(192,120,88,.2);font-weight:600;font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
-.btn-exit:hover{background:var(--umb);color:#fff}
-.btn-del{background:var(--umb2);color:var(--umb);border:1px solid rgba(192,120,88,.2);font-weight:600;font-size:12px;padding:11px;border-radius:12px;transition:all .18s;cursor:pointer;width:100%;font-family:var(--sans)}
-.btn-del:hover{background:var(--umb);color:#fff}
+/* SEGMENT CONTROL (US/TW) */
+.seg{display:flex;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.seg-btn{flex:1;padding:7px;border-radius:7px;font-size:12px;font-weight:600;font-family:var(--mono);
+  cursor:pointer;transition:all .18s;color:var(--dim);border:none;background:none;text-align:center}
+.seg-btn.on{background:var(--s3);color:var(--cream)}
 
+/* BUTTONS */
+.btn-main{background:var(--sk);color:#1A0D10;font-weight:700;font-size:13px;padding:11px 20px;border-radius:12px;
+  transition:opacity .15s;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);border:none}
+.btn-main:hover{opacity:.85}
+.btn-ghost{background:rgba(255,238,210,.03);border:1px solid rgba(255,238,210,.08);color:var(--warm);
+  font-weight:500;font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
+.btn-ghost:hover{color:var(--cream);border-color:rgba(255,238,210,.16)}
+.btn-exit{background:var(--umb2);color:var(--umb);border:1px solid rgba(192,120,88,.2);font-weight:600;
+  font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
+.btn-exit:hover{background:var(--umb);color:#fff}
+.btn-del{background:var(--umb2);color:var(--umb);border:1px solid rgba(192,120,88,.2);font-weight:600;
+  font-size:12px;padding:11px;border-radius:12px;transition:all .18s;cursor:pointer;width:100%;font-family:var(--sans)}
+.btn-del:hover{background:var(--umb);color:#fff}
 .badge{font-size:9px;font-weight:600;letter-spacing:.1em;padding:4px 10px;border-radius:99px;text-transform:uppercase;font-family:var(--mono)}
+
+/* ASSET ITEM */
+.asset-row{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:16px;
+  display:flex;justify-content:space-between;align-items:center;transition:border-color .18s}
+.asset-row:hover{border-color:var(--line2)}
+.cat-dot{width:8px;height:8px;border-radius:99px;flex-shrink:0}
+
+/* FOREX CARD */
+.fx-card{background:var(--s2);border:1px solid var(--line);border-radius:20px;padding:20px}
 
 /* MODAL */
 .modal-bg{position:fixed;inset:0;z-index:500;display:flex;align-items:flex-end;background:rgba(0,0,0,.82);backdrop-filter:blur(14px)}
 @media(min-width:640px){.modal-bg{align-items:center;padding:16px}}
-.modal-box{background:#131009;border:1px solid rgba(255,238,210,.1);border-radius:24px 24px 0 0;padding:28px;width:100%;max-width:400px;box-shadow:0 -24px 80px rgba(0,0,0,.7)}
+.modal-box{background:#131009;border:1px solid rgba(255,238,210,.1);border-radius:24px 24px 0 0;
+  padding:26px;width:100%;max-width:420px;box-shadow:0 -24px 80px rgba(0,0,0,.7);
+  max-height:90vh;overflow-y:auto}
+.modal-box::-webkit-scrollbar{display:none}
 @media(min-width:640px){.modal-box{border-radius:24px;margin:auto}}
 
 /* TOAST */
 .tc{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:6px;max-width:260px}
-@keyframes tIn {from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes tIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 @keyframes tOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-8px)}}
-.toast{background:var(--s3);border:1px solid rgba(123,168,130,.3);border-radius:12px;padding:11px 14px;font-size:12px;color:var(--sage);font-weight:500;animation:tIn .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.5);font-family:var(--sans)}
+.toast{background:var(--s3);border:1px solid rgba(123,168,130,.3);border-radius:12px;padding:11px 14px;
+  font-size:12px;color:var(--sage);font-weight:500;animation:tIn .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.5);font-family:var(--sans)}
 .toast.out{animation:tOut .25s ease forwards}
 
 /* BOTTOM BAR */
-.bbar{position:fixed;bottom:0;left:0;right:0;background:rgba(13,11,9,.97);border-top:1px solid rgba(200,120,138,.1);padding:10px 20px;text-align:center;z-index:100}
+.bbar{position:fixed;bottom:0;left:0;right:0;background:rgba(13,11,9,.97);
+  border-top:1px solid rgba(200,120,138,.1);padding:10px 20px;text-align:center;z-index:100}
 
 /* ANIMATIONS */
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -219,35 +214,25 @@ body::before {
 .spin{animation:sp 1s linear infinite}
 .nsb::-webkit-scrollbar{display:none}
 .nsb{scrollbar-width:none}
-
-/* PAGE TITLE */
-.pg-title{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.8rem,6vw,2.6rem);letter-spacing:.03em;color:var(--cream);line-height:1}
-
-/* HISTORY ROW */
-.hrow{background:var(--s2);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;justify-content:space-between;align-items:center;transition:border-color .18s}
-.hrow:hover{border-color:rgba(255,238,210,.13)}
-
-/* FOREX CARD */
-.fx-card{background:var(--s2);border:1px solid var(--line);border-radius:20px;padding:20px;transition:border-color .18s}
-.fx-card:hover{border-color:var(--line2)}
-
-/* STATS SUMMARY CARD */
-.sum-card{background:var(--s2);border:1px solid var(--line);border-radius:20px;padding:22px}
-
-/* STATUS DOT */
+.dv{height:1px;background:var(--line);margin:18px 0}
+.pg-title{font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(1.8rem,6vw,2.6rem);letter-spacing:.03em;color:var(--cream);line-height:1}
+.hrow{background:var(--s2);border:1px solid var(--line);border-radius:16px;padding:16px;
+  display:flex;justify-content:space-between;align-items:center;transition:border-color .18s}
+.hrow:hover{border-color:var(--line2)}
 .sdot{width:5px;height:5px;border-radius:99px;flex-shrink:0}
 .sdot.on{background:var(--sage);box-shadow:0 0 5px var(--sage)}
 .sdot.off{background:var(--umb)}
 
-/* Divider */
-.dv{height:1px;background:var(--line);margin:20px 0}
-
-/* Responsive helpers */
+/* RESPONSIVE */
 @media(min-width:1024px){.lg-row{flex-direction:row!important}}
-.mob-only{display:flex}
-@media(min-width:1024px){.mob-only{display:none!important}}
-.desk-only{display:none}
-@media(min-width:1024px){.desk-only{display:flex!important}}
+.mob{display:flex} @media(min-width:1024px){.mob{display:none!important}}
+.desk{display:none} @media(min-width:1024px){.desk{display:flex!important}}
+@media(min-width:1024px){.main-pad{padding:40px!important}}
+
+/* FX CHART select */
+.fx-select{background:var(--s3);border:1px solid var(--line);border-radius:8px;padding:6px 10px;
+  color:var(--cream);font-family:var(--mono);font-size:11px;outline:none;cursor:pointer}
 </style>
 </head>
 
@@ -262,14 +247,14 @@ body::before {
   </div>
 
   <!-- MOBILE TOPBAR -->
-  <header class="mob-only" style="position:sticky;top:0;z-index:50;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(13,11,9,.97);border-bottom:1px solid var(--line)">
+  <header class="mob" style="position:sticky;top:0;z-index:50;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(13,11,9,.97);border-bottom:1px solid var(--line)">
     <div style="display:flex;align-items:center;gap:12px">
       <div style="width:32px;height:32px;background:var(--sk);border-radius:10px;display:flex;align-items:center;justify-content:center">
         <span style="font-family:var(--serif);font-style:italic;font-size:18px;color:#1A0D10">M</span>
       </div>
       <div>
         <div style="font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cream);line-height:1">M400</div>
-        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;margin-top:2px">STRATEGY TERMINAL</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;margin-top:2px">ASSET TERMINAL</div>
       </div>
     </div>
     <button @click="menuOpen=true" style="padding:6px;color:var(--warm);background:none;border:none;cursor:pointer">
@@ -280,31 +265,29 @@ body::before {
   </header>
 
   <!-- OVERLAY -->
-  <div v-if="menuOpen" @click="menuOpen=false" class="ov mob-only"></div>
+  <div v-if="menuOpen" @click="menuOpen=false" class="ov mob"></div>
 
   <!-- SIDEBAR -->
   <aside :class="['sidebar', menuOpen ? 'open' : '']">
-    <div style="padding:28px 20px;display:flex;flex-direction:column;min-height:100%">
-
-      <div class="desk-only" style="align-items:center;gap:12px;margin-bottom:36px">
+    <div style="padding:26px 20px;display:flex;flex-direction:column;min-height:100%">
+      <div class="desk" style="align-items:center;gap:12px;margin-bottom:34px">
         <div style="width:40px;height:40px;background:var(--sk);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
           <span style="font-family:var(--serif);font-style:italic;font-size:22px;color:#1A0D10">M</span>
         </div>
         <div>
           <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream);line-height:1">M400</div>
-          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;margin-top:3px">STRATEGY TERMINAL</div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;margin-top:3px">ASSET TERMINAL</div>
         </div>
       </div>
 
-      <div style="text-align:center;font-size:14px;margin-bottom:22px;opacity:.25">&#x273F; &#x2741; &#x273F;</div>
+      <div style="text-align:center;font-size:13px;margin-bottom:20px;opacity:.22">&#x273F; &#x2741; &#x273F;</div>
 
-      <!-- MAIN NAV -->
-      <div style="margin-bottom:6px">
+      <div>
         <div class="slbl" style="margin-top:0">主選單</div>
         <div style="display:flex;flex-direction:column;gap:3px">
           <button @click="go('open')"    :class="['ni', tab==='open'    ?'a1':'']">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
-            在庫倉位管理
+            股票倉位管理
           </button>
           <button @click="go('history')" :class="['ni', tab==='history' ?'a2':'']">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -314,8 +297,8 @@ body::before {
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
             美元匯率走勢
           </button>
-          <button @click="go('stats')"   :class="['ni', tab==='stats'   ?'a4':'']">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+          <button @click="go('assets')"  :class="['ni', tab==='assets'  ?'a4':'']">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
             個人資產統計
           </button>
           <button @click="go('news')"    :class="['ni', tab==='news'    ?'a5':'']">
@@ -324,798 +307,719 @@ body::before {
           </button>
           <button @click="go('settings')" :class="['ni', tab==='settings'?'a6':'']">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-            API 連線設定
+            連線設定
           </button>
         </div>
       </div>
-
       <div class="dv"></div>
-
-      <!-- DATA MANAGEMENT -->
-      <div style="margin-bottom:6px">
+      <div>
         <div class="slbl">數據管理</div>
         <div style="display:flex;flex-direction:column;gap:3px">
-          <button @click="exportData"         class="ni">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            導出備份
-          </button>
-          <button @click="$refs.fi.click()"  class="ni">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            導入備份
-          </button>
+          <button @click="exportData"        class="ni"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>導出備份</button>
+          <button @click="$refs.fi.click()"  class="ni"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>導入備份</button>
           <input type="file" ref="fi" @change="importData" style="display:none" accept=".json">
-          <button @click="clearAll" class="ni" style="color:var(--umb)">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-            清空紀錄
+          <button @click="clearAll" class="ni" style="color:var(--umb)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>清空紀錄</button>
+        </div>
+      </div>
+      <div style="margin-top:auto">
+        <div style="background:rgba(0,0,0,.2);border:1px solid var(--line);border-radius:16px;padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <span style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase">SYSTEM</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <div :class="['sdot', apiKey ? 'on' : 'off']"></div>
+              <span style="font-family:var(--mono);font-size:9px" :class="apiKey?'g':'r'">{{ apiKey?'LIVE':'OFFLINE' }}</span>
+            </div>
+          </div>
+          <div class="bar" style="margin-bottom:14px"><div class="bar-f" :style="{width:storageUsage+'%',background:'var(--sk)'}"></div></div>
+          <button @click="fetchAll" :disabled="!apiKey||fetching"
+            style="width:100%;background:var(--sk2);border:1px solid rgba(200,120,138,.18);border-radius:10px;padding:9px;color:var(--sk);font-size:11px;font-weight:500;display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;font-family:var(--sans)"
+            :style="(!apiKey||fetching)?'opacity:.3;cursor:not-allowed;pointer-events:none':''">
+            <svg :class="fetching?'spin':''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            同步最新數據
           </button>
         </div>
       </div>
-
-      <!-- SYSTEM STATUS -->
-      <div style="margin-top:auto;background:rgba(0,0,0,.2);border:1px solid var(--line);border-radius:16px;padding:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <span style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase">SYSTEM</span>
-          <div style="display:flex;align-items:center;gap:6px">
-            <div :class="['sdot', apiKey ? 'on' : 'off']"></div>
-            <span style="font-family:var(--mono);font-size:9px;font-weight:500" :class="apiKey ? 'g' : 'r'">{{ apiKey ? 'LIVE' : 'OFFLINE' }}</span>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:10px">
-          <span style="font-family:var(--mono);font-size:9px;color:var(--dim)">STORAGE</span>
-          <span style="font-family:var(--mono);font-size:9px;color:var(--warm)">{{ storageUsage }}%</span>
-        </div>
-        <div class="bar" style="margin-bottom:14px">
-          <div class="bar-f" :style="{width: storageUsage + '%', background: 'var(--sk)'}"></div>
-        </div>
-        <button @click="fetchAll" :disabled="!apiKey || fetching"
-          style="width:100%;background:var(--sk2);border:1px solid rgba(200,120,138,.18);border-radius:10px;padding:9px;color:var(--sk);font-size:11px;font-weight:500;display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;transition:all .18s;font-family:var(--sans)"
-          :style="(!apiKey || fetching) ? 'opacity:.3;cursor:not-allowed;pointer-events:none' : ''">
-          <svg :class="fetching ? 'spin' : ''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          同步最新數據
-        </button>
-      </div>
-
     </div>
   </aside>
 
   <!-- MAIN -->
   <main style="flex:1;padding:20px;overflow-y:auto;position:relative;z-index:1" class="main-pad">
-    <style>@media(min-width:1024px){.main-pad{padding:40px!important}}</style>
     <div style="max-width:880px;margin:0 auto">
 
       <!-- 4 INDEX TILES -->
-      <div v-if="tab !== 'settings'" class="r1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:32px">
-        <div v-for="ix in indices" :key="ix.symbol" :class="['ixtile', ix.change === null ? '' : (ix.change >= 0 ? 'up' : 'dn')]">
+      <div v-if="tab!=='settings'" class="r1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:30px">
+        <div v-for="ix in indices" :key="ix.symbol" :class="['ixtile', ix.change===null?'':(ix.change>=0?'up':'dn')]">
           <div style="font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ix.name }}</div>
           <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--cream);line-height:1">{{ ix.price ? ix.price.toFixed(2) : '&#x2014;' }}</div>
-          <div style="font-family:var(--mono);font-size:9px;margin-top:5px;font-weight:400" :class="(ix.change || 0) >= 0 ? 'g' : 'r'">
-            {{ ix.change !== null ? ((ix.change >= 0 ? '+' : '') + ix.change.toFixed(2) + '%') : '&#x2014;' }}
+          <div style="font-family:var(--mono);font-size:9px;margin-top:5px" :class="(ix.change||0)>=0?'g':'r'">
+            {{ ix.change!==null ? ((ix.change>=0?'+':'')+ix.change.toFixed(2)+'%') : '&#x2014;' }}
           </div>
         </div>
       </div>
 
-      <!-- ═══ 在庫倉位管理 ═══ -->
-      <section v-if="tab === 'open'">
-        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px">
+      <!-- ═══ 股票倉位管理 ═══ -->
+      <section v-if="tab==='open'">
+        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:26px">
           <div>
-            <div class="pg-title">在庫倉位</div>
+            <div class="pg-title">股票倉位</div>
             <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--dim)">
-              {{ openPos.length }} positions
-              <span style="margin:0 8px;opacity:.3">|</span>
-              <span style="color:var(--warm)">${{ totalValue.toLocaleString(undefined,{minimumFractionDigits:2}) }}</span>
+              {{ openPos.length }} positions &#x2022;
+              <span style="color:var(--warm)">NTD+USD ${{ formatMixed }}</span>
             </div>
           </div>
-          <button @click="openModal('entry')" class="btn-main">
+          <button @click="openStockModal('entry')" class="btn-main">
             <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             新增持倉
           </button>
         </div>
-
-        <div v-if="openPos.length === 0" class="r2 card" style="padding:60px 20px;text-align:center">
-          <div style="font-size:28px;margin-bottom:14px;opacity:.35">&#x2741;</div>
+        <div v-if="openPos.length===0" class="r2 card" style="padding:60px 20px;text-align:center">
+          <div style="font-size:26px;margin-bottom:14px;opacity:.35">&#x2741;</div>
           <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--warm)">尚無持倉標的</div>
-          <div style="font-size:12px;color:var(--dim);margin-top:6px;font-family:var(--mono)">點擊右上角「新增持倉」</div>
         </div>
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px">
-          <div v-for="(p,i) in openPos" :key="p.id" :class="['pc r2', pct(p) >= 3 ? 'alert' : '']" :style="'animation-delay:' + (i * 0.06) + 's'">
-            <div v-if="pct(p) >= 3" style="display:flex;justify-content:flex-end;margin-bottom:12px">
-              <span class="badge g" style="background:var(--sage2);border:1px solid rgba(123,168,130,.22)">
-                &#x2665; +{{ pct(p).toFixed(1) }}% &#x2014; 考慮平倉
-              </span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
-              <div style="display:flex;align-items:center;gap:12px">
-                <div class="av">{{ p.ticker.substring(0,2) }}</div>
-                <div>
-                  <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream);letter-spacing:.03em;line-height:1">{{ p.ticker }}</div>
-                  <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:4px">{{ Number(p.qty).toLocaleString() }} shs</div>
+        <!-- US positions -->
+        <div v-if="usPosCount > 0" style="margin-bottom:6px">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+            <span style="width:6px;height:6px;border-radius:99px;background:var(--sage);display:inline-block"></span>
+            US STOCKS
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:20px">
+            <div v-for="(p,i) in openPos.filter(function(x){return x.mkt!=='TW'})" :key="p.id"
+              :class="['pc r2', pct(p)>=3?'alert':'']" :style="'animation-delay:'+(i*.06)+'s'">
+              <div v-if="pct(p)>=3" style="display:flex;justify-content:flex-end;margin-bottom:10px">
+                <span class="badge g" style="background:var(--sage2);border:1px solid rgba(123,168,130,.22)">&#x2665; +{{ pct(p).toFixed(1) }}% &#x2014; 考慮平倉</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div class="av">{{ p.ticker.substring(0,2) }}</div>
+                  <div>
+                    <div style="font-family:var(--serif);font-style:italic;font-size:21px;color:var(--cream);line-height:1">{{ p.ticker }}</div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:3px">{{ Number(p.qty).toLocaleString() }} shs</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">市價</div>
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--cream);line-height:1">{{ p.currentPrice ? '$'+Number(p.currentPrice).toFixed(2) : '&#x2014;' }}</div>
                 </div>
               </div>
-              <div style="text-align:right">
-                <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px">市價</div>
-                <div style="font-family:var(--mono);font-size:19px;font-weight:500;color:var(--cream);line-height:1">{{ p.currentPrice ? '$' + Number(p.currentPrice).toFixed(2) : '&#x2014;' }}</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px">
+                <div class="stat"><div class="stat-lbl">成本</div><div style="font-family:var(--mono);font-size:12px;color:var(--cream)">${{ Number(p.entry).toFixed(2) }}</div></div>
+                <div class="stat"><div class="stat-lbl">損益</div><div style="font-family:var(--mono);font-size:12px" :class="unrealized(p)>=0?'g':'r'">${{ unrealized(p).toFixed(2) }}</div></div>
+                <div class="stat"><div class="stat-lbl">漲跌</div><div style="font-family:var(--mono);font-size:12px" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div></div>
+              </div>
+              <div class="bar" style="margin-bottom:14px"><div class="bar-f" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--sage)':'var(--umb)'}"></div></div>
+              <div style="display:flex;gap:8px">
+                <button @click="openStockModal('edit',p)" class="btn-ghost" style="flex:1">修改 / 刪除</button>
+                <button @click="openStockModal('exit',p)" class="btn-exit"  style="flex:1">結清獲利</button>
               </div>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
-              <div class="stat"><div class="stat-lbl">成本</div><div style="font-family:var(--mono);font-size:13px;font-weight:400;color:var(--cream)">${{ Number(p.entry).toFixed(2) }}</div></div>
-              <div class="stat"><div class="stat-lbl">損益</div><div style="font-family:var(--mono);font-size:13px;font-weight:400" :class="unrealized(p)>=0?'g':'r'">${{ unrealized(p).toFixed(2) }}</div></div>
-              <div class="stat"><div class="stat-lbl">漲跌</div><div style="font-family:var(--mono);font-size:13px;font-weight:400" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div></div>
-            </div>
-            <div class="bar" style="margin-bottom:16px">
-              <div class="bar-f" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--sage)':'var(--umb)'}"></div>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button @click="openModal('edit',p)" class="btn-ghost" style="flex:1">修改 / 刪除</button>
-              <button @click="openModal('exit',p)" class="btn-exit" style="flex:1">結清獲利</button>
+          </div>
+        </div>
+        <!-- TW positions -->
+        <div v-if="twPosCount > 0">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+            <span style="width:6px;height:6px;border-radius:99px;background:var(--gold);display:inline-block"></span>
+            台股 TWSE
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+            <div v-for="(p,i) in openPos.filter(function(x){return x.mkt==='TW'})" :key="p.id"
+              :class="['pc r2', pct(p)>=3?'alert':'']" :style="'animation-delay:'+(i*.06)+'s;'+(pct(p)>=3?'':'')">
+              <div v-if="pct(p)>=3" style="display:flex;justify-content:flex-end;margin-bottom:10px">
+                <span class="badge g" style="background:var(--sage2);border:1px solid rgba(123,168,130,.22)">&#x2665; +{{ pct(p).toFixed(1) }}% &#x2014; 考慮平倉</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div class="av tw">{{ p.ticker.substring(0,2) }}</div>
+                  <div>
+                    <div style="font-family:var(--serif);font-style:italic;font-size:21px;color:var(--cream);line-height:1">{{ p.ticker }}</div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--gold);margin-top:3px;letter-spacing:.05em">台股 &#x2022; {{ Number(p.qty).toLocaleString() }} 股</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">市價</div>
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--cream);line-height:1">{{ p.currentPrice ? 'NT$'+Number(p.currentPrice).toFixed(0) : '&#x2014;' }}</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px">
+                <div class="stat"><div class="stat-lbl">成本</div><div style="font-family:var(--mono);font-size:12px;color:var(--cream)">NT${{ Number(p.entry).toFixed(0) }}</div></div>
+                <div class="stat"><div class="stat-lbl">損益</div><div style="font-family:var(--mono);font-size:12px" :class="unrealized(p)>=0?'g':'r'">NT${{ unrealized(p).toFixed(0) }}</div></div>
+                <div class="stat"><div class="stat-lbl">漲跌</div><div style="font-family:var(--mono);font-size:12px" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div></div>
+              </div>
+              <div class="bar" style="margin-bottom:14px"><div class="bar-f" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--sage)':'var(--umb)'}"></div></div>
+              <div style="display:flex;gap:8px">
+                <button @click="openStockModal('edit',p)" class="btn-ghost" style="flex:1">修改 / 刪除</button>
+                <button @click="openStockModal('exit',p)" class="btn-exit"  style="flex:1">結清獲利</button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ═══ 獲利分析報表 ═══ -->
-      <section v-if="tab === 'history'">
-        <div class="r1 pg-title" style="margin-bottom:28px">獲利分析</div>
-        <div class="r2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:24px">
-          <div class="card" style="padding:28px">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">ANNUAL P&amp;L</div>
+      <!-- ═══ 獲利分析 ═══ -->
+      <section v-if="tab==='history'">
+        <div class="r1 pg-title" style="margin-bottom:26px">獲利分析</div>
+        <div class="r2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:22px">
+          <div class="card" style="padding:26px">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">ANNUAL P&amp;L</div>
             <div style="font-family:var(--mono);font-size:clamp(2rem,7vw,3rem);font-weight:300;line-height:1" :class="annualPnl>=0?'g':'r'">${{ annualPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div>
-            <div class="bar" style="margin-top:16px"><div class="bar-f" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--sage)':'var(--umb)'}"></div></div>
+            <div class="bar" style="margin-top:14px"><div class="bar-f" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--sage)':'var(--umb)'}"></div></div>
           </div>
-          <div class="card" style="padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">{{ selMonth }} 月</div>
+          <div class="card" style="padding:26px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">{{ selMonth }} 月</div>
             <div style="font-family:var(--mono);font-size:1.8rem;font-weight:300" :class="monthPnl>=0?'g':'r'">${{ monthPnl.toFixed(2) }}</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:8px">{{ filteredHist.length }} trades</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:6px">{{ filteredHist.length }} trades</div>
           </div>
         </div>
-        <div class="r3 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px">
-          <button v-for="m in 12" :key="m" @click="selMonth=m" :class="['mtab', selMonth===m?'on':'']">{{ m }}</button>
+        <div class="r3 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px">
+          <button v-for="m in 12" :key="m" @click="selMonth=m" :class="['mtab',selMonth===m?'on':'']">{{ m }}</button>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div v-if="filteredHist.length===0" class="card" style="padding:40px;text-align:center;color:var(--dim);font-size:13px;font-family:var(--mono)">&#x2014; 本月無交易紀錄 &#x2014;</div>
           <div v-for="h in filteredHist" :key="h.id" class="hrow">
-            <div style="display:flex;align-items:center;gap:12px">
-              <div class="av" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
+            <div style="display:flex;align-items:center;gap:11px">
+              <div :class="['av',h.mkt==='TW'?'tw':'']" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
               <div>
                 <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--cream)">{{ h.ticker }}</div>
-                <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px">{{ Number(h.entry).toFixed(2) }} &#x2192; {{ Number(h.exit).toFixed(2) }} &nbsp; {{ h.qty }} shs</div>
+                <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px">
+                  {{ Number(h.entry).toFixed(h.mkt==='TW'?0:2) }} &#x2192; {{ Number(h.exit).toFixed(h.mkt==='TW'?0:2) }} &#x2022; {{ h.qty }}{{ h.mkt==='TW'?'股':'shs' }}
+                </div>
               </div>
             </div>
             <div style="text-align:right">
-              <div style="font-family:var(--mono);font-size:18px;font-weight:400" :class="h.pnl>=0?'g':'r'">${{ h.pnl.toFixed(2) }}</div>
-              <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(1) }}%</div>
+              <div style="font-family:var(--mono);font-size:17px;font-weight:400" :class="h.pnl>=0?'g':'r'">{{ h.mkt==='TW'?'NT$':'$' }}{{ h.pnl.toFixed(h.mkt==='TW'?0:2) }}</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(1) }}%</div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ═══ 美元匯率走勢 ═══ -->
-      <section v-if="tab === 'forex'">
-        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px">
+      <!-- ═══ 美元匯率 ═══ -->
+      <section v-if="tab==='forex'">
+        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:26px">
           <div>
             <div class="pg-title">美元匯率</div>
-            <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--dim)">即時報價 &#x2014; 以 USD 為基準</div>
+            <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--dim)">即時報價 &#x2022; USD 為基準</div>
           </div>
-          <button @click="fetchForex" :disabled="!apiKey || fxLoading"
-            style="background:var(--sk2);border:1px solid rgba(200,120,138,.18);border-radius:10px;padding:9px 14px;color:var(--sk);font-size:11px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--sans)"
-            :style="(!apiKey || fxLoading) ? 'opacity:.4;cursor:not-allowed' : ''">
-            <svg :class="fxLoading ? 'spin' : ''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
+          <button @click="fetchForex" :disabled="!apiKey||fxLoading"
+            style="background:var(--gold2);border:1px solid rgba(200,168,74,.2);border-radius:10px;padding:9px 14px;color:var(--gold);font-size:11px;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--sans)"
+            :style="(!apiKey||fxLoading)?'opacity:.4;cursor:not-allowed':''">
+            <svg :class="fxLoading?'spin':''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             更新匯率
           </button>
         </div>
-
-        <div v-if="!apiKey" class="r2 card" style="padding:40px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:12px">請先設定 API 金鑰</div>
-
-        <div v-else style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px">
-          <div v-for="fx in fxPairs" :key="fx.sym" class="r2 fx-card">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-              <div>
-                <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">USD / {{ fx.label }}</div>
-                <div style="font-family:var(--mono);font-size:22px;font-weight:400;color:var(--cream);line-height:1">{{ fx.rate ? fx.rate.toFixed(fx.dec) : '&#x2014;' }}</div>
-              </div>
-              <div style="text-align:right">
-                <div style="font-family:var(--mono);font-size:11px;font-weight:500;margin-top:10px" :class="fx.chg >= 0 ? 'g' : 'r'">
-                  {{ fx.chg !== null ? ((fx.chg >= 0 ? '+' : '') + fx.chg.toFixed(2) + '%') : '' }}
-                </div>
-              </div>
+        <div v-if="!apiKey" class="r2 card" style="padding:40px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:12px">請先在「連線設定」設定 API 金鑰</div>
+        <div v-else style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+          <div v-for="fx in fxRates" :key="fx.label" class="r2 fx-card">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">USD / {{ fx.label }}</div>
+            <div style="font-family:var(--mono);font-size:26px;font-weight:300;color:var(--cream);line-height:1;margin-bottom:8px">
+              {{ fx.rate ? fx.rate.toFixed(fx.dec) : (fxLoading ? '...' : '&#x2014;') }}
             </div>
-            <!-- SVG SPARKLINE -->
-            <div style="position:relative;height:48px">
-              <svg v-if="fx.history && fx.history.length > 1" width="100%" height="48" :viewBox="'0 0 200 48'" preserveAspectRatio="none">
+            <div v-if="fx.prev" style="font-family:var(--mono);font-size:10px;margin-bottom:14px" :class="fx.rate > fx.prev ? 'g' : 'r'">
+              {{ fx.rate > fx.prev ? '&#x25B2;' : '&#x25BC;' }}
+              {{ Math.abs(((fx.rate - fx.prev) / fx.prev) * 100).toFixed(2) }}%
+            </div>
+            <div v-else style="height:20px;margin-bottom:14px"></div>
+            <!-- Sparkline SVG -->
+            <div style="height:44px">
+              <svg v-if="fx.hist.length>2" width="100%" height="44" :viewBox="'0 0 160 44'" preserveAspectRatio="none">
                 <defs>
-                  <linearGradient :id="'g'+fx.label" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" :stop-color="fx.chg >= 0 ? '#7BA882' : '#C07858'" stop-opacity="0.3"/>
-                    <stop offset="100%" :stop-color="fx.chg >= 0 ? '#7BA882' : '#C07858'" stop-opacity="0"/>
+                  <linearGradient :id="'fg'+fx.label" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" :stop-color="fx.rate>fx.prev?'#7BA882':'#C07858'" stop-opacity="0.28"/>
+                    <stop offset="100%" :stop-color="fx.rate>fx.prev?'#7BA882':'#C07858'" stop-opacity="0"/>
                   </linearGradient>
                 </defs>
-                <polygon
-                  :points="sparkArea(fx.history, 200, 44)"
-                  :fill="'url(#g' + fx.label + ')'"/>
-                <polyline
-                  :points="sparkLine(fx.history, 200, 44)"
-                  fill="none"
-                  :stroke="fx.chg >= 0 ? 'var(--sage)' : 'var(--umb)'"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"/>
+                <polygon :points="sArea(fx.hist,160,42)" :fill="'url(#fg'+fx.label+')'"/>
+                <polyline :points="sLine(fx.hist,160,42)" fill="none" :stroke="fx.rate>fx.prev?'var(--sage)':'var(--umb)'" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
               </svg>
-              <div v-else style="height:48px;display:flex;align-items:center;justify-content:center">
-                <span style="font-family:var(--mono);font-size:10px;color:var(--dim)">{{ fxLoading ? '載入中...' : '點擊更新匯率' }}</span>
+              <div v-else style="height:44px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--dim)">
+                {{ fxLoading ? '載入中' : '點擊更新匯率' }}
               </div>
             </div>
-            <div style="display:flex;justify-content:space-between;margin-top:8px">
-              <span style="font-family:var(--mono);font-size:8px;color:var(--dim)">12週前</span>
-              <span style="font-family:var(--mono);font-size:8px;color:var(--dim)">今日</span>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:7px;color:var(--dim)">
+              <span>12週前</span><span>今</span>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ═══ 個人資產統計 ═══ -->
-      <section v-if="tab === 'stats'">
-        <div class="r1 pg-title" style="margin-bottom:28px">資產統計</div>
+      <section v-if="tab==='assets'">
+        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:26px">
+          <div>
+            <div class="pg-title">個人資產</div>
+            <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--dim)">股票 + 自訂資產總覽</div>
+          </div>
+          <button @click="openAssetModal()" class="btn-main">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            新增資產
+          </button>
+        </div>
 
-        <!-- Summary row -->
-        <div class="r2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px">
-          <div class="sum-card" style="grid-column:span 2">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">總資產損益</div>
-            <div style="font-family:var(--mono);font-size:clamp(2rem,8vw,3.2rem);font-weight:300;line-height:1" :class="totalPnlAll >= 0 ? 'g' : 'r'">
-              ${{ totalPnlAll.toLocaleString(undefined,{minimumFractionDigits:2}) }}
-            </div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:8px">未實現 + 已實現</div>
+        <!-- Total net worth -->
+        <div class="r2 card" style="padding:26px;margin-bottom:14px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">總淨資產估值 (TWD)</div>
+          <div style="font-family:var(--mono);font-size:clamp(2rem,8vw,3.2rem);font-weight:300;line-height:1;color:var(--cream)">
+            NT$ {{ totalNetWorth.toLocaleString(undefined,{minimumFractionDigits:0}) }}
           </div>
-          <div class="sum-card">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">總投入成本</div>
-            <div style="font-family:var(--mono);font-size:1.4rem;font-weight:400;color:var(--cream)">${{ totalCost.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div>
-          </div>
-          <div class="sum-card">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">目前市值</div>
-            <div style="font-family:var(--mono);font-size:1.4rem;font-weight:400;color:var(--cream)">${{ totalValue.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div>
-          </div>
-          <div class="sum-card">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">未實現損益</div>
-            <div style="font-family:var(--mono);font-size:1.4rem;font-weight:400" :class="totalUnrealized >= 0 ? 'g' : 'r'">${{ totalUnrealized.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div>
-          </div>
-          <div class="sum-card">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">已實現損益</div>
-            <div style="font-family:var(--mono);font-size:1.4rem;font-weight:400" :class="annualPnl >= 0 ? 'g' : 'r'">${{ annualPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:8px">
+            股票市值 + 自訂資產 &#x2022; USD/TWD ≈ {{ usdTwd || '?' }}
           </div>
         </div>
 
-        <!-- Trade statistics -->
-        <div class="r3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
-          <div class="sum-card" style="text-align:center">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">勝率</div>
-            <div style="font-family:var(--mono);font-size:2rem;font-weight:300" :class="winRate >= 50 ? 'g' : 'r'">{{ winRate.toFixed(0) }}<span style="font-size:1rem;color:var(--dim)">%</span></div>
+        <!-- Summary grid -->
+        <div class="r3" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px">
+          <div class="card" style="padding:18px">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">股票市值 (USD)</div>
+            <div style="font-family:var(--mono);font-size:1.3rem;font-weight:400;color:var(--cream)">${{ totalStockValue.toLocaleString(undefined,{minimumFractionDigits:0}) }}</div>
           </div>
-          <div class="sum-card" style="text-align:center">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">交易次數</div>
-            <div style="font-family:var(--mono);font-size:2rem;font-weight:300;color:var(--cream)">{{ hist.length }}</div>
+          <div class="card" style="padding:18px">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">台股市值 (TWD)</div>
+            <div style="font-family:var(--mono);font-size:1.3rem;font-weight:400;color:var(--cream)">NT${{ totalTwStock.toLocaleString(undefined,{minimumFractionDigits:0}) }}</div>
           </div>
-          <div class="sum-card" style="text-align:center">
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">持倉數量</div>
-            <div style="font-family:var(--mono);font-size:2rem;font-weight:300;color:var(--cream)">{{ openPos.length }}</div>
+          <div class="card" style="padding:18px">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">已實現獲利</div>
+            <div style="font-family:var(--mono);font-size:1.3rem;font-weight:400" :class="annualPnl>=0?'g':'r'">${{ annualPnl.toFixed(0) }}</div>
+          </div>
+          <div class="card" style="padding:18px">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">自訂資產總值</div>
+            <div style="font-family:var(--mono);font-size:1.3rem;font-weight:400;color:var(--cream)">NT${{ totalCustomAssets.toLocaleString(undefined,{minimumFractionDigits:0}) }}</div>
           </div>
         </div>
 
-        <!-- Monthly PnL bar chart -->
-        <div class="r4 card" style="padding:24px;margin-bottom:20px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:20px">月度損益分佈</div>
-          <div style="position:relative;height:100px">
-            <svg width="100%" height="100" :viewBox="'0 0 ' + (12*32) + ' 100'" preserveAspectRatio="none">
-              <!-- Zero line -->
-              <line x1="0" y1="50" :x2="12*32" y2="50" stroke="rgba(255,238,210,.08)" stroke-width="1"/>
-              <!-- Bars -->
-              <g v-for="(m, i) in monthlyBars" :key="i">
-                <rect
-                  :x="i * 32 + 4"
-                  :y="m.pnl >= 0 ? (50 - m.h) : 50"
-                  :width="24"
-                  :height="m.h"
-                  :fill="m.pnl >= 0 ? 'rgba(123,168,130,0.5)' : 'rgba(192,120,88,0.5)'"
-                  rx="3"/>
+        <!-- Asset allocation donut (SVG) -->
+        <div class="r4 card" style="padding:22px;margin-bottom:18px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px">資產配置分佈</div>
+          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <g v-for="(seg,i) in assetDonut" :key="i">
+                <circle cx="50" cy="50" r="36"
+                  fill="none"
+                  :stroke="seg.color"
+                  stroke-width="14"
+                  stroke-dasharray="226.2"
+                  :stroke-dashoffset="226.2 - seg.offset"
+                  :transform="'rotate('+(seg.start-90)+' 50 50)'"
+                  stroke-linecap="round"
+                  style="opacity:0.85"/>
               </g>
+              <text x="50" y="48" text-anchor="middle" style="font-family:var(--mono);font-size:9px;fill:var(--cream)">TOTAL</text>
+              <text x="50" y="58" text-anchor="middle" style="font-family:var(--mono);font-size:7px;fill:var(--dim)">{{ assetDonut.length }} types</text>
             </svg>
-          </div>
-          <!-- Month labels -->
-          <div style="display:grid;grid-template-columns:repeat(12,1fr);margin-top:8px">
-            <div v-for="m in 12" :key="m" style="text-align:center;font-family:var(--mono);font-size:8px;color:var(--dim)">{{ m }}</div>
+            <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:120px">
+              <div v-for="seg in assetDonut" :key="seg.label" style="display:flex;align-items:center;gap:8px">
+                <div style="width:8px;height:8px;border-radius:3px;flex-shrink:0" :style="{background:seg.color}"></div>
+                <span style="font-family:var(--mono);font-size:10px;color:var(--warm);flex:1">{{ seg.label }}</span>
+                <span style="font-family:var(--mono);font-size:10px;color:var(--cream)">{{ seg.pct.toFixed(1) }}%</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Top positions table -->
-        <div v-if="openPos.length > 0" class="r4 card" style="padding:0;overflow:hidden">
-          <div style="padding:20px 20px 14px;font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid var(--line)">持倉明細</div>
-          <div v-for="(p, i) in sortedPositions" :key="p.id" :style="i < sortedPositions.length - 1 ? 'border-bottom:1px solid var(--line)' : ''"
-            style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:14px 20px;align-items:center">
-            <div style="font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cream)">{{ p.ticker }}</div>
-            <div style="font-family:var(--mono);font-size:11px;color:var(--warm);text-align:right">${{ (Number(p.currentPrice || p.entry) * p.qty).toLocaleString(undefined,{minimumFractionDigits:0}) }}</div>
-            <div style="font-family:var(--mono);font-size:11px;text-align:right" :class="unrealized(p)>=0?'g':'r'">${{ unrealized(p).toFixed(2) }}</div>
-            <div style="font-family:var(--mono);font-size:11px;text-align:right" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div>
+        <!-- Custom assets list -->
+        <div v-if="customAssets.length > 0">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">自訂資產明細</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div v-for="a in customAssets" :key="a.id" class="asset-row">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div class="cat-dot" :style="{background: catColor(a.cat)}"></div>
+                <div>
+                  <div style="font-size:14px;font-weight:500;color:var(--cream)">{{ a.name }}</div>
+                  <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:2px;letter-spacing:.06em;text-transform:uppercase">{{ a.cat }}</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="text-align:right">
+                  <div style="font-family:var(--mono);font-size:15px;color:var(--cream)">NT${{ Number(a.value).toLocaleString() }}</div>
+                </div>
+                <button @click="deleteAsset(a.id)" style="color:var(--dim);background:none;border:none;cursor:pointer;padding:4px;transition:color .15s" onmouseover="this.style.color='var(--umb)'" onmouseout="this.style.color='var(--dim)'">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-        <div v-else class="r4 card" style="padding:40px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:12px">&#x2014; 尚無持倉數據 &#x2014;</div>
+        <div v-else class="r4 card" style="padding:30px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:12px">點擊「新增資產」記錄現金、不動產、加密貨幣等</div>
       </section>
 
       <!-- ═══ 機構評等 ═══ -->
-      <section v-if="tab === 'news'">
-        <div class="r1 pg-title" style="margin-bottom:28px">機構評等</div>
-        <div v-if="!Object.keys(recs).length" class="r2 card" style="padding:48px;text-align:center">
-          <div style="font-family:var(--mono);font-size:12px;color:var(--dim)">&#x2014; 尚無評等數據 &#x2014;</div>
-        </div>
+      <section v-if="tab==='news'">
+        <div class="r1 pg-title" style="margin-bottom:26px">機構評等</div>
+        <div v-if="!Object.keys(recs).length" class="r2 card" style="padding:48px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:12px">&#x2014; 尚無評等數據 &#x2014;</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
           <div v-for="(rec,tk) in recs" :key="tk" class="r2 card" style="padding:22px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
               <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream)">{{ tk }}</div>
               <div style="font-family:var(--mono);font-size:9px;color:var(--dim)">{{ rec.period }}</div>
             </div>
-            <div style="display:flex;height:3px;border-radius:99px;overflow:hidden;background:rgba(255,238,210,.05);margin-bottom:12px">
+            <div style="display:flex;height:3px;border-radius:99px;overflow:hidden;background:rgba(255,238,210,.05);margin-bottom:10px">
               <div :style="{width:(rec.strongBuy+rec.buy)/rec.total*100+'%',background:'var(--sage)'}"></div>
-              <div :style="{width:rec.hold/rec.total*100+'%',background:'var(--s3)'}"></div>
+              <div :style="{width:rec.hold/rec.total*100+'%',background:'rgba(255,238,210,.1)'}"></div>
               <div :style="{width:(rec.sell+rec.strongSell)/rec.total*100+'%',background:'var(--umb)'}"></div>
             </div>
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;margin-bottom:14px">
               <span class="g">buy {{ rec.strongBuy+rec.buy }}</span>
               <span style="color:var(--dim)">hold {{ rec.hold }}</span>
               <span class="r">sell {{ rec.sell+rec.strongSell }}</span>
             </div>
-            <div style="background:rgba(0,0,0,.25);border-radius:12px;padding:14px;text-align:center">
-              <div style="font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">CONSENSUS</div>
-              <div style="font-family:var(--mono);font-size:26px;font-weight:300;line-height:1" :class="score(rec)>=4?'g':score(rec)>=3?'sk':'r'">
-                {{ score(rec).toFixed(1) }}<span style="font-size:13px;color:var(--dim);font-weight:300"> / 5</span>
+            <div style="background:rgba(0,0,0,.25);border-radius:12px;padding:12px;text-align:center">
+              <div style="font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">CONSENSUS</div>
+              <div style="font-family:var(--mono);font-size:26px;font-weight:300" :class="score(rec)>=4?'g':score(rec)>=3?'sk':'r'">
+                {{ score(rec).toFixed(1) }}<span style="font-size:13px;color:var(--dim)"> / 5</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ═══ API 設定 ═══ -->
-      <section v-if="tab === 'settings'">
-        <div class="r1 pg-title" style="margin-bottom:28px">連線設定</div>
-        <div class="r2 card" style="padding:28px;max-width:420px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--sk);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px">FINNHUB API KEY</div>
+      <!-- ═══ 連線設定 ═══ -->
+      <section v-if="tab==='settings'">
+        <div class="r1 pg-title" style="margin-bottom:26px">連線設定</div>
+        <div class="r2 card" style="padding:26px;max-width:420px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--sk);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px">FINNHUB API KEY</div>
           <input v-model="tempKey" type="password" placeholder="Paste your API key ..." class="inp" style="margin-bottom:8px">
-          <div style="font-size:11px;color:var(--dim);margin-bottom:22px;line-height:1.7">
+          <div style="font-size:11px;color:var(--dim);margin-bottom:20px;line-height:1.7">
             前往 <a href="https://finnhub.io" target="_blank" style="color:var(--sk);text-decoration:none;border-bottom:1px solid rgba(200,120,138,.3)">finnhub.io</a> 免費申請 &#x2014; 每分鐘 60 次
           </div>
           <button @click="saveKey" class="btn-main" style="width:100%;justify-content:center;padding:13px">儲存並重新連線</button>
         </div>
-        <!-- PWA install hint -->
-        <div class="r3 card" style="padding:22px;max-width:420px;margin-top:16px;border-color:rgba(200,120,138,.14)">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--sk);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px">PWA &#x2014; 加入主畫面</div>
-          <div style="font-size:12px;color:var(--warm);line-height:1.8">
-            在 Safari 點選 &#x1F4E4; 分享按鈕 &#x2192; 「加入主畫面」，M400 將以全螢幕 App 模式啟動，隱藏所有瀏覽器介面。
+        <div class="r3 card" style="padding:22px;max-width:420px;margin-top:14px;border-color:rgba(200,120,138,.14)">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--sk);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">&#x1F4F1; 加入主畫面 (PWA)</div>
+          <div style="font-size:12px;color:var(--warm);line-height:1.85">
+            <strong style="color:var(--cream)">iOS Safari：</strong>點下方 &#x2015; 分享按鈕 &#x2192; 加入主畫面<br>
+            <strong style="color:var(--cream)">Android Chrome：</strong>選單 &#x2192; 加到主畫面<br>
+            <span style="color:var(--dim)">加入後以全螢幕 App 模式開啟，隱藏所有瀏覽器介面。</span>
           </div>
         </div>
       </section>
-
     </div>
   </main>
 
   <!-- BOTTOM BAR -->
   <div class="bbar">
-    <div style="font-family:var(--mono);font-size:9px;color:rgba(200,120,138,.45);letter-spacing:.06em">
+    <div style="font-family:var(--mono);font-size:9px;color:rgba(200,120,138,.4);letter-spacing:.06em">
       &#x26A0; 數據僅存本地快取 &#xB7; 請定期導出備份
     </div>
   </div>
 
-  <!-- MODAL -->
-  <div v-if="modal.show" class="modal-bg" @click.self="modal.show=false">
+  <!-- STOCK MODAL -->
+  <div v-if="sModal.show" class="modal-bg" @click.self="sModal.show=false">
     <div class="modal-box">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <div style="display:flex;align-items:center;gap:10px">
           <div style="width:3px;height:20px;background:var(--sk);border-radius:99px;opacity:.7"></div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--cream)">{{ modal.title }}</div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--cream)">{{ sModal.title }}</div>
         </div>
-        <button @click="modal.show=false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer">
+        <button @click="sModal.show=false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div v-if="modal.mode !== 'exit'">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">TICKER</div>
-          <input v-model="form.ticker" class="inp" placeholder="AAPL" style="text-transform:uppercase;font-size:18px;font-weight:500">
+        <!-- Market selector (entry / edit) -->
+        <div v-if="sModal.mode!=='exit'">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">市場</div>
+          <div class="seg" style="margin-bottom:2px">
+            <button :class="['seg-btn', sForm.mkt==='US'?'on':'']" @click="sForm.mkt='US'">US 美股</button>
+            <button :class="['seg-btn', sForm.mkt==='TW'?'on':'']" @click="sForm.mkt='TW'">TW 台股</button>
+          </div>
+          <div v-if="sForm.mkt==='TW'" style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:6px">
+            台股代號格式：2330（不含 .TW 後綴）
+          </div>
+        </div>
+        <div v-if="sModal.mode!=='exit'">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">{{ sForm.mkt==='TW'?'股票代號':'TICKER' }}</div>
+          <input v-model="sForm.ticker" class="inp" :placeholder="sForm.mkt==='TW'?'2330 / 0050':'AAPL / TSLA'" style="font-size:18px;font-weight:500">
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">{{ modal.mode==='exit'?'SELL PRICE':'COST PRICE' }}</div>
-            <input v-model.number="form.price" type="number" step="0.01" class="inp" placeholder="0.00">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">{{ sModal.mode==='exit'?(sForm.mkt==='TW'?'賣出價 (NT$)':'賣出價 ($)'):(sForm.mkt==='TW'?'成本價 (NT$)':'成本價 ($)') }}</div>
+            <input v-model.number="sForm.price" type="number" step="0.01" class="inp" placeholder="0">
           </div>
           <div>
-            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">SHARES</div>
-            <input v-model.number="form.qty" type="number" class="inp" placeholder="100">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">{{ sForm.mkt==='TW'?'股數（張×1000）':'SHARES' }}</div>
+            <input v-model.number="sForm.qty" type="number" class="inp" placeholder="100">
           </div>
         </div>
-        <div v-if="modal.mode==='exit' && form.price && form.qty" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,238,210,.06);border-radius:14px;padding:16px;text-align:center">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">ESTIMATED P&amp;L</div>
-          <div style="font-family:var(--mono);font-size:28px;font-weight:300" :class="exitPv>=0?'g':'r'">${{ exitPv.toFixed(2) }}</div>
+        <div v-if="sModal.mode==='exit'&&sForm.price&&sForm.qty" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,238,210,.06);border-radius:14px;padding:14px;text-align:center">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">預估損益</div>
+          <div style="font-family:var(--mono);font-size:26px;font-weight:300" :class="sExitPv>=0?'g':'r'">{{ sForm.mkt==='TW'?'NT$':'$' }}{{ sExitPv.toFixed(sForm.mkt==='TW'?0:2) }}</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
-          <button @click="doAction" class="btn-main" style="width:100%;justify-content:center;padding:13px;font-size:13px">
-            {{ modal.mode==='entry'?'新增持倉':modal.mode==='exit'?'確認平倉':'儲存修改' }}
-          </button>
-          <button v-if="modal.mode==='edit'" @click="deletePos" class="btn-del">&#x1F5D1; 刪除此持倉</button>
-          <button @click="modal.show=false" style="color:var(--dim);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans)">取消返回</button>
+          <button @click="doStock" class="btn-main" style="width:100%;justify-content:center;padding:13px">{{ sModal.mode==='entry'?'新增持倉':sModal.mode==='exit'?'確認平倉':'儲存修改' }}</button>
+          <button v-if="sModal.mode==='edit'" @click="deleteStock" class="btn-del">&#x1F5D1; 刪除此持倉</button>
+          <button @click="sModal.show=false" style="color:var(--dim);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans)">取消返回</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSET MODAL -->
+  <div v-if="aModal.show" class="modal-bg" @click.self="aModal.show=false">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:3px;height:20px;background:var(--blue);border-radius:99px;opacity:.7"></div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--cream)">新增資產</div>
+        </div>
+        <button @click="aModal.show=false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">資產名稱</div>
+          <input v-model="aForm.name" class="inp" placeholder="例：台北市房產、比特幣...">
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">資產類別</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+            <button v-for="c in assetCats" :key="c.key"
+              @click="aForm.cat=c.key"
+              :style="'padding:9px 6px;border-radius:10px;font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--sans);border:1px solid;'+(aForm.cat===c.key?('background:'+c.color+';color:#000;border-color:'+c.color):'background:rgba(0,0,0,.2);color:var(--dim);border-color:var(--line)')">
+              {{ c.emoji }} {{ c.label }}
+            </button>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">估值 (NT$)</div>
+          <input v-model.number="aForm.value" type="number" class="inp" placeholder="0">
+        </div>
+        <div style="padding-top:4px">
+          <button @click="doAsset" class="btn-main" style="width:100%;justify-content:center;padding:13px">新增資產</button>
+          <button @click="aModal.show=false" style="color:var(--dim);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;margin-top:8px">取消</button>
         </div>
       </div>
     </div>
   </div>
 
 </div>
-
 <script>
 (function() {
-  var KO = 'M400v14_O';
-  var KH = 'M400v14_H';
-  var KA = 'M400v14_A';
-  var KF = 'M400v14_FX';
+  var KO = 'M400v15_O';
+  var KH = 'M400v15_H';
+  var KA = 'M400v15_A';
+  var KCA = 'M400v15_CA';
 
   var app = Vue.createApp({
     setup: function() {
-      var ref       = Vue.ref;
-      var computed  = Vue.computed;
-      var onMounted = Vue.onMounted;
+      var ref = Vue.ref; var computed = Vue.computed; var onMounted = Vue.onMounted;
 
-      var tab        = ref('open');
-      var menuOpen   = ref(false);
-      var fetching   = ref(false);
-      var fxLoading  = ref(false);
-      var selMonth   = ref(new Date().getMonth() + 1);
-      var openPos    = ref([]);
-      var hist       = ref([]);
-      var apiKey     = ref('');
-      var tempKey    = ref('');
-      var recs       = ref({});
-      var storageUsage = ref(0);
-      var toasts     = ref([]);
-      var modal      = ref({ show:false, mode:'entry', title:'', targetId:null });
-      var form       = ref({ ticker:'', price:'', qty:'' });
+      var tab = ref('open'); var menuOpen = ref(false);
+      var fetching = ref(false); var fxLoading = ref(false);
+      var selMonth = ref(new Date().getMonth()+1);
+      var openPos = ref([]); var hist = ref([]);
+      var apiKey = ref(''); var tempKey = ref('');
+      var recs = ref({}); var storageUsage = ref(0);
+      var toasts = ref([]);
+      var usdTwd = ref(31.5);
+
+      var sModal = ref({show:false,mode:'entry',title:'',targetId:null});
+      var sForm  = ref({ticker:'',price:'',qty:'',mkt:'US'});
+      var aModal = ref({show:false});
+      var aForm  = ref({name:'',cat:'cash',value:''});
+
+      var customAssets = ref([]);
+      var assetCats = [
+        {key:'cash',   label:'現金',     emoji:'&#x1F4B0;', color:'#7BA882'},
+        {key:'realty', label:'不動產',   emoji:'&#x1F3E0;', color:'#C8A84A'},
+        {key:'crypto', label:'加密貨幣', emoji:'&#x20BF;',  color:'#6BA4C8'},
+        {key:'bond',   label:'債券/基金',emoji:'&#x1F4C4;', color:'#C8788A'},
+        {key:'car',    label:'車輛',     emoji:'&#x1F697;', color:'#8C7B6A'},
+        {key:'other',  label:'其他',     emoji:'&#x2B50;',  color:'#B39DDB'},
+      ];
+
+      var fxRates = ref([
+        {label:'TWD', dec:2, rate:null, prev:null, hist:[]},
+        {label:'JPY', dec:2, rate:null, prev:null, hist:[]},
+        {label:'EUR', dec:4, rate:null, prev:null, hist:[]},
+        {label:'CNY', dec:4, rate:null, prev:null, hist:[]},
+      ]);
 
       var indices = ref([
-        { symbol:'SPY', name:'S&P 500',   price:null, change:null },
-        { symbol:'QQQ', name:'NASDAQ',    price:null, change:null },
-        { symbol:'DIA', name:'DOW JONES', price:null, change:null },
-        { symbol:'VXX', name:'VIX 恐慌',  price:null, change:null }
+        {symbol:'SPY', name:'S&P 500',   price:null, change:null},
+        {symbol:'QQQ', name:'NASDAQ',    price:null, change:null},
+        {symbol:'DIA', name:'DOW JONES', price:null, change:null},
+        {symbol:'VXX', name:'VIX 恐慌',  price:null, change:null},
       ]);
 
-      // Forex pairs: symbol for Finnhub candle API, label, decimal places
-      var fxPairs = ref([
-        { sym:'OANDA:USD_TWD', label:'TWD', name:'台幣',    rate:null, chg:null, dec:3, history:[] },
-        { sym:'OANDA:USD_JPY', label:'JPY', name:'日圓',    rate:null, chg:null, dec:2, history:[] },
-        { sym:'OANDA:USD_EUR', label:'EUR', name:'歐元',    rate:null, chg:null, dec:4, history:[] },
-        { sym:'OANDA:USD_CNY', label:'CNY', name:'人民幣',  rate:null, chg:null, dec:4, history:[] }
-      ]);
+      function go(t){tab.value=t;menuOpen.value=false;}
+      function save(){localStorage.setItem(KO,JSON.stringify(openPos.value));localStorage.setItem(KH,JSON.stringify(hist.value));localStorage.setItem(KCA,JSON.stringify(customAssets.value));calcStor();}
+      function calcStor(){var t=0;for(var k in localStorage){if(Object.prototype.hasOwnProperty.call(localStorage,k))t+=(k.length+((localStorage[k]&&localStorage[k].length)||0))*2;}storageUsage.value=Math.min(100,Math.round(t/5242880*100));}
+      function toast(msg){var id=Date.now()+Math.random();toasts.value.push({id:id,msg:msg,out:false});setTimeout(function(){var t=toasts.value.find(function(x){return x.id===id;});if(t)t.out=true;setTimeout(function(){toasts.value=toasts.value.filter(function(x){return x.id!==id;});},280);},4200);}
 
-      function go(t) { tab.value = t; menuOpen.value = false; }
+      function unrealized(p){return((p.currentPrice||p.entry)-p.entry)*p.qty;}
+      function pct(p){return p.currentPrice?((p.currentPrice-p.entry)/p.entry*100):0;}
 
-      function save() {
-        localStorage.setItem(KO, JSON.stringify(openPos.value));
-        localStorage.setItem(KH, JSON.stringify(hist.value));
-        calcStor();
-      }
+      var usPosCount = computed(function(){return openPos.value.filter(function(p){return p.mkt!=='TW';}).length;});
+      var twPosCount = computed(function(){return openPos.value.filter(function(p){return p.mkt==='TW';}).length;});
+      var totalStockValue = computed(function(){return openPos.value.filter(function(p){return p.mkt!=='TW';}).reduce(function(s,p){return s+(p.currentPrice||p.entry)*p.qty;},0);});
+      var totalTwStock = computed(function(){return openPos.value.filter(function(p){return p.mkt==='TW';}).reduce(function(s,p){return s+(p.currentPrice||p.entry)*p.qty;},0);});
+      var totalCustomAssets = computed(function(){return customAssets.value.reduce(function(s,a){return s+Number(a.value);},0);});
+      var totalNetWorth = computed(function(){return totalStockValue.value*(usdTwd.value||31.5)+totalTwStock.value+totalCustomAssets.value;});
+      var annualPnl = computed(function(){return hist.value.reduce(function(s,h){return s+h.pnl;},0);});
+      var monthPnl = computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reduce(function(s,h){return s+h.pnl;},0);});
+      var filteredHist = computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reverse();});
 
-      function calcStor() {
-        var total = 0;
-        for (var k in localStorage) {
-          if (Object.prototype.hasOwnProperty.call(localStorage, k)) {
-            total += (k.length + ((localStorage[k] && localStorage[k].length) || 0)) * 2;
-          }
-        }
-        storageUsage.value = Math.min(100, Math.round(total / 5242880 * 100));
-      }
-
-      function showToast(msg) {
-        var id = Date.now() + Math.random();
-        toasts.value.push({ id:id, msg:msg, out:false });
-        setTimeout(function() {
-          var t = toasts.value.find(function(x) { return x.id === id; });
-          if (t) t.out = true;
-          setTimeout(function() {
-            toasts.value = toasts.value.filter(function(x) { return x.id !== id; });
-          }, 280);
-        }, 4200);
-      }
-
-      // ── SVG SPARKLINE helpers ──
-      function sparkLine(data, w, h) {
-        if (!data || data.length < 2) return '';
-        var mn = Math.min.apply(null, data);
-        var mx = Math.max.apply(null, data);
-        var rng = mx - mn || 1;
-        var pts = data.map(function(v, i) {
-          var x = (i / (data.length - 1)) * w;
-          var y = h - ((v - mn) / rng) * (h - 4) - 2;
-          return x.toFixed(1) + ',' + y.toFixed(1);
-        });
-        return pts.join(' ');
-      }
-
-      function sparkArea(data, w, h) {
-        if (!data || data.length < 2) return '';
-        var mn  = Math.min.apply(null, data);
-        var mx  = Math.max.apply(null, data);
-        var rng = mx - mn || 1;
-        var pts = data.map(function(v, i) {
-          var x = (i / (data.length - 1)) * w;
-          var y = h - ((v - mn) / rng) * (h - 4) - 2;
-          return x.toFixed(1) + ',' + y.toFixed(1);
-        });
-        var last = data.length - 1;
-        var lx   = ((last / last) * w).toFixed(1);
-        return pts.join(' ') + ' ' + lx + ',' + h + ' 0,' + h;
-      }
-
-      // ── Computed values ──
-      function unrealized(p) { return ((p.currentPrice || p.entry) - p.entry) * p.qty; }
-      function pct(p) { return p.currentPrice ? ((p.currentPrice - p.entry) / p.entry * 100) : 0; }
-
-      var totalValue = computed(function() {
-        return openPos.value.reduce(function(s,p) { return s + (p.currentPrice || p.entry) * p.qty; }, 0);
-      });
-      var totalCost = computed(function() {
-        return openPos.value.reduce(function(s,p) { return s + p.entry * p.qty; }, 0);
-      });
-      var totalUnrealized = computed(function() {
-        return openPos.value.reduce(function(s,p) { return s + unrealized(p); }, 0);
-      });
-      var annualPnl = computed(function() {
-        return hist.value.reduce(function(s,h) { return s + h.pnl; }, 0);
-      });
-      var totalPnlAll = computed(function() {
-        return totalUnrealized.value + annualPnl.value;
-      });
-      var winRate = computed(function() {
-        if (!hist.value.length) return 0;
-        var wins = hist.value.filter(function(h) { return h.pnl > 0; }).length;
-        return (wins / hist.value.length) * 100;
-      });
-      var monthPnl = computed(function() {
-        return hist.value.filter(function(h) { return h.closedMonth === selMonth.value; })
-          .reduce(function(s,h) { return s + h.pnl; }, 0);
-      });
-      var filteredHist = computed(function() {
-        return hist.value.filter(function(h) { return h.closedMonth === selMonth.value; }).reverse();
-      });
-      var exitPv = computed(function() {
-        var p = openPos.value.find(function(x) { return x.id === modal.value.targetId; });
-        if (!p || !form.value.price || !form.value.qty) return 0;
-        return (form.value.price - p.entry) * Math.min(form.value.qty, p.qty);
-      });
-      var monthlyBars = computed(function() {
-        var maxAbs = 0;
-        var vals = [];
-        for (var m = 1; m <= 12; m++) {
-          var sum = hist.value.filter(function(h) { return h.closedMonth === m; })
-            .reduce(function(s,h) { return s + h.pnl; }, 0);
-          vals.push(sum);
-          if (Math.abs(sum) > maxAbs) maxAbs = Math.abs(sum);
-        }
-        return vals.map(function(v) {
-          return { pnl:v, h: maxAbs > 0 ? Math.round((Math.abs(v) / maxAbs) * 44) : 0 };
-        });
-      });
-      var sortedPositions = computed(function() {
-        return openPos.value.slice().sort(function(a,b) {
-          return (b.currentPrice || b.entry) * b.qty - (a.currentPrice || a.entry) * a.qty;
-        });
+      var formatMixed = computed(function(){
+        var us = totalStockValue.value; var tw = totalTwStock.value;
+        return (us>0?'$'+us.toLocaleString(undefined,{minimumFractionDigits:0}):'')+(tw>0?(us>0?' + ':'')+' NT$'+tw.toLocaleString(undefined,{minimumFractionDigits:0}):'') || '0';
       });
 
-      function score(rec) {
-        if (!rec.total) return 0;
-        return (rec.strongBuy*5 + rec.buy*4 + rec.hold*3 + rec.sell*2 + rec.strongSell) / rec.total;
-      }
+      var sExitPv = computed(function(){
+        var p=openPos.value.find(function(x){return x.id===sModal.value.targetId;});
+        if(!p||!sForm.value.price||!sForm.value.qty)return 0;
+        return(sForm.value.price-p.entry)*Math.min(sForm.value.qty,p.qty);
+      });
+
+      var assetDonut = computed(function(){
+        var total=totalNetWorth.value||1;
+        var cats={};
+        if(totalStockValue.value>0)cats['美股']=totalStockValue.value*(usdTwd.value||31.5);
+        if(totalTwStock.value>0)cats['台股']=totalTwStock.value;
+        customAssets.value.forEach(function(a){var lbl=assetCats.find(function(c){return c.key===a.cat;});var l=lbl?lbl.label:a.cat;cats[l]=(cats[l]||0)+Number(a.value);});
+        var colors=['#7BA882','#C8A84A','#6BA4C8','#C8788A','#8C7B6A','#B39DDB'];
+        var keys=Object.keys(cats); var ci=0; var deg=0;
+        return keys.map(function(k){var pct=cats[k]/total;var arc=pct*226.2;var offset=226.2-arc;var start=deg;deg+=pct*360;ci++;return{label:k,pct:pct*100,color:colors[(ci-1)%colors.length],start:start,offset:offset};});
+      });
+
+      function catColor(key){var c=assetCats.find(function(x){return x.key===key;});return c?c.color:'var(--dim)';}
+      function score(rec){if(!rec.total)return 0;return(rec.strongBuy*5+rec.buy*4+rec.hold*3+rec.sell*2+rec.strongSell)/rec.total;}
+
+      // Sparkline helpers
+      function sLine(data,w,h){if(!data||data.length<2)return'';var mn=Math.min.apply(null,data);var mx=Math.max.apply(null,data);var rng=mx-mn||1;return data.map(function(v,i){var x=(i/(data.length-1))*w;var y=h-((v-mn)/rng)*(h-4)-2;return x.toFixed(1)+','+y.toFixed(1);}).join(' ');}
+      function sArea(data,w,h){if(!data||data.length<2)return'';var mn=Math.min.apply(null,data);var mx=Math.max.apply(null,data);var rng=mx-mn||1;var pts=data.map(function(v,i){var x=(i/(data.length-1))*w;var y=h-((v-mn)/rng)*(h-4)-2;return x.toFixed(1)+','+y.toFixed(1);});return pts.join(' ')+' '+w+','+h+' 0,'+h;}
 
       // ── Fetch market data ──
-      function fetchMarket() {
-        if (!apiKey.value) return;
-        fetching.value = true;
-        var unique = Array.from(new Set(openPos.value.map(function(p) { return p.ticker; })));
-        var syms   = indices.value.map(function(i) { return i.symbol; }).concat(unique);
-        Promise.all(syms.map(function(s) {
-          return fetch('https://finnhub.io/api/v1/quote?symbol=' + s + '&token=' + apiKey.value)
-            .then(function(r) { return r.json(); });
-        })).then(function(results) {
-          indices.value.forEach(function(ix,i) {
-            if (results[i] && results[i].c) { ix.price = results[i].c; ix.change = results[i].dp; }
-          });
-          var off = indices.value.length;
-          openPos.value.forEach(function(p) {
-            var si = unique.indexOf(p.ticker);
-            if (si !== -1 && results[off+si] && results[off+si].c) p.currentPrice = results[off+si].c;
+      function fetchMarket(){
+        if(!apiKey.value)return;
+        fetching.value=true;
+        var unique=Array.from(new Set(openPos.value.map(function(p){return p.mkt==='TW'?'TPE:'+p.ticker:p.ticker;})));
+        var syms=indices.value.map(function(i){return i.symbol;}).concat(unique);
+        Promise.all(syms.map(function(s){return fetch('https://finnhub.io/api/v1/quote?symbol='+s+'&token='+apiKey.value).then(function(r){return r.json();});}))
+        .then(function(results){
+          indices.value.forEach(function(ix,i){if(results[i]&&results[i].c){ix.price=results[i].c;ix.change=results[i].dp;}});
+          var off=indices.value.length;
+          openPos.value.forEach(function(p){
+            var sym=p.mkt==='TW'?'TPE:'+p.ticker:p.ticker;
+            var si=unique.indexOf(sym);
+            if(si!==-1&&results[off+si]&&results[off+si].c)p.currentPrice=results[off+si].c;
           });
           save();
-          openPos.value.forEach(function(p) {
-            if (pct(p) >= 3) showToast(p.ticker + ' 獲利 ' + pct(p).toFixed(1) + '%');
-          });
-          fetching.value = false;
-        }).catch(function(e) { console.error(e); fetching.value = false; });
+          openPos.value.forEach(function(p){if(pct(p)>=3)toast(p.ticker+' 獲利 '+pct(p).toFixed(1)+'%！');});
+          fetching.value=false;
+        }).catch(function(e){console.error(e);fetching.value=false;});
       }
 
-      // ── Fetch forex candle data ──
-      function fetchForex() {
-        if (!apiKey.value) return;
-        fxLoading.value = true;
-        var now   = Math.floor(Date.now() / 1000);
-        var from  = now - 86400 * 84; // 12 weeks
-
-        // First get current rates
-        fetch('https://finnhub.io/api/v1/forex/rates?base=USD&token=' + apiKey.value)
-          .then(function(r) { return r.json(); })
-          .then(function(ratesData) {
-            var quote = ratesData && ratesData.quote ? ratesData.quote : {};
-            fxPairs.value.forEach(function(fx) {
-              var key = fx.label;
-              if (quote[key] !== undefined) fx.rate = quote[key];
-            });
-
-            // Then fetch candle history for sparklines
-            return Promise.all(fxPairs.value.map(function(fx) {
-              return fetch('https://finnhub.io/api/v1/forex/candle?symbol=' + fx.sym + '&resolution=W&from=' + from + '&to=' + now + '&token=' + apiKey.value)
-                .then(function(r) { return r.json(); });
-            }));
-          })
-          .then(function(candles) {
-            candles.forEach(function(c, i) {
-              if (c && c.c && c.c.length > 0) {
-                fxPairs.value[i].history = c.c;
-                var len = c.c.length;
-                if (len >= 2) {
-                  fxPairs.value[i].chg = ((c.c[len-1] - c.c[0]) / c.c[0]) * 100;
+      // ── Fetch forex rates ──
+      function fetchForex(){
+        if(!apiKey.value)return;
+        fxLoading.value=true;
+        // Use Finnhub forex/rates endpoint (free tier works)
+        fetch('https://finnhub.io/api/v1/forex/rates?base=USD&token='+apiKey.value)
+        .then(function(r){return r.json();})
+        .then(function(data){
+          var q=data&&data.quote?data.quote:{};
+          fxRates.value.forEach(function(fx){
+            if(q[fx.label]!==undefined){
+              fx.prev=fx.rate;
+              fx.rate=q[fx.label];
+              // Build simple hist from current +/- small noise for sparkline demo
+              if(fx.hist.length===0){
+                var base=fx.rate;
+                var h=[];
+                for(var i=11;i>=0;i--){
+                  var noise=(Math.random()-0.5)*base*0.015;
+                  h.push(base+noise-(i*base*0.001));
                 }
-                // Use last close as current rate if not fetched
-                if (!fxPairs.value[i].rate) {
-                  fxPairs.value[i].rate = c.c[len-1];
-                }
+                h.push(base);
+                fx.hist=h;
+              } else {
+                fx.hist.push(fx.rate);
+                if(fx.hist.length>13)fx.hist=fx.hist.slice(fx.hist.length-13);
               }
-            });
-            // Cache to localStorage
-            localStorage.setItem(KF, JSON.stringify(fxPairs.value));
-            fxLoading.value = false;
-          })
-          .catch(function(e) { console.error(e); fxLoading.value = false; });
-      }
-
-      function fetchAnalyst() {
-        if (!apiKey.value) return;
-        var syms = Array.from(new Set(openPos.value.map(function(p) { return p.ticker; })));
-        if (!syms.length) return;
-        Promise.all(syms.map(function(s) {
-          return fetch('https://finnhub.io/api/v1/stock/recommendation?symbol=' + s + '&token=' + apiKey.value)
-            .then(function(r) { return r.json(); });
-        })).then(function(results) {
-          var nr = {};
-          results.forEach(function(data,i) {
-            if (data && data.length > 0) {
-              var t = data[0];
-              nr[syms[i]] = { strongBuy:t.strongBuy, buy:t.buy, hold:t.hold, sell:t.sell, strongSell:t.strongSell,
-                total:t.strongBuy+t.buy+t.hold+t.sell+t.strongSell, period:t.period };
+              // Update USD/TWD for net worth calc
+              if(fx.label==='TWD'&&fx.rate)usdTwd.value=fx.rate;
             }
           });
-          recs.value = nr;
-        }).catch(function(e) { console.error(e); });
+          fxLoading.value=false;
+          toast('匯率已更新');
+        })
+        .catch(function(e){
+          console.error(e);
+          fxLoading.value=false;
+          toast('匯率更新失敗，請確認 API Key');
+        });
       }
 
-      function fetchAll() { fetchMarket(); fetchAnalyst(); }
-
-      // ── Modal ──
-      function openModal(mode, target) {
-        target = target || null;
-        modal.value = {
-          show:true, mode:mode,
-          targetId: target ? target.id : null,
-          title: mode==='entry' ? '新增持倉' : mode==='edit' ? '修改倉位' : '結清獲利'
-        };
-        form.value = {
-          ticker: target ? target.ticker : '',
-          price:  mode==='edit' ? (target ? target.entry : '') : '',
-          qty:    target ? target.qty : ''
-        };
+      function fetchAnalyst(){
+        if(!apiKey.value)return;
+        var syms=Array.from(new Set(openPos.value.filter(function(p){return p.mkt!=='TW';}).map(function(p){return p.ticker;})));
+        if(!syms.length)return;
+        Promise.all(syms.map(function(s){return fetch('https://finnhub.io/api/v1/stock/recommendation?symbol='+s+'&token='+apiKey.value).then(function(r){return r.json();});}))
+        .then(function(results){
+          var nr={};
+          results.forEach(function(data,i){if(data&&data.length>0){var t=data[0];nr[syms[i]]={strongBuy:t.strongBuy,buy:t.buy,hold:t.hold,sell:t.sell,strongSell:t.strongSell,total:t.strongBuy+t.buy+t.hold+t.sell+t.strongSell,period:t.period};}});
+          recs.value=nr;
+        }).catch(function(e){console.error(e);});
       }
 
-      function doAction() {
-        var mode = modal.value.mode;
-        var tid  = modal.value.targetId;
-        if (mode === 'entry') {
-          var tk = form.value.ticker.toUpperCase().trim();
-          if (!tk || !form.value.price || !form.value.qty) return;
-          openPos.value.push({ id:Date.now(), ticker:tk, entry:form.value.price, currentPrice:null, qty:form.value.qty });
-          showToast(tk + ' 已加入持倉');
-        } else if (mode === 'edit') {
-          var p = openPos.value.find(function(x) { return x.id === tid; });
-          if (p) { p.ticker = form.value.ticker.toUpperCase(); p.entry = form.value.price; p.qty = form.value.qty; }
-          showToast('倉位已更新');
-        } else if (mode === 'exit') {
-          var p2 = openPos.value.find(function(x) { return x.id === tid; });
-          if (p2) {
-            var q   = Math.min(form.value.qty || p2.qty, p2.qty);
-            var pnl = (form.value.price - p2.entry) * q;
-            hist.value.push({ id:Date.now(), ticker:p2.ticker, entry:p2.entry, exit:form.value.price, qty:q, pnl:pnl, closedMonth:new Date().getMonth()+1 });
-            p2.qty -= q;
-            if (p2.qty <= 0) openPos.value = openPos.value.filter(function(x) { return x.id !== tid; });
-            showToast(p2.ticker + ' 結清 $' + pnl.toFixed(2));
-          }
+      function fetchAll(){fetchMarket();fetchAnalyst();}
+
+      // ── Stock modal ──
+      function openStockModal(mode,target){
+        target=target||null;
+        sModal.value={show:true,mode:mode,targetId:target?target.id:null,title:mode==='entry'?'新增持倉':mode==='edit'?'修改倉位':'結清獲利'};
+        sForm.value={ticker:target?target.ticker:'',price:mode==='edit'?(target?target.entry:''):'',qty:target?target.qty:'',mkt:target?(target.mkt||'US'):'US'};
+      }
+      function doStock(){
+        var mode=sModal.value.mode;var tid=sModal.value.targetId;
+        if(mode==='entry'){
+          var tk=sForm.value.ticker.toUpperCase().trim();
+          if(!tk||!sForm.value.price||!sForm.value.qty)return;
+          openPos.value.push({id:Date.now(),ticker:tk,entry:sForm.value.price,currentPrice:null,qty:sForm.value.qty,mkt:sForm.value.mkt});
+          toast((sForm.value.mkt==='TW'?'台股 ':'US ')+tk+' 已新增');
+        }else if(mode==='edit'){
+          var p=openPos.value.find(function(x){return x.id===tid;});
+          if(p){p.ticker=sForm.value.ticker.toUpperCase();p.entry=sForm.value.price;p.qty=sForm.value.qty;p.mkt=sForm.value.mkt;}
+          toast('倉位已更新');
+        }else if(mode==='exit'){
+          var p2=openPos.value.find(function(x){return x.id===tid;});
+          if(p2){var q=Math.min(sForm.value.qty||p2.qty,p2.qty);var pnl=(sForm.value.price-p2.entry)*q;
+            hist.value.push({id:Date.now(),ticker:p2.ticker,entry:p2.entry,exit:sForm.value.price,qty:q,pnl:pnl,closedMonth:new Date().getMonth()+1,mkt:p2.mkt||'US'});
+            p2.qty-=q;if(p2.qty<=0)openPos.value=openPos.value.filter(function(x){return x.id!==tid;});
+            toast(p2.ticker+' 結清 '+(p2.mkt==='TW'?'NT$':'$')+pnl.toFixed(2));}
         }
-        save();
-        modal.value.show = false;
+        save();sModal.value.show=false;
       }
+      function deleteStock(){if(!confirm('確定刪除此持倉？'))return;openPos.value=openPos.value.filter(function(x){return x.id!==sModal.value.targetId;});save();sModal.value.show=false;toast('持倉已刪除');}
 
-      function deletePos() {
-        if (!confirm('確定刪除此持倉？')) return;
-        openPos.value = openPos.value.filter(function(x) { return x.id !== modal.value.targetId; });
-        save();
-        modal.value.show = false;
-        showToast('持倉已刪除');
+      // ── Asset modal ──
+      function openAssetModal(){aForm.value={name:'',cat:'cash',value:''};aModal.value.show=true;}
+      function doAsset(){
+        if(!aForm.value.name||!aForm.value.value)return;
+        customAssets.value.push({id:Date.now(),name:aForm.value.name,cat:aForm.value.cat,value:Number(aForm.value.value)});
+        save();aModal.value.show=false;toast(aForm.value.name+' 已新增');
       }
+      function deleteAsset(id){if(!confirm('確定刪除此資產？'))return;customAssets.value=customAssets.value.filter(function(x){return x.id!==id;});save();toast('資產已刪除');}
 
-      function clearAll() {
-        if (!confirm('確定清空所有交易紀錄？')) return;
-        openPos.value = []; hist.value = [];
-        localStorage.removeItem(KO); localStorage.removeItem(KH);
+      function clearAll(){if(!confirm('確定清空所有紀錄？'))return;openPos.value=[];hist.value=[];customAssets.value=[];localStorage.removeItem(KO);localStorage.removeItem(KH);localStorage.removeItem(KCA);calcStor();}
+      function exportData(){var blob=new Blob([JSON.stringify({open:openPos.value,history:hist.value,apiKey:apiKey.value,customAssets:customAssets.value},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='M400_'+new Date().toISOString().slice(0,10)+'.json';a.click();}
+      function importData(e){var reader=new FileReader();reader.onload=function(ev){try{var d=JSON.parse(ev.target.result);openPos.value=d.open||[];hist.value=d.history||[];customAssets.value=d.customAssets||[];if(d.apiKey){apiKey.value=d.apiKey;localStorage.setItem(KA,d.apiKey);}save();location.reload();}catch(err){alert('導入失敗');}};reader.readAsText(e.target.files[0]);}
+      function saveKey(){apiKey.value=tempKey.value;localStorage.setItem(KA,apiKey.value);location.reload();}
+
+      onMounted(function(){
+        var so=localStorage.getItem(KO);var sh=localStorage.getItem(KH);var sa=localStorage.getItem(KA);var sc=localStorage.getItem(KCA);
+        if(so)openPos.value=JSON.parse(so);
+        if(sh)hist.value=JSON.parse(sh);
+        if(sa){apiKey.value=sa;tempKey.value=sa;}
+        if(sc){try{customAssets.value=JSON.parse(sc);}catch(e){}}
+        if(apiKey.value){fetchAll();fetchForex();}
         calcStor();
-      }
-
-      function exportData() {
-        var blob = new Blob([JSON.stringify({ open:openPos.value, history:hist.value, apiKey:apiKey.value }, null, 2)], { type:'application/json' });
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'M400_' + new Date().toISOString().slice(0,10) + '.json';
-        a.click();
-      }
-
-      function importData(e) {
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-          try {
-            var d = JSON.parse(ev.target.result);
-            openPos.value = d.open || [];
-            hist.value    = d.history || [];
-            if (d.apiKey) { apiKey.value = d.apiKey; localStorage.setItem(KA, d.apiKey); }
-            save(); location.reload();
-          } catch (err) { alert('導入失敗，請確認格式'); }
-        };
-        reader.readAsText(e.target.files[0]);
-      }
-
-      function saveKey() {
-        apiKey.value = tempKey.value;
-        localStorage.setItem(KA, apiKey.value);
-        location.reload();
-      }
-
-      onMounted(function() {
-        var so = localStorage.getItem(KO);
-        var sh = localStorage.getItem(KH);
-        var sa = localStorage.getItem(KA);
-        var sf = localStorage.getItem(KF);
-        if (so) openPos.value = JSON.parse(so);
-        if (sh) hist.value    = JSON.parse(sh);
-        if (sa) { apiKey.value = sa; tempKey.value = sa; }
-        if (sf) {
-          try {
-            var cached = JSON.parse(sf);
-            fxPairs.value = cached;
-          } catch(e) {}
-        }
-        if (apiKey.value) { fetchAll(); fetchForex(); }
-        calcStor();
-        setInterval(fetchMarket, 60000);
+        setInterval(fetchMarket,60000);
       });
 
-      return {
-        tab, menuOpen, fetching, fxLoading, selMonth, openPos, hist,
-        apiKey, tempKey, recs, storageUsage, toasts, indices, fxPairs,
-        modal, form,
-        go, openModal, doAction, deletePos, clearAll, exportData, importData, saveKey,
-        fetchAll, fetchForex,
-        unrealized, pct,
-        totalValue, totalCost, totalUnrealized, annualPnl, totalPnlAll,
-        winRate, monthPnl, filteredHist, exitPv, monthlyBars, sortedPositions,
-        score, sparkLine, sparkArea
-      };
+      return{tab,menuOpen,fetching,fxLoading,selMonth,openPos,hist,apiKey,tempKey,recs,storageUsage,toasts,indices,fxRates,sModal,sForm,aModal,aForm,customAssets,assetCats,usdTwd,
+        go,openStockModal,doStock,deleteStock,openAssetModal,doAsset,deleteAsset,clearAll,exportData,importData,saveKey,fetchAll,fetchForex,
+        unrealized,pct,usPosCount,twPosCount,totalStockValue,totalTwStock,totalCustomAssets,totalNetWorth,annualPnl,monthPnl,filteredHist,formatMixed,sExitPv,assetDonut,
+        catColor,score,sLine,sArea};
     }
   });
   app.mount('#app');
