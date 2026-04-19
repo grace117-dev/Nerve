@@ -20,16 +20,12 @@
   cx.beginPath();
   if (cx.roundRect) { cx.roundRect(0,0,512,512,100); } else { cx.rect(0,0,512,512); }
   cx.fill();
-  cx.fillStyle = 'rgba(180,90,110,0.12)';
-  cx.beginPath(); cx.arc(256,256,200,0,Math.PI*2); cx.fill();
-  cx.fillStyle = '#B45A6E';
-  cx.font = 'italic 300px Georgia,serif';
-  cx.textAlign = 'center'; cx.textBaseline = 'middle';
-  cx.fillText('M', 256, 276);
+  cx.fillStyle = 'rgba(180,90,110,0.12)'; cx.beginPath(); cx.arc(256,256,200,0,Math.PI*2); cx.fill();
+  cx.fillStyle = '#B45A6E'; cx.font = 'italic 300px Georgia,serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText('M', 256, 276);
   var iconPng = cv.toDataURL('image/png');
   var il = document.createElement('link'); il.rel = 'apple-touch-icon'; il.href = iconPng; document.head.appendChild(il);
-  var manifest = { name:'M400 戰略終端', short_name:'M400', description:'個人資產管理', start_url:'./', display:'standalone', orientation:'portrait', background_color:'#F5F0E8', theme_color:'#F5F0E8', icons:[{src:iconPng,sizes:'512x512',type:'image/png',purpose:'any maskable'}] };
-  var ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest)); document.head.appendChild(ml);
+  var mf = {name:'M400 戰略終端',short_name:'M400',description:'個人資產管理',start_url:'./',display:'standalone',orientation:'portrait',background_color:'#F5F0E8',theme_color:'#F5F0E8',icons:[{src:iconPng,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  var ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(mf)); document.head.appendChild(ml);
 })();
 </script>
 <style>
@@ -43,7 +39,6 @@
   --line2: rgba(100,80,60,0.18);
   --sk:    #B45A6E;
   --sk2:   rgba(180,90,110,0.10);
-  --sk3:   rgba(180,90,110,0.18);
   --sage:  #5A9068;
   --sage2: rgba(90,144,104,0.10);
   --umb:   #B06040;
@@ -65,24 +60,20 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:radial-gradient(ellipse 80% 50% at 30% -10%,rgba(180,90,110,.06) 0%,transparent 55%),
              radial-gradient(ellipse 50% 60% at 90% 90%,rgba(90,144,104,.04) 0%,transparent 50%)}
 .mono{font-family:var(--mono)} .g{color:var(--sage)} .r{color:var(--umb)} .sk{color:var(--sk)} .am{color:var(--amber)}
-
 .topbar-safe{padding-top:env(safe-area-inset-top)}
 .sidebar-safe{padding-top:calc(env(safe-area-inset-top) + 20px)}
 
-/* SIDEBAR */
 .sidebar{position:fixed;left:0;top:0;width:272px;height:100%;background:var(--s1);border-right:1px solid var(--line);transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:300;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .sidebar::-webkit-scrollbar{display:none}
 .sidebar.open{transform:translateX(0)}
 @media(min-width:1024px){.sidebar{position:sticky;top:0;height:100vh;transform:none;flex-shrink:0}}
 .ov{position:fixed;inset:0;background:rgba(44,36,24,.45);z-index:200;backdrop-filter:blur(4px)}
-
 .ni{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;font-family:var(--sans);color:var(--pale);width:100%;text-align:left;border:1px solid transparent;transition:all .18s;cursor:pointer}
 .ni:hover{color:var(--ink);background:rgba(44,36,24,.06)}
 .ni.a1{color:var(--sage);background:var(--sage2);border-color:rgba(90,144,104,.2)}
 .ni.a2{color:#4A7CA8;background:rgba(74,124,168,.08);border-color:rgba(74,124,168,.18)}
 .ni.a3{color:#7A8AB0;background:rgba(122,138,176,.08);border-color:rgba(122,138,176,.18)}
-.ni.a4{color:#A08040;background:rgba(160,128,64,.08);border-color:rgba(160,128,64,.18)}
-.ni.a5{color:var(--sk);background:var(--sk2);border-color:rgba(180,90,110,.2)}
+.ni.a4{color:var(--sk);background:var(--sk2);border-color:rgba(180,90,110,.2)}
 .slbl{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--pale);padding:0 14px;margin-bottom:8px;font-family:var(--mono)}
 
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 2px 12px rgba(100,80,60,.06)}
@@ -91,28 +82,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .ixtile.up::after{background:linear-gradient(90deg,transparent,var(--sage),transparent)}
 .ixtile.dn::after{background:linear-gradient(90deg,transparent,var(--umb),transparent)}
 
-/* POSITION CARD */
 .pc{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;transition:border-color .4s,box-shadow .4s;box-shadow:0 2px 14px rgba(100,80,60,.07)}
 @keyframes breathe{0%,100%{box-shadow:0 2px 14px rgba(90,144,104,.12),0 0 0 0 rgba(90,144,104,.2)}50%{box-shadow:0 2px 14px rgba(90,144,104,.12),0 0 0 8px rgba(90,144,104,0)}}
 .pc.alert-tp{border-color:rgba(90,144,104,.4);animation:breathe 3s ease infinite}
-.pc.alert-sl{border-color:rgba(176,96,64,.4)}
+.pc.alert-sl{border-color:rgba(176,96,64,.45)}
 
 .stat{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .stat-lbl{font-size:8px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--pale);margin-bottom:5px;font-family:var(--mono)}
 .bar{height:2px;border-radius:99px;background:rgba(100,80,60,.08);overflow:hidden}
 .bar-f{height:100%;border-radius:99px;transition:width .9s cubic-bezier(.4,0,.2,1)}
-.av{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:15px;font-weight:400;color:var(--sk);background:var(--sk2);border:1px solid rgba(180,90,110,.15)}
+.av{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--sk);background:var(--sk2);border:1px solid rgba(180,90,110,.15)}
 
-/* BATCH LOTS */
 .lot-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--line);margin-bottom:6px}
-
-/* ALERT PILL */
 .alert-pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 8px;border-radius:99px;letter-spacing:.06em}
 .alert-pill.tp{color:var(--sage);background:var(--sage2);border:1px solid rgba(90,144,104,.22)}
 .alert-pill.sl{color:var(--umb);background:var(--umb2);border:1px solid rgba(176,96,64,.22)}
-.alert-pill.na{color:var(--pale);background:rgba(100,80,60,.06);border:1px solid var(--line)}
 
-/* INPUT */
+/* SORT TABS */
+.sort-tab{padding:5px 12px;border-radius:8px;font-size:10px;font-weight:600;transition:all .15s;color:var(--pale);background:rgba(100,80,60,.05);border:1px solid transparent;cursor:pointer;font-family:var(--mono);flex-shrink:0}
+.sort-tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
 .inp{background:var(--bg);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;color:var(--ink);outline:none;width:100%;font-size:15px;font-family:var(--mono);transition:border-color .2s,box-shadow .2s}
 .inp:focus{border-color:var(--sk);box-shadow:0 0 0 3px rgba(180,90,110,.1)}
 .inp::placeholder{color:var(--pale)}
@@ -120,16 +109,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .inp-sm{padding:8px 12px;font-size:13px;border-radius:10px}
 .err-msg{font-family:var(--mono);font-size:10px;color:var(--umb);margin-top:5px;display:flex;align-items:center;gap:4px}
 
-/* SEGMENT */
-.seg{display:flex;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:3px;gap:3px}
-.seg-btn{flex:1;padding:8px;border-radius:7px;font-size:12px;font-weight:600;font-family:var(--mono);cursor:pointer;transition:all .18s;color:var(--pale);border:none;background:none;text-align:center}
-.seg-btn.on{background:var(--ink);color:var(--bg)}
-
-/* MONTH TAB */
 .mtab{padding:7px 14px;border-radius:8px;font-size:11px;font-weight:500;flex-shrink:0;transition:all .18s;color:var(--pale);background:rgba(100,80,60,.05);border:1px solid transparent;cursor:pointer;font-family:var(--mono)}
 .mtab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
-/* BUTTONS */
 .btn-main{background:var(--sk);color:#fff;font-weight:700;font-size:13px;padding:11px 20px;border-radius:12px;transition:opacity .15s;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);border:none;box-shadow:0 2px 12px rgba(180,90,110,.25)}
 .btn-main:hover{opacity:.88}
 .btn-ghost{background:rgba(44,36,24,.05);border:1px solid var(--line);color:var(--mid);font-weight:500;font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
@@ -142,7 +124,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .btn-del:hover{background:var(--umb);color:#fff}
 .badge{font-size:9px;font-weight:600;letter-spacing:.1em;padding:4px 10px;border-radius:99px;text-transform:uppercase;font-family:var(--mono)}
 
-/* ROI CARD */
 .roi-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;position:relative;overflow:hidden;box-shadow:0 2px 14px rgba(100,80,60,.07)}
 .roi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .roi-card.pos::before{background:linear-gradient(90deg,transparent,rgba(90,144,104,.6),transparent)}
@@ -150,14 +131,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .flow-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
 .flow-row:last-child{border-bottom:none}
 
-/* MODAL */
+/* BACKUP BANNER */
+.backup-banner{background:rgba(160,120,40,.08);border:1px solid rgba(160,120,40,.25);border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+
 .modal-bg{position:fixed;inset:0;z-index:500;display:flex;align-items:flex-end;background:rgba(44,36,24,.5);backdrop-filter:blur(14px)}
 @media(min-width:640px){.modal-bg{align-items:center;padding:16px}}
 .modal-box{background:var(--card);border:1px solid var(--line2);border-radius:24px 24px 0 0;padding:26px;width:100%;max-width:440px;box-shadow:0 -24px 60px rgba(44,36,24,.15);max-height:92vh;overflow-y:auto;padding-bottom:calc(26px + env(safe-area-inset-bottom))}
 .modal-box::-webkit-scrollbar{display:none}
 @media(min-width:640px){.modal-box{border-radius:24px;margin:auto;padding-bottom:26px}}
 
-/* TOAST */
 .tc{position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;z-index:9999;display:flex;flex-direction:column;gap:6px;max-width:280px}
 @keyframes tIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 @keyframes tOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-8px)}}
@@ -167,13 +149,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .toast.info{color:var(--sk);border-color:var(--sk)}
 .toast.out{animation:tOut .25s ease forwards}
 
-/* BOTTOM BAR */
 .bbar{position:fixed;bottom:0;left:0;right:0;background:rgba(245,240,232,.97);border-top:1px solid rgba(180,90,110,.12);padding:10px 20px;padding-bottom:calc(10px + env(safe-area-inset-bottom));text-align:center;z-index:100}
 
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .r1{animation:rise .38s .00s ease both} .r2{animation:rise .38s .07s ease both} .r3{animation:rise .38s .14s ease both} .r4{animation:rise .38s .21s ease both}
-@keyframes sp{to{transform:rotate(360deg)}}
-.spin{animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}} .spin{animation:sp 1s linear infinite}
 .nsb::-webkit-scrollbar{display:none} .nsb{scrollbar-width:none}
 .dv{height:1px;background:var(--line);margin:18px 0}
 .pg-title{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.8rem,6vw,2.6rem);letter-spacing:.03em;color:var(--ink);line-height:1}
@@ -181,26 +161,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .hrow:hover{border-color:var(--line2)}
 .sdot{width:5px;height:5px;border-radius:99px;flex-shrink:0}
 .sdot.on{background:var(--sage);box-shadow:0 0 5px var(--sage)} .sdot.off{background:var(--umb)}
-
 @media(min-width:1024px){.lg-row{flex-direction:row!important}}
 .mob{display:flex} @media(min-width:1024px){.mob{display:none!important}}
 .desk{display:none} @media(min-width:1024px){.desk{display:flex!important}}
 @media(min-width:1024px){.main-pad{padding:40px!important}}
-
-/* SECTION HEADER with ornament */
-.sec-ornament{display:flex;align-items:center;gap:8px;margin-bottom:14px;margin-top:4px}
-.sec-ornament::after{content:'';flex:1;height:1px;background:var(--line)}
 </style>
 </head>
 
 <body>
 <div id="app" v-cloak style="position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh" class="lg-row">
 
-  <!-- TOASTS -->
   <div class="tc">
-    <div v-for="t in toasts" :key="t.id" :class="['toast', t.type || 'info', t.out ? 'out' : '']">
-      {{ t.msg }}
-    </div>
+    <div v-for="t in toasts" :key="t.id" :class="['toast',t.type||'info',t.out?'out':'']">{{ t.msg }}</div>
   </div>
 
   <!-- MOBILE TOPBAR -->
@@ -222,7 +194,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div v-if="menuOpen" @click="menuOpen=false" class="ov mob"></div>
 
   <!-- SIDEBAR -->
-  <aside :class="['sidebar', menuOpen ? 'open' : '']">
+  <aside :class="['sidebar',menuOpen?'open':'']">
     <div class="sidebar-safe" style="padding-left:20px;padding-right:20px;padding-bottom:28px;display:flex;flex-direction:column;min-height:100%">
       <div class="desk" style="align-items:center;gap:12px;margin-bottom:32px;padding-top:28px">
         <div style="width:40px;height:40px;background:var(--sk);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px rgba(180,90,110,.3)">
@@ -237,11 +209,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       <div>
         <div class="slbl" style="margin-top:0">主選單</div>
         <div style="display:flex;flex-direction:column;gap:3px">
-          <button @click="go('open')"     :class="['ni', tab==='open'    ?'a1':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>在庫倉位管理</button>
-          <button @click="go('history')"  :class="['ni', tab==='history' ?'a2':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>獲利分析報表</button>
-          <button @click="go('stats')"    :class="['ni', tab==='stats'   ?'a3':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>總成本損益統計</button>
-          <button @click="go('news')"     :class="['ni', tab==='news'    ?'a4':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>機構評等</button>
-          <button @click="go('settings')" :class="['ni', tab==='settings'?'a5':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>API 連線設定</button>
+          <button @click="go('open')"     :class="['ni',tab==='open'    ?'a1':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>在庫倉位管理</button>
+          <button @click="go('history')"  :class="['ni',tab==='history' ?'a2':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>獲利分析報表</button>
+          <button @click="go('stats')"    :class="['ni',tab==='stats'   ?'a3':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>總成本損益統計</button>
+          <button @click="go('settings')" :class="['ni',tab==='settings'?'a4':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>API 連線設定</button>
         </div>
       </div>
       <div class="dv"></div>
@@ -256,13 +227,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       </div>
       <div style="margin-top:auto;padding-top:24px">
         <div style="background:rgba(44,36,24,.05);border:1px solid var(--line);border-radius:16px;padding:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
             <span style="font-family:var(--mono);font-size:9px;color:var(--pale);letter-spacing:.12em;text-transform:uppercase">SYSTEM</span>
             <div style="display:flex;align-items:center;gap:6px">
-              <div :class="['sdot', apiKey ? 'on' : 'off']"></div>
-              <span style="font-family:var(--mono);font-size:9px" :class="apiKey ? 'g' : 'r'">{{ apiKey ? 'LIVE' : 'OFFLINE' }}</span>
+              <div :class="['sdot',apiKey?'on':'off']"></div>
+              <span style="font-family:var(--mono);font-size:9px" :class="apiKey?'g':'r'">{{ apiKey?'LIVE':'OFFLINE' }}</span>
             </div>
           </div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--pale);margin-bottom:10px">上次備份：{{ lastBackupDisplay }}</div>
           <div class="bar" style="margin-bottom:14px"><div class="bar-f" :style="{width:storageUsage+'%',background:'var(--sk)'}"></div></div>
           <button @click="fetchAll" :disabled="!apiKey||fetching" style="width:100%;background:var(--sk2);border:1px solid rgba(180,90,110,.2);border-radius:10px;padding:9px;color:var(--sk);font-size:11px;font-weight:600;display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;transition:all .18s;font-family:var(--sans)" :style="(!apiKey||fetching)?'opacity:.35;cursor:not-allowed;pointer-events:none':''">
             <svg :class="fetching?'spin':''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -277,9 +249,21 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <main style="flex:1;padding:20px;overflow-y:auto;position:relative;z-index:1" class="main-pad">
     <div style="max-width:880px;margin:0 auto">
 
+      <!-- BACKUP REMINDER BANNER -->
+      <div v-if="showBackupReminder" class="r1 backup-banner">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:16px">&#x1F4BE;</span>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--amber)">已超過 7 天未備份</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px">上次：{{ lastBackupDisplay }}</div>
+          </div>
+        </div>
+        <button @click="exportData" style="background:var(--amber);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;font-family:var(--sans)">立即備份</button>
+      </div>
+
       <!-- 4 INDEX TILES -->
       <div v-if="tab!=='settings'" class="r1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:28px">
-        <div v-for="ix in indices" :key="ix.symbol" :class="['ixtile', ix.change===null?'':(ix.change>=0?'up':'dn')]">
+        <div v-for="ix in indices" :key="ix.symbol" :class="['ixtile',ix.change===null?'':(ix.change>=0?'up':'dn')]">
           <div style="font-family:var(--mono);font-size:7px;color:var(--pale);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ix.name }}</div>
           <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);line-height:1">{{ ix.price ? ix.price.toFixed(2) : '&#x2014;' }}</div>
           <div style="font-family:var(--mono);font-size:9px;margin-top:5px" :class="(ix.change||0)>=0?'g':'r'">{{ ix.change!==null?((ix.change>=0?'+':'')+ix.change.toFixed(2)+'%'):'&#x2014;' }}</div>
@@ -288,17 +272,22 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
       <!-- ═══ 在庫倉位管理 ═══ -->
       <section v-if="tab==='open'">
-        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
+        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px">
           <div>
             <div class="pg-title">在庫倉位</div>
             <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--pale)">
-              {{ openPos.length }} positions &#x2022; <span style="color:var(--mid)">${{ totalValue.toLocaleString(undefined,{minimumFractionDigits:2}) }}</span>
+              {{ openPos.length }} positions &#x2022; <span style="color:var(--mid)">${{ fmt(totalValue) }}</span>
             </div>
           </div>
           <button @click="openEntryModal()" class="btn-main">
             <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             新增持倉
           </button>
+        </div>
+
+        <!-- SORT CONTROLS -->
+        <div v-if="openPos.length > 1" class="r2 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px">
+          <button v-for="s in sortOptions" :key="s.key" @click="sortBy=s.key" :class="['sort-tab',sortBy===s.key?'on':'']">{{ s.label }}</button>
         </div>
 
         <div v-if="openPos.length===0" class="r2 card" style="padding:60px 20px;text-align:center">
@@ -308,57 +297,46 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         </div>
 
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px">
-          <div v-for="(p,i) in openPos" :key="p.id" :class="['pc r2', alertClass(p)]" :style="'animation-delay:'+(i*.06)+'s'">
-
-            <!-- Alert badges -->
-            <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap">
-              <span v-if="isTpTriggered(p)" class="alert-pill tp">&#x1F4C8; 停利 ${{ p.tp }}</span>
+          <div v-for="(p,i) in sortedPos" :key="p.id" :class="['pc r2',alertClass(p)]" :style="'animation-delay:'+(i*.05)+'s'">
+            <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap;min-height:24px">
+              <span v-if="isTpTriggered(p)" class="alert-pill tp">&#x1F4C8; 已達停利 ${{ p.tp }}</span>
               <span v-else-if="p.tp" class="alert-pill tp">TP ${{ p.tp }}</span>
-              <span v-if="isSlTriggered(p)" class="alert-pill sl">&#x26A0; 停損 ${{ p.sl }}</span>
+              <span v-if="isSlTriggered(p)" class="alert-pill sl">&#x26A0; 停損警報 ${{ p.sl }}</span>
               <span v-else-if="p.sl" class="alert-pill sl">SL ${{ p.sl }}</span>
             </div>
-
-            <!-- Header -->
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
               <div style="display:flex;align-items:center;gap:12px">
                 <div class="av">{{ p.ticker.substring(0,2) }}</div>
                 <div>
                   <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--ink);line-height:1">{{ p.ticker }}</div>
                   <div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:3px">
-                    {{ totalQty(p) }} shs
+                    {{ totalQty(p).toLocaleString() }} shs
                     <span v-if="p.lots && p.lots.length > 1" style="margin-left:4px;background:var(--sk2);color:var(--sk);border-radius:4px;padding:1px 5px;font-size:8px">{{ p.lots.length }} lots</span>
                   </div>
                 </div>
               </div>
               <div style="text-align:right">
                 <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">市價</div>
-                <div style="font-family:var(--mono);font-size:19px;font-weight:500;color:var(--ink);line-height:1">{{ p.currentPrice ? '$'+Number(p.currentPrice).toFixed(2) : '&#x2014;' }}</div>
+                <div style="font-family:var(--mono);font-size:19px;font-weight:500;color:var(--ink);line-height:1">{{ p.currentPrice ? '$'+p.currentPrice.toFixed(2) : '&#x2014;' }}</div>
               </div>
             </div>
-
-            <!-- Stats -->
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px">
               <div class="stat"><div class="stat-lbl">均攤成本</div><div style="font-family:var(--mono);font-size:12px;color:var(--ink)">${{ avgCost(p).toFixed(2) }}</div></div>
-              <div class="stat"><div class="stat-lbl">未實現</div><div style="font-family:var(--mono);font-size:12px" :class="unrealized(p)>=0?'g':'r'">${{ unrealized(p).toFixed(2) }}</div></div>
+              <div class="stat"><div class="stat-lbl">未實現</div><div style="font-family:var(--mono);font-size:12px" :class="unrealized(p)>=0?'g':'r'">${{ fmt(unrealized(p)) }}</div></div>
               <div class="stat"><div class="stat-lbl">漲跌幅</div><div style="font-family:var(--mono);font-size:12px" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div></div>
             </div>
-
-            <!-- TP/SL progress bar -->
-            <div v-if="p.sl || p.tp" style="margin-bottom:12px">
+            <div v-if="p.sl||p.tp" style="margin-bottom:12px">
               <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--pale);margin-bottom:4px">
                 <span v-if="p.sl">SL ${{ p.sl }}</span><span v-else></span>
                 <span v-if="p.tp">TP ${{ p.tp }}</span>
               </div>
               <div style="height:4px;border-radius:99px;background:rgba(100,80,60,.08);position:relative;overflow:hidden">
-                <div style="position:absolute;top:0;bottom:0;border-radius:99px;transition:left .5s,right .5s"
-                  :style="tpSlBar(p)"></div>
+                <div style="position:absolute;top:0;bottom:0;border-radius:99px;transition:left .5s,right .5s" :style="tpSlBar(p)"></div>
               </div>
             </div>
             <div v-else class="bar" style="margin-bottom:12px">
               <div class="bar-f" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--sage)':'var(--umb)'}"></div>
             </div>
-
-            <!-- Actions -->
             <div style="display:flex;gap:6px">
               <button @click="openAddLotModal(p)" class="btn-add" style="flex:1">+ 加倉</button>
               <button @click="openEditModal(p)" class="btn-ghost" style="flex:1">設定</button>
@@ -374,12 +352,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         <div class="r2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:20px">
           <div class="card" style="padding:24px">
             <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">ANNUAL P&amp;L（已實現）</div>
-            <div style="font-family:var(--mono);font-size:clamp(2rem,7vw,3rem);font-weight:300;line-height:1" :class="annualPnl>=0?'g':'r'">${{ annualPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div>
+            <div style="font-family:var(--mono);font-size:clamp(2rem,7vw,3rem);font-weight:300;line-height:1" :class="annualPnl>=0?'g':'r'">${{ fmt(annualPnl) }}</div>
             <div class="bar" style="margin-top:14px"><div class="bar-f" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--sage)':'var(--umb)'}"></div></div>
           </div>
           <div class="card" style="padding:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
             <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">{{ selMonth }} 月結算</div>
-            <div style="font-family:var(--mono);font-size:1.8rem;font-weight:300" :class="monthPnl>=0?'g':'r'">${{ monthPnl.toFixed(2) }}</div>
+            <div style="font-family:var(--mono);font-size:1.8rem;font-weight:300" :class="monthPnl>=0?'g':'r'">${{ fmt(monthPnl) }}</div>
             <div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:6px">{{ filteredHist.length }} trades</div>
           </div>
         </div>
@@ -393,12 +371,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
               <div class="av" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
               <div>
                 <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--ink)">{{ h.ticker }}</div>
-                <div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:3px">均成 ${{ Number(h.entry).toFixed(2) }} &#x2192; ${{ Number(h.exit).toFixed(2) }} &#x2022; {{ h.qty }} shs</div>
+                <div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:3px">
+                  均成 ${{ Number(h.entry).toFixed(2) }} &#x2192; ${{ Number(h.exit).toFixed(2) }} &#x2022; {{ h.qty }} shs
+                  <span v-if="h.closedDate" style="margin-left:6px;opacity:.6">{{ h.closedDate }}</span>
+                </div>
               </div>
             </div>
             <div style="text-align:right">
-              <div style="font-family:var(--mono);font-size:18px;font-weight:400" :class="h.pnl>=0?'g':'r'">${{ h.pnl.toFixed(2) }}</div>
-              <div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:3px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(1) }}%</div>
+              <div style="font-family:var(--mono);font-size:18px;font-weight:400" :class="h.pnl>=0?'g':'r'">${{ fmt(h.pnl) }}</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:3px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(2) }}%</div>
             </div>
           </div>
         </div>
@@ -408,7 +389,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       <section v-if="tab==='stats'">
         <div class="r1 pg-title" style="margin-bottom:6px">總成本損益</div>
         <div style="font-family:var(--mono);font-size:11px;color:var(--pale);margin-bottom:24px">含所有投入資本 &#x2022; 已平倉回收 &#x2022; 未平倉市值</div>
-        <div :class="['r2 roi-card', totalROI>=0?'pos':'neg']" style="margin-bottom:14px">
+        <div :class="['r2 roi-card',totalROI>=0?'pos':'neg']" style="margin-bottom:14px">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
             <div>
               <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">整體投資報酬率 (ROI)</div>
@@ -416,25 +397,25 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
             </div>
             <div style="text-align:right">
               <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">淨損益</div>
-              <div style="font-family:var(--mono);font-size:1.6rem;font-weight:300" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ totalNetPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div>
+              <div style="font-family:var(--mono);font-size:1.6rem;font-weight:300" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ fmt(totalNetPnl) }}</div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
             <div style="flex:1;height:6px;border-radius:99px;background:rgba(44,36,24,.08);overflow:hidden"><div style="height:100%;border-radius:99px;transition:width .9s ease" :style="{width:Math.min(Math.abs(totalROI),100)+'%',background:totalROI>=0?'var(--sage)':'var(--umb)'}"></div></div>
-            <div style="font-family:var(--mono);font-size:9px;color:var(--pale);flex-shrink:0">on ${{ totalCostDeployed.toLocaleString(undefined,{minimumFractionDigits:0}) }}</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--pale);flex-shrink:0">on ${{ fmt(totalCostDeployed) }}</div>
           </div>
         </div>
         <div class="r3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
-          <div class="card" style="padding:18px"><div class="stat-lbl">總投入成本</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;color:var(--ink);margin-top:4px">${{ totalCostDeployed.toLocaleString(undefined,{minimumFractionDigits:0}) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">已結清 + 在庫</div></div>
-          <div class="card" style="padding:18px"><div class="stat-lbl">已實現獲利</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;margin-top:4px" :class="annualPnl>=0?'g':'r'">${{ annualPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">{{ hist.length }} 筆已結清</div></div>
-          <div class="card" style="padding:18px"><div class="stat-lbl">未實現損益</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;margin-top:4px" :class="totalUnrealized>=0?'g':'r'">${{ totalUnrealized.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">{{ openPos.length }} 筆在庫</div></div>
+          <div class="card" style="padding:18px"><div class="stat-lbl">總投入成本</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;color:var(--ink);margin-top:4px">${{ fmt(totalCostDeployed) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">已結清 + 在庫</div></div>
+          <div class="card" style="padding:18px"><div class="stat-lbl">已實現獲利</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;margin-top:4px" :class="annualPnl>=0?'g':'r'">${{ fmt(annualPnl) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">{{ hist.length }} 筆已結清</div></div>
+          <div class="card" style="padding:18px"><div class="stat-lbl">未實現損益</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;margin-top:4px" :class="totalUnrealized>=0?'g':'r'">${{ fmt(totalUnrealized) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">{{ openPos.length }} 筆在庫</div></div>
         </div>
         <div class="r4 card" style="padding:24px;margin-bottom:14px">
           <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px">資金流向明細</div>
-          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--umb2);border:1px solid rgba(176,96,64,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--umb)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v6M12 2l-3 3M12 2l3 3"/><path d="M3 12h18"/><path d="M5 21h14a2 2 0 002-2v-8H3v8a2 2 0 002 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">總投入成本</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">所有買入金額合計（含已結清）</div></div><div style="font-family:var(--mono);font-size:16px;font-weight:400;color:var(--umb)">&#x2212;${{ totalCostDeployed.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div></div>
-          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--sage2);border:1px solid rgba(90,144,104,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--sage)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22v-6M12 22l-3-3M12 22l3-3"/><path d="M3 12h18"/><path d="M5 3h14a2 2 0 012 2v8H3V5a2 2 0 012-2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">已回收資金</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">結清售出金額＝成本回收 + 獲利</div></div><div style="font-family:var(--mono);font-size:16px;font-weight:400" :class="totalRecovered>=0?'g':'r'">+${{ totalRecovered.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div></div>
-          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--sk2);border:1px solid rgba(180,90,110,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--sk)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">在庫市值</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">目前持倉的即時市場價值</div></div><div style="font-family:var(--mono);font-size:16px;font-weight:400;color:var(--sk)">${{ totalValue.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div></div>
-          <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:14px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center"><div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px">最終結算</div><div style="font-size:12px;color:var(--mid)">已回收 + 在庫 &#x2212; 總投入</div></div><div style="font-family:var(--mono);font-size:22px;font-weight:300" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ totalNetPnl.toLocaleString(undefined,{minimumFractionDigits:2}) }}</div></div>
+          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--umb2);border:1px solid rgba(176,96,64,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--umb)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v6M12 2l-3 3M12 2l3 3"/><path d="M3 12h18"/><path d="M5 21h14a2 2 0 002-2v-8H3v8a2 2 0 002 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">總投入成本</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">所有買入金額合計（含已結清）</div></div><div style="font-family:var(--mono);font-size:16px;color:var(--umb)">&#x2212;${{ fmt(totalCostDeployed) }}</div></div>
+          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--sage2);border:1px solid rgba(90,144,104,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--sage)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22v-6M12 22l-3-3M12 22l3-3"/><path d="M3 12h18"/><path d="M5 3h14a2 2 0 012 2v8H3V5a2 2 0 012-2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">已回收資金</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">結清售出金額＝成本回收 + 獲利</div></div><div style="font-family:var(--mono);font-size:16px" :class="totalRecovered>=0?'g':'r'">+${{ fmt(totalRecovered) }}</div></div>
+          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--sk2);border:1px solid rgba(180,90,110,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--sk)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">在庫市值</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">目前持倉的即時市場價值</div></div><div style="font-family:var(--mono);font-size:16px;color:var(--sk)">${{ fmt(totalValue) }}</div></div>
+          <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:14px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center"><div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px">最終結算</div><div style="font-size:12px;color:var(--mid)">已回收 + 在庫 &#x2212; 總投入</div></div><div style="font-family:var(--mono);font-size:22px;font-weight:300" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ fmt(totalNetPnl) }}</div></div>
         </div>
         <div v-if="tickerStats.length>0" class="r4 card" style="overflow:hidden">
           <div style="padding:18px 20px 12px;font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid var(--line)">各標的完整損益</div>
@@ -444,33 +425,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
                 <div class="av" style="width:34px;height:34px;border-radius:10px;font-size:12px">{{ tk.ticker.substring(0,2) }}</div>
                 <div><div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--ink)">{{ tk.ticker }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:1px">{{ tk.trades }} trades &#x2022; {{ tk.openQty>0?tk.openQty+' open':'fully closed' }}</div></div>
               </div>
-              <div style="text-align:right"><div style="font-family:var(--mono);font-size:17px;font-weight:400" :class="tk.netPnl>=0?'g':'r'">{{ tk.netPnl>=0?'+':'' }}${{ tk.netPnl.toFixed(2) }}</div><div style="font-family:var(--mono);font-size:10px;margin-top:2px" :class="tk.roi>=0?'g':'r'">{{ tk.roi>=0?'+':'' }}{{ tk.roi.toFixed(2) }}% ROI</div></div>
+              <div style="text-align:right"><div style="font-family:var(--mono);font-size:17px;font-weight:400" :class="tk.netPnl>=0?'g':'r'">{{ tk.netPnl>=0?'+':'' }}${{ fmt(tk.netPnl) }}</div><div style="font-family:var(--mono);font-size:10px;margin-top:2px" :class="tk.roi>=0?'g':'r'">{{ tk.roi>=0?'+':'' }}{{ tk.roi.toFixed(2) }}% ROI</div></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-              <div class="stat" style="padding:8px 10px"><div class="stat-lbl">投入</div><div style="font-family:var(--mono);font-size:11px;color:var(--ink)">${{ tk.cost.toFixed(0) }}</div></div>
-              <div class="stat" style="padding:8px 10px"><div class="stat-lbl">回收</div><div style="font-family:var(--mono);font-size:11px" :class="tk.recovered>0?'g':'r'">${{ tk.recovered.toFixed(0) }}</div></div>
-              <div class="stat" style="padding:8px 10px"><div class="stat-lbl">市值</div><div style="font-family:var(--mono);font-size:11px;color:var(--sk)">${{ tk.currentVal.toFixed(0) }}</div></div>
+              <div class="stat" style="padding:8px 10px"><div class="stat-lbl">投入</div><div style="font-family:var(--mono);font-size:11px;color:var(--ink)">${{ fmt(tk.cost) }}</div></div>
+              <div class="stat" style="padding:8px 10px"><div class="stat-lbl">回收</div><div style="font-family:var(--mono);font-size:11px" :class="tk.recovered>0?'g':'r'">${{ fmt(tk.recovered) }}</div></div>
+              <div class="stat" style="padding:8px 10px"><div class="stat-lbl">市值</div><div style="font-family:var(--mono);font-size:11px;color:var(--sk)">${{ fmt(tk.currentVal) }}</div></div>
             </div>
           </div>
         </div>
         <div v-if="hist.length>0" class="r4" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px">
           <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">勝率</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="winRate>=50?'g':'r'">{{ winRate.toFixed(0) }}<span style="font-size:1rem;color:var(--pale)">%</span></div></div>
-          <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">平均獲利</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="avgWin>=0?'g':'r'">${{ avgWin.toFixed(0) }}</div></div>
-          <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">平均虧損</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="avgLoss<=0?'r':'g'">${{ avgLoss.toFixed(0) }}</div></div>
-        </div>
-      </section>
-
-      <!-- ═══ 機構評等 ═══ -->
-      <section v-if="tab==='news'">
-        <div class="r1 pg-title" style="margin-bottom:24px">機構評等</div>
-        <div v-if="!Object.keys(recs).length" class="r2 card" style="padding:48px;text-align:center;color:var(--pale);font-family:var(--mono);font-size:12px">&#x2014; 尚無評等數據 &#x2014;</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
-          <div v-for="(rec,tk) in recs" :key="tk" class="r2 card" style="padding:22px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--ink)">{{ tk }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale)">{{ rec.period }}</div></div>
-            <div style="display:flex;height:3px;border-radius:99px;overflow:hidden;background:rgba(44,36,24,.08);margin-bottom:10px"><div :style="{width:(rec.strongBuy+rec.buy)/rec.total*100+'%',background:'var(--sage)'}"></div><div :style="{width:rec.hold/rec.total*100+'%',background:'rgba(44,36,24,.15)'}"></div><div :style="{width:(rec.sell+rec.strongSell)/rec.total*100+'%',background:'var(--umb)'}"></div></div>
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;margin-bottom:14px"><span class="g">buy {{ rec.strongBuy+rec.buy }}</span><span style="color:var(--pale)">hold {{ rec.hold }}</span><span class="r">sell {{ rec.sell+rec.strongSell }}</span></div>
-            <div style="background:var(--bg);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--line)"><div style="font-family:var(--mono);font-size:7px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">CONSENSUS</div><div style="font-family:var(--mono);font-size:26px;font-weight:300" :class="score(rec)>=4?'g':score(rec)>=3?'sk':'r'">{{ score(rec).toFixed(1) }}<span style="font-size:13px;color:var(--pale)"> / 5</span></div></div>
-          </div>
+          <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">平均獲利</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="avgWin>=0?'g':'r'">${{ fmt(avgWin) }}</div></div>
+          <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">平均虧損</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="avgLoss<=0?'r':'g'">${{ fmt(avgLoss) }}</div></div>
         </div>
       </section>
 
@@ -485,192 +452,130 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         </div>
         <div class="r3 card" style="padding:22px;max-width:420px;margin-top:14px;border-color:rgba(180,90,110,.15)">
           <div style="font-family:var(--mono);font-size:8px;color:var(--sk);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">&#x1F4F1; 加入主畫面 (PWA)</div>
-          <div style="font-size:12px;color:var(--mid);line-height:1.85"><strong style="color:var(--ink)">iOS Safari：</strong>點分享按鈕 &#x2192; 加入主畫面<br><strong style="color:var(--ink)">Android Chrome：</strong>選單 &#x2192; 加到主畫面<br><span style="color:var(--pale)">加入後以全螢幕 App 模式啟動。</span></div>
+          <div style="font-size:12px;color:var(--mid);line-height:1.85"><strong style="color:var(--ink)">iOS Safari：</strong>點分享按鈕 &#x2192; 加入主畫面<br><strong style="color:var(--ink)">Android Chrome：</strong>選單 &#x2192; 加到主畫面</div>
         </div>
       </section>
-
     </div>
   </main>
 
-  <!-- BOTTOM BAR -->
   <div class="bbar"><div style="font-family:var(--mono);font-size:9px;color:rgba(180,90,110,.5);letter-spacing:.06em">&#x26A0; 數據僅存本地快取 &#xB7; 請定期導出備份</div></div>
 
-  <!-- ══ ENTRY MODAL (新增持倉) ══ -->
+  <!-- ══ ENTRY MODAL ══ -->
   <div v-if="eModal.show" class="modal-bg" @click.self="eModal.show=false">
     <div class="modal-box">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:3px;height:20px;background:var(--sk);border-radius:99px"></div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">新增持倉</div>
-        </div>
+        <div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--sk);border-radius:99px"></div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">新增持倉</div></div>
         <button @click="eModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <!-- Ticker -->
         <div>
           <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">股票代號</div>
-          <input v-model="eForm.ticker" :class="['inp', eErrors.ticker?'error':'']" placeholder="AAPL" style="text-transform:uppercase;font-size:20px;font-weight:600" @input="eErrors.ticker=''">
-          <div v-if="eErrors.ticker" class="err-msg"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>{{ eErrors.ticker }}</div>
+          <input v-model="eForm.ticker" :class="['inp',eErrors.ticker?'error':'']" placeholder="AAPL" style="text-transform:uppercase;font-size:20px;font-weight:600" @input="eErrors.ticker=''">
+          <div v-if="eErrors.ticker" class="err-msg">{{ eErrors.ticker }}</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
             <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">買入價格 ($)</div>
             <input v-model.number="eForm.price" type="number" step="0.01" :class="['inp',eErrors.price?'error':'']" placeholder="0.00" @input="eErrors.price=''">
-            <div v-if="eErrors.price" class="err-msg"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>{{ eErrors.price }}</div>
+            <div v-if="eErrors.price" class="err-msg">{{ eErrors.price }}</div>
           </div>
           <div>
             <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">股數</div>
             <input v-model.number="eForm.qty" type="number" :class="['inp',eErrors.qty?'error':'']" placeholder="100" @input="eErrors.qty=''">
-            <div v-if="eErrors.qty" class="err-msg"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>{{ eErrors.qty }}</div>
+            <div v-if="eErrors.qty" class="err-msg">{{ eErrors.qty }}</div>
           </div>
         </div>
-        <!-- TP / SL alerts -->
         <div style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px">
           <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">價格提醒（選填）</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div>
-              <div style="font-family:var(--mono);font-size:8px;color:var(--sage);letter-spacing:.1em;margin-bottom:6px">&#x25B2; 停利目標 ($)</div>
-              <input v-model.number="eForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="選填">
-            </div>
-            <div>
-              <div style="font-family:var(--mono);font-size:8px;color:var(--umb);letter-spacing:.1em;margin-bottom:6px">&#x25BC; 停損警報 ($)</div>
-              <input v-model.number="eForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="選填">
-            </div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--sage);letter-spacing:.1em;margin-bottom:6px">&#x25B2; 停利目標 ($)</div><input v-model.number="eForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="選填"></div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--umb);letter-spacing:.1em;margin-bottom:6px">&#x25BC; 停損警報 ($)</div><input v-model.number="eForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="選填"></div>
           </div>
         </div>
         <div style="padding-top:4px">
           <button @click="doEntry" class="btn-main" style="width:100%;justify-content:center;padding:13px">確認新增持倉</button>
-          <button @click="eModal.show=false" style="color:var(--pale);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;margin-top:8px;text-align:center">取消返回</button>
+          <button @click="eModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;margin-top:8px;text-align:center">取消返回</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══ ADD LOT MODAL (加倉) ══ -->
+  <!-- ══ ADD LOT MODAL ══ -->
   <div v-if="addLotModal.show" class="modal-bg" @click.self="addLotModal.show=false">
     <div class="modal-box">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:3px;height:20px;background:var(--sage);border-radius:99px"></div>
-          <div>
-            <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">加倉</div>
-            <div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">{{ addLotModal.ticker }} &#x2022; 現持 {{ addLotModal.currentQty }} shs &#x2022; 均成 ${{ addLotModal.currentAvg }}</div>
-          </div>
-        </div>
+        <div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--sage);border-radius:99px"></div><div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">加倉</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">{{ addLotModal.ticker }} &#x2022; 現持 {{ addLotModal.currentQty }} shs &#x2022; 均成 ${{ addLotModal.currentAvg }}</div></div></div>
         <button @click="addLotModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
-      <!-- Existing lots -->
-      <div v-if="addLotModal.lots && addLotModal.lots.length > 0" style="margin-bottom:16px">
+      <div v-if="addLotModal.lots&&addLotModal.lots.length>0" style="margin-bottom:16px">
         <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">現有批次</div>
-        <div v-for="(lot, li) in addLotModal.lots" :key="li" class="lot-row">
-          <div>
-            <span style="font-family:var(--mono);font-size:12px;color:var(--ink)">${{ Number(lot.price).toFixed(2) }}</span>
-            <span style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-left:8px">{{ lot.qty }} shs</span>
-          </div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--pale)">{{ lot.date || '' }}</div>
+        <div v-for="(lot,li) in addLotModal.lots" :key="li" class="lot-row">
+          <div><span style="font-family:var(--mono);font-size:12px;color:var(--ink)">${{ Number(lot.price).toFixed(2) }}</span><span style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-left:8px">{{ lot.qty }} shs</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--pale)">{{ lot.date||'' }}</div>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div>
-            <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">加倉價格 ($)</div>
-            <input v-model.number="addLotForm.price" type="number" step="0.01" :class="['inp',addLotErrors.price?'error':'']" placeholder="0.00" @input="addLotErrors.price=''">
-            <div v-if="addLotErrors.price" class="err-msg">{{ addLotErrors.price }}</div>
-          </div>
-          <div>
-            <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">加倉股數</div>
-            <input v-model.number="addLotForm.qty" type="number" :class="['inp',addLotErrors.qty?'error':'']" placeholder="100" @input="addLotErrors.qty=''">
-            <div v-if="addLotErrors.qty" class="err-msg">{{ addLotErrors.qty }}</div>
-          </div>
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">加倉價格 ($)</div><input v-model.number="addLotForm.price" type="number" step="0.01" :class="['inp',addLotErrors.price?'error':'']" placeholder="0.00" @input="addLotErrors.price=''"><div v-if="addLotErrors.price" class="err-msg">{{ addLotErrors.price }}</div></div>
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">加倉股數</div><input v-model.number="addLotForm.qty" type="number" :class="['inp',addLotErrors.qty?'error':'']" placeholder="100" @input="addLotErrors.qty=''"><div v-if="addLotErrors.qty" class="err-msg">{{ addLotErrors.qty }}</div></div>
         </div>
-        <!-- Preview new avg cost -->
-        <div v-if="addLotForm.price > 0 && addLotForm.qty > 0" style="background:var(--bg);border:1px solid var(--line2);border-radius:12px;padding:12px">
+        <div v-if="addLotForm.price>0&&addLotForm.qty>0" style="background:var(--bg);border:1px solid var(--line2);border-radius:12px;padding:12px">
           <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">加倉後均攤成本</div>
-              <div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--ink)">${{ newAvgCostPreview }}</div>
-            </div>
-            <div style="text-align:right">
-              <div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">總股數</div>
-              <div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--mid)">{{ addLotModal.currentQty + addLotForm.qty }}</div>
-            </div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">加倉後均攤成本</div><div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--ink)">${{ newAvgCostPreview }}</div></div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">總股數</div><div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--mid)">{{ addLotModal.currentQty + addLotForm.qty }}</div></div>
           </div>
         </div>
         <button @click="doAddLot" class="btn-add" style="width:100%;justify-content:center;padding:13px">確認加倉</button>
-        <button @click="addLotModal.show=false" style="color:var(--pale);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button>
+        <button @click="addLotModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button>
       </div>
     </div>
   </div>
 
-  <!-- ══ EDIT/SETTINGS MODAL ══ -->
+  <!-- ══ EDIT MODAL ══ -->
   <div v-if="editModal.show" class="modal-bg" @click.self="editModal.show=false">
     <div class="modal-box">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:3px;height:20px;background:var(--amber);border-radius:99px"></div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">{{ editModal.ticker }} 設定</div>
-        </div>
+        <div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--amber);border-radius:99px"></div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">{{ editModal.ticker }} 設定</div></div>
         <button @click="editModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <!-- TP / SL -->
         <div style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px">
           <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">價格提醒設定</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div>
-              <div style="font-family:var(--mono);font-size:8px;color:var(--sage);letter-spacing:.1em;margin-bottom:6px">&#x25B2; 停利目標 ($)</div>
-              <input v-model.number="editForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="0.00（留空清除）">
-            </div>
-            <div>
-              <div style="font-family:var(--mono);font-size:8px;color:var(--umb);letter-spacing:.1em;margin-bottom:6px">&#x25BC; 停損警報 ($)</div>
-              <input v-model.number="editForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="0.00（留空清除）">
-            </div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--sage);letter-spacing:.1em;margin-bottom:6px">&#x25B2; 停利目標 ($)</div><input v-model.number="editForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="留空清除"></div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--umb);letter-spacing:.1em;margin-bottom:6px">&#x25BC; 停損警報 ($)</div><input v-model.number="editForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="留空清除"></div>
           </div>
         </div>
-        <div style="padding-top:4px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
           <button @click="doEdit" class="btn-main" style="width:100%;justify-content:center;padding:13px">儲存設定</button>
           <button @click="doDeletePos" class="btn-del">&#x1F5D1; 刪除此持倉</button>
-          <button @click="editModal.show=false" style="color:var(--pale);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button>
+          <button @click="editModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══ EXIT MODAL (結清) ══ -->
+  <!-- ══ EXIT MODAL ══ -->
   <div v-if="exitModal.show" class="modal-bg" @click.self="exitModal.show=false">
     <div class="modal-box">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:3px;height:20px;background:var(--umb);border-radius:99px"></div>
-          <div>
-            <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">結清獲利</div>
-            <div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">{{ exitModal.ticker }} &#x2022; 均成 ${{ exitModal.avgCost }} &#x2022; 持有 {{ exitModal.qty }} shs</div>
-          </div>
-        </div>
+        <div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--umb);border-radius:99px"></div><div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">結清獲利</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">{{ exitModal.ticker }} &#x2022; 均成 ${{ exitModal.avgCost }} &#x2022; 持有 {{ exitModal.qty }} shs</div></div></div>
         <button @click="exitModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div>
-            <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">賣出價格 ($)</div>
-            <input v-model.number="exitForm.price" type="number" step="0.01" :class="['inp',exitErrors.price?'error':'']" placeholder="0.00" @input="exitErrors.price=''">
-            <div v-if="exitErrors.price" class="err-msg">{{ exitErrors.price }}</div>
-          </div>
-          <div>
-            <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">賣出股數</div>
-            <input v-model.number="exitForm.qty" type="number" :class="['inp',exitErrors.qty?'error':'']" :placeholder="String(exitModal.qty)" @input="exitErrors.qty=''">
-            <div v-if="exitErrors.qty" class="err-msg">{{ exitErrors.qty }}</div>
-          </div>
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">賣出價格 ($)</div><input v-model.number="exitForm.price" type="number" step="0.01" :class="['inp',exitErrors.price?'error':'']" placeholder="0.00" @input="exitErrors.price=''"><div v-if="exitErrors.price" class="err-msg">{{ exitErrors.price }}</div></div>
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">賣出股數</div><input v-model.number="exitForm.qty" type="number" :class="['inp',exitErrors.qty?'error':'']" :placeholder="String(exitModal.qty)" @input="exitErrors.qty=''"><div v-if="exitErrors.qty" class="err-msg">{{ exitErrors.qty }}</div></div>
         </div>
-        <div v-if="exitForm.price > 0 && exitForm.qty > 0" style="background:var(--bg);border:1px solid var(--line2);border-radius:14px;padding:14px">
+        <div v-if="exitForm.price>0&&exitForm.qty>0" style="background:var(--bg);border:1px solid var(--line2);border-radius:14px;padding:14px">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
-            <div style="text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">預估損益</div><div style="font-family:var(--mono);font-size:22px;font-weight:300" :class="exitPv>=0?'g':'r'">{{ exitPv>=0?'+':'' }}${{ exitPv.toFixed(2) }}</div></div>
-            <div style="text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">回收金額</div><div style="font-family:var(--mono);font-size:22px;font-weight:300;color:var(--mid)">${{ (exitForm.price * Math.min(exitForm.qty, exitModal.qty)).toFixed(2) }}</div></div>
+            <div style="text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">預估損益</div><div style="font-family:var(--mono);font-size:22px;font-weight:300" :class="exitPv>=0?'g':'r'">{{ exitPv>=0?'+':'' }}${{ fmt(exitPv) }}</div></div>
+            <div style="text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">回收金額</div><div style="font-family:var(--mono);font-size:22px;font-weight:300;color:var(--mid)">${{ fmt(exitForm.price * Math.min(exitForm.qty, exitModal.qty)) }}</div></div>
           </div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--pale);text-align:center">{{ exitPv>=0?'&#x2665; 獲利':'&#x26A0; 虧損' }} {{ Math.abs(exitPvPct).toFixed(2) }}%</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--pale);text-align:center">{{ exitPvPct>=0?'+':'' }}{{ exitPvPct.toFixed(2) }}%</div>
         </div>
         <button @click="doExit" class="btn-exit" style="width:100%;justify-content:center;padding:13px;font-size:13px">確認平倉</button>
-        <button @click="exitModal.show=false" style="color:var(--pale);font-size:12px;font-weight:500;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button>
+        <button @click="exitModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button>
       </div>
     </div>
   </div>
@@ -679,9 +584,39 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <script>
 (function() {
-  var KO = 'M400v162_O';
-  var KH = 'M400v162_H';
-  var KA = 'M400v162_A';
+  // ── STABLE KEY (never changes between versions) ──
+  var KO = 'M400_POSITIONS';
+  var KH = 'M400_HISTORY';
+  var KA = 'M400_APIKEY';
+  var KB = 'M400_LASTBACKUP';
+
+  // ── MIGRATION: import data from any old version key ──
+  var OLD_OPEN_KEYS = ['M400v162_O','M400v16_O','M400v15_O','M400v14_O','M400v13_O','M400v12_OPEN','M400v11_OPEN','M400_STATION_OPEN_DATA'];
+  var OLD_HIST_KEYS = ['M400v162_H','M400v16_H','M400v15_H','M400v14_H','M400v13_H','M400v12_HIST','M400v11_HIST','M400_STATION_HISTORY_DATA'];
+  var OLD_API_KEYS  = ['M400v162_A','M400v16_A','M400v15_A','M400v14_A','M400v13_A','M400v12_API','M400v11_API','M400_FINNHUB_API_KEY'];
+
+  function migrate() {
+    // Only migrate if stable key is empty
+    if (!localStorage.getItem(KO)) {
+      for (var i = 0; i < OLD_OPEN_KEYS.length; i++) {
+        var v = localStorage.getItem(OLD_OPEN_KEYS[i]);
+        if (v) { localStorage.setItem(KO, v); break; }
+      }
+    }
+    if (!localStorage.getItem(KH)) {
+      for (var j = 0; j < OLD_HIST_KEYS.length; j++) {
+        var h = localStorage.getItem(OLD_HIST_KEYS[j]);
+        if (h) { localStorage.setItem(KH, h); break; }
+      }
+    }
+    if (!localStorage.getItem(KA)) {
+      for (var k = 0; k < OLD_API_KEYS.length; k++) {
+        var a = localStorage.getItem(OLD_API_KEYS[k]);
+        if (a) { localStorage.setItem(KA, a); break; }
+      }
+    }
+  }
+  migrate();
 
   Vue.createApp({
     setup: function() {
@@ -691,20 +626,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       var selMonth = ref(new Date().getMonth() + 1);
       var openPos = ref([]); var hist = ref([]);
       var apiKey = ref(''); var tempKey = ref('');
-      var recs = ref({}); var storageUsage = ref(0); var toasts = ref([]);
+      var storageUsage = ref(0); var toasts = ref([]);
+      var lastBackup = ref(0); // timestamp
 
-      // Modal states
+      var sortBy = ref('default');
+      var sortOptions = [
+        {key:'default',  label:'預設'},
+        {key:'pct-desc', label:'漲幅 ↓'},
+        {key:'pct-asc',  label:'漲幅 ↑'},
+        {key:'value-desc',label:'市值 ↓'},
+        {key:'pnl-desc', label:'損益 ↓'},
+      ];
+
       var eModal      = ref({show:false});
       var eForm       = ref({ticker:'',price:'',qty:'',tp:'',sl:''});
       var eErrors     = ref({ticker:'',price:'',qty:''});
-
       var addLotModal = ref({show:false,targetId:null,ticker:'',currentQty:0,currentAvg:'0',lots:[]});
       var addLotForm  = ref({price:'',qty:''});
       var addLotErrors= ref({price:'',qty:''});
-
-      var editModal   = ref({show:false,targetId:null,ticker:'',tp:'',sl:''});
+      var editModal   = ref({show:false,targetId:null,ticker:''});
       var editForm    = ref({tp:'',sl:''});
-
       var exitModal   = ref({show:false,targetId:null,ticker:'',qty:0,avgCost:'0'});
       var exitForm    = ref({price:'',qty:''});
       var exitErrors  = ref({price:'',qty:''});
@@ -717,99 +658,107 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       ]);
 
       function go(t){tab.value=t;menuOpen.value=false;}
-      function save(){localStorage.setItem(KO,JSON.stringify(openPos.value));localStorage.setItem(KH,JSON.stringify(hist.value));calcStor();}
-      function calcStor(){var t=0;for(var k in localStorage){if(Object.prototype.hasOwnProperty.call(localStorage,k))t+=(k.length+((localStorage[k]&&localStorage[k].length)||0))*2;}storageUsage.value=Math.min(100,Math.round(t/5242880*100));}
 
-      function toast(msg, type) {
-        var id = Date.now() + Math.random();
+      function save(){
+        localStorage.setItem(KO,JSON.stringify(openPos.value));
+        localStorage.setItem(KH,JSON.stringify(hist.value));
+        calcStor();
+      }
+      function calcStor(){
+        var t=0;
+        for(var k in localStorage){if(Object.prototype.hasOwnProperty.call(localStorage,k))t+=(k.length+((localStorage[k]&&localStorage[k].length)||0))*2;}
+        storageUsage.value=Math.min(100,Math.round(t/5242880*100));
+      }
+      function toast(msg,type){
+        var id=Date.now()+Math.random();
         toasts.value.push({id:id,msg:msg,type:type||'info',out:false});
         setTimeout(function(){var t=toasts.value.find(function(x){return x.id===id;});if(t)t.out=true;setTimeout(function(){toasts.value=toasts.value.filter(function(x){return x.id!==id;});},280);},4200);
       }
 
-      // ── Position helpers (batch lots support) ──
-      function totalQty(p) {
-        if (p.lots && p.lots.length > 0) { return p.lots.reduce(function(s,l){return s+l.qty;},0); }
-        return p.qty || 0;
-      }
-      function avgCost(p) {
-        if (p.lots && p.lots.length > 0) {
-          var totalCost = p.lots.reduce(function(s,l){return s+l.price*l.qty;},0);
-          var totalQ    = p.lots.reduce(function(s,l){return s+l.qty;},0);
-          return totalQ > 0 ? totalCost / totalQ : 0;
-        }
-        return p.entry || 0;
-      }
-      function unrealized(p) { return (p.currentPrice ? p.currentPrice - avgCost(p) : 0) * totalQty(p); }
-      function pct(p) { var ac = avgCost(p); return (p.currentPrice && ac > 0) ? ((p.currentPrice - ac) / ac * 100) : 0; }
-
-      function isTpTriggered(p) { return p.tp && p.currentPrice && p.currentPrice >= p.tp; }
-      function isSlTriggered(p) { return p.sl && p.currentPrice && p.currentPrice <= p.sl; }
-
-      function alertClass(p) {
-        if (isTpTriggered(p)) return 'alert-tp';
-        if (isSlTriggered(p)) return 'alert-sl';
-        return '';
+      // ── Number formatter ──
+      function fmt(n) {
+        var num = Number(n);
+        if (isNaN(num)) return '0.00';
+        return num.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
       }
 
-      function tpSlBar(p) {
-        if (!p.currentPrice) return 'display:none';
-        var sl = p.sl || 0; var tp = p.tp || 0; var cur = p.currentPrice; var ac = avgCost(p);
-        var lo = sl || (ac * 0.9); var hi = tp || (ac * 1.1);
-        if (hi <= lo) return 'display:none';
-        var leftPct  = Math.max(0, Math.min(100, (lo - lo) / (hi - lo) * 100));
-        var curPct   = Math.max(0, Math.min(100, (cur - lo) / (hi - lo) * 100));
-        var color    = cur >= ac ? 'var(--sage)' : 'var(--umb)';
-        return 'left:' + leftPct + '%;right:' + (100 - curPct) + '%;background:' + color;
-      }
-
-      var totalValue       = computed(function(){ return openPos.value.reduce(function(s,p){return s+(p.currentPrice||avgCost(p))*totalQty(p);},0); });
-      var annualPnl        = computed(function(){ return hist.value.reduce(function(s,h){return s+h.pnl;},0); });
-      var totalUnrealized  = computed(function(){ return openPos.value.reduce(function(s,p){return s+unrealized(p);},0); });
-      var totalNetPnl      = computed(function(){ return annualPnl.value + totalUnrealized.value; });
-      var totalCostDeployed= computed(function(){
-        var closedCost = hist.value.reduce(function(s,h){return s+h.entry*h.qty;},0);
-        var openCost   = openPos.value.reduce(function(s,p){return s+avgCost(p)*totalQty(p);},0);
-        return closedCost + openCost;
+      // ── Backup ──
+      var lastBackupDisplay = computed(function(){
+        if (!lastBackup.value) return '從未';
+        var d = new Date(lastBackup.value);
+        return d.getMonth()+1 + '/' + d.getDate() + ' ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
       });
-      var totalRecovered   = computed(function(){ return hist.value.reduce(function(s,h){return s+h.exit*h.qty;},0); });
-      var totalROI         = computed(function(){ return totalCostDeployed.value===0?0:(totalNetPnl.value/totalCostDeployed.value)*100; });
-      var monthPnl         = computed(function(){ return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reduce(function(s,h){return s+h.pnl;},0); });
-      var filteredHist     = computed(function(){ return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reverse(); });
-      var winRate          = computed(function(){ if(!hist.value.length)return 0; return hist.value.filter(function(h){return h.pnl>0;}).length/hist.value.length*100; });
-      var avgWin           = computed(function(){ var w=hist.value.filter(function(h){return h.pnl>0;}); if(!w.length)return 0; return w.reduce(function(s,h){return s+h.pnl;},0)/w.length; });
-      var avgLoss          = computed(function(){ var l=hist.value.filter(function(h){return h.pnl<=0;}); if(!l.length)return 0; return l.reduce(function(s,h){return s+h.pnl;},0)/l.length; });
+      var showBackupReminder = computed(function(){
+        if (!openPos.value.length && !hist.value.length) return false;
+        if (!lastBackup.value) return hist.value.length > 0;
+        return (Date.now() - lastBackup.value) > 7 * 86400000;
+      });
+
+      // ── Position helpers ──
+      function totalQty(p){if(p.lots&&p.lots.length>0)return p.lots.reduce(function(s,l){return s+l.qty;},0);return p.qty||0;}
+      function avgCost(p){if(p.lots&&p.lots.length>0){var tc=p.lots.reduce(function(s,l){return s+l.price*l.qty;},0);var tq=p.lots.reduce(function(s,l){return s+l.qty;},0);return tq>0?tc/tq:0;}return p.entry||0;}
+      function unrealized(p){return(p.currentPrice?p.currentPrice-avgCost(p):0)*totalQty(p);}
+      function pct(p){var ac=avgCost(p);return(p.currentPrice&&ac>0)?((p.currentPrice-ac)/ac*100):0;}
+      function isTpTriggered(p){return p.tp&&p.currentPrice&&p.currentPrice>=p.tp;}
+      function isSlTriggered(p){return p.sl&&p.currentPrice&&p.currentPrice<=p.sl;}
+      function alertClass(p){if(isTpTriggered(p))return'alert-tp';if(isSlTriggered(p))return'alert-sl';return'';}
+      function tpSlBar(p){
+        if(!p.currentPrice)return'display:none';
+        var sl=p.sl||0;var tp=p.tp||0;var cur=p.currentPrice;var ac=avgCost(p);
+        var lo=sl||(ac*0.9);var hi=tp||(ac*1.1);
+        if(hi<=lo)return'display:none';
+        var curPct=Math.max(0,Math.min(100,(cur-lo)/(hi-lo)*100));
+        var color=cur>=ac?'var(--sage)':'var(--umb)';
+        return'left:0;right:'+(100-curPct)+'%;background:'+color;
+      }
+
+      // ── Computed ──
+      var sortedPos = computed(function(){
+        var arr = openPos.value.slice();
+        if (sortBy.value === 'pct-desc')   arr.sort(function(a,b){return pct(b)-pct(a);});
+        else if (sortBy.value === 'pct-asc')    arr.sort(function(a,b){return pct(a)-pct(b);});
+        else if (sortBy.value === 'value-desc') arr.sort(function(a,b){return (b.currentPrice||avgCost(b))*totalQty(b)-(a.currentPrice||avgCost(a))*totalQty(a);});
+        else if (sortBy.value === 'pnl-desc')   arr.sort(function(a,b){return unrealized(b)-unrealized(a);});
+        return arr;
+      });
+
+      var totalValue       = computed(function(){return openPos.value.reduce(function(s,p){return s+(p.currentPrice||avgCost(p))*totalQty(p);},0);});
+      var annualPnl        = computed(function(){return hist.value.reduce(function(s,h){return s+h.pnl;},0);});
+      var totalUnrealized  = computed(function(){return openPos.value.reduce(function(s,p){return s+unrealized(p);},0);});
+      var totalNetPnl      = computed(function(){return annualPnl.value+totalUnrealized.value;});
+      var totalCostDeployed= computed(function(){return hist.value.reduce(function(s,h){return s+h.entry*h.qty;},0)+openPos.value.reduce(function(s,p){return s+avgCost(p)*totalQty(p);},0);});
+      var totalRecovered   = computed(function(){return hist.value.reduce(function(s,h){return s+h.exit*h.qty;},0);});
+      var totalROI         = computed(function(){return totalCostDeployed.value===0?0:(totalNetPnl.value/totalCostDeployed.value)*100;});
+      var monthPnl         = computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reduce(function(s,h){return s+h.pnl;},0);});
+      var filteredHist     = computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).sort(function(a,b){return(b.closedTs||0)-(a.closedTs||0);});});
+      var winRate          = computed(function(){if(!hist.value.length)return 0;return hist.value.filter(function(h){return h.pnl>0;}).length/hist.value.length*100;});
+      var avgWin           = computed(function(){var w=hist.value.filter(function(h){return h.pnl>0;});if(!w.length)return 0;return w.reduce(function(s,h){return s+h.pnl;},0)/w.length;});
+      var avgLoss          = computed(function(){var l=hist.value.filter(function(h){return h.pnl<=0;});if(!l.length)return 0;return l.reduce(function(s,h){return s+h.pnl;},0)/l.length;});
       var tickerStats      = computed(function(){
         var map={};
         hist.value.forEach(function(h){var tk=h.ticker;if(!map[tk])map[tk]={ticker:tk,cost:0,recovered:0,currentVal:0,pnl:0,trades:0,openQty:0};map[tk].cost+=h.entry*h.qty;map[tk].recovered+=h.exit*h.qty;map[tk].pnl+=h.pnl;map[tk].trades+=1;});
         openPos.value.forEach(function(p){var tk=p.ticker;if(!map[tk])map[tk]={ticker:tk,cost:0,recovered:0,currentVal:0,pnl:0,trades:0,openQty:0};map[tk].cost+=avgCost(p)*totalQty(p);map[tk].currentVal+=(p.currentPrice||avgCost(p))*totalQty(p);map[tk].pnl+=unrealized(p);map[tk].openQty+=totalQty(p);});
         return Object.values(map).map(function(d){return{ticker:d.ticker,cost:d.cost,recovered:d.recovered,currentVal:d.currentVal,netPnl:d.pnl,roi:d.cost>0?(d.pnl/d.cost)*100:0,trades:d.trades,openQty:d.openQty};}).sort(function(a,b){return b.netPnl-a.netPnl;});
       });
-
-      // Add lot preview
       var newAvgCostPreview = computed(function(){
-        var m = addLotModal.value;
-        if (!m.show || !addLotForm.value.price || !addLotForm.value.qty) return '0.00';
-        var existingCost = m.lots.reduce(function(s,l){return s+l.price*l.qty;},0);
-        var existingQty  = m.lots.reduce(function(s,l){return s+l.qty;},0);
-        var newCost = existingCost + addLotForm.value.price * addLotForm.value.qty;
-        var newQty  = existingQty + addLotForm.value.qty;
-        return newQty > 0 ? (newCost / newQty).toFixed(2) : '0.00';
+        var m=addLotModal.value;
+        if(!m.show||!addLotForm.value.price||!addLotForm.value.qty)return'0.00';
+        var ec=m.lots.reduce(function(s,l){return s+l.price*l.qty;},0);
+        var eq=m.lots.reduce(function(s,l){return s+l.qty;},0);
+        var nc=ec+addLotForm.value.price*addLotForm.value.qty;
+        var nq=eq+addLotForm.value.qty;
+        return nq>0?(nc/nq).toFixed(2):'0.00';
       });
-
-      // Exit preview
       var exitPv = computed(function(){
-        var m = exitModal.value;
-        if (!m.show || !exitForm.value.price || !exitForm.value.qty) return 0;
-        var q = Math.min(exitForm.value.qty, m.qty);
-        return (exitForm.value.price - parseFloat(m.avgCost)) * q;
+        var m=exitModal.value;
+        if(!m.show||!exitForm.value.price||!exitForm.value.qty)return 0;
+        return(exitForm.value.price-parseFloat(m.avgCost))*Math.min(exitForm.value.qty,m.qty);
       });
       var exitPvPct = computed(function(){
-        var avgC = parseFloat(exitModal.value.avgCost) || 0;
-        if (!avgC || !exitForm.value.price) return 0;
-        return (exitForm.value.price - avgC) / avgC * 100;
+        var avgC=parseFloat(exitModal.value.avgCost)||0;
+        if(!avgC||!exitForm.value.price)return 0;
+        return(exitForm.value.price-avgC)/avgC*100;
       });
-
-      function score(rec){if(!rec.total)return 0;return(rec.strongBuy*5+rec.buy*4+rec.hold*3+rec.sell*2+rec.strongSell)/rec.total;}
 
       // ── Fetch ──
       function fetchMarket(){
@@ -822,163 +771,110 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
           var off=indices.value.length;
           openPos.value.forEach(function(p){var si=unique.indexOf(p.ticker);if(si!==-1&&results[off+si]&&results[off+si].c)p.currentPrice=results[off+si].c;});
           save();
-          // Check alerts
           openPos.value.forEach(function(p){
-            if(pct(p)>=3&&!isTpTriggered(p)) toast(p.ticker+' 已獲利 '+pct(p).toFixed(1)+'%', 'success');
-            if(isTpTriggered(p)) toast('&#x1F4C8; '+p.ticker+' 已達停利目標 $'+p.tp, 'success');
-            if(isSlTriggered(p)) toast('&#x26A0; '+p.ticker+' 已觸及停損 $'+p.sl, 'warn');
+            if(pct(p)>=3&&!isTpTriggered(p))toast(p.ticker+' 已獲利 '+pct(p).toFixed(1)+'%','success');
+            if(isTpTriggered(p))toast('&#x1F4C8; '+p.ticker+' 已達停利目標 $'+p.tp,'success');
+            if(isSlTriggered(p))toast('&#x26A0; '+p.ticker+' 已觸及停損 $'+p.sl,'warn');
           });
           fetching.value=false;
         }).catch(function(e){console.error(e);fetching.value=false;});
       }
-      function fetchAnalyst(){
-        if(!apiKey.value)return;
-        var syms=Array.from(new Set(openPos.value.map(function(p){return p.ticker;})));
-        if(!syms.length)return;
-        Promise.all(syms.map(function(s){return fetch('https://finnhub.io/api/v1/stock/recommendation?symbol='+s+'&token='+apiKey.value).then(function(r){return r.json();});}))
-        .then(function(results){var nr={};results.forEach(function(data,i){if(data&&data.length>0){var t=data[0];nr[syms[i]]={strongBuy:t.strongBuy,buy:t.buy,hold:t.hold,sell:t.sell,strongSell:t.strongSell,total:t.strongBuy+t.buy+t.hold+t.sell+t.strongSell,period:t.period};}});recs.value=nr;})
-        .catch(function(e){console.error(e);});
-      }
-      function fetchAll(){fetchMarket();fetchAnalyst();}
+      function fetchAll(){fetchMarket();}
 
-      // ── Validation helper ──
-      function validatePositive(val, label) {
-        if (val === '' || val === null || val === undefined) return label + '不能為空';
-        var n = Number(val);
-        if (isNaN(n)) return '請輸入有效數字';
-        if (n <= 0) return label + '必須大於 0';
-        return '';
+      // ── Validation ──
+      function vPos(val,lbl){
+        if(val===''||val===null||val===undefined)return lbl+'不能為空';
+        var n=Number(val);if(isNaN(n))return'請輸入有效數字';if(n<=0)return lbl+'必須大於 0';return'';
       }
 
-      // ── Entry modal ──
-      function openEntryModal() {
-        eForm.value = {ticker:'',price:'',qty:'',tp:'',sl:''};
-        eErrors.value = {ticker:'',price:'',qty:''};
-        eModal.value.show = true;
-      }
-      function doEntry() {
-        var tk = (eForm.value.ticker || '').toUpperCase().trim();
-        eErrors.value.ticker = tk ? '' : '請輸入股票代號';
-        eErrors.value.price  = validatePositive(eForm.value.price, '買入價格');
-        eErrors.value.qty    = validatePositive(eForm.value.qty, '股數');
-        if (eErrors.value.ticker || eErrors.value.price || eErrors.value.qty) return;
-        var lot = { price: Number(eForm.value.price), qty: Number(eForm.value.qty), date: new Date().toLocaleDateString('zh-TW') };
-        openPos.value.push({
-          id: Date.now(), ticker: tk, entry: Number(eForm.value.price),
-          currentPrice: null, qty: Number(eForm.value.qty),
-          lots: [lot],
-          tp: eForm.value.tp ? Number(eForm.value.tp) : null,
-          sl: eForm.value.sl ? Number(eForm.value.sl) : null
-        });
-        save();
-        eModal.value.show = false;
-        toast(tk + ' 已新增持倉', 'success');
+      // ── Entry ──
+      function openEntryModal(){eForm.value={ticker:'',price:'',qty:'',tp:'',sl:''};eErrors.value={ticker:'',price:'',qty:''};eModal.value.show=true;}
+      function doEntry(){
+        var tk=(eForm.value.ticker||'').toUpperCase().trim();
+        eErrors.value.ticker=tk?'':'請輸入股票代號';
+        eErrors.value.price=vPos(eForm.value.price,'買入價格');
+        eErrors.value.qty=vPos(eForm.value.qty,'股數');
+        if(eErrors.value.ticker||eErrors.value.price||eErrors.value.qty)return;
+        var lot={price:Number(eForm.value.price),qty:Number(eForm.value.qty),date:new Date().toLocaleDateString('zh-TW')};
+        openPos.value.push({id:Date.now(),ticker:tk,entry:Number(eForm.value.price),currentPrice:null,qty:Number(eForm.value.qty),lots:[lot],tp:eForm.value.tp?Number(eForm.value.tp):null,sl:eForm.value.sl?Number(eForm.value.sl):null});
+        save();eModal.value.show=false;toast(tk+' 已新增持倉','success');
       }
 
-      // ── Add lot modal ──
-      function openAddLotModal(p) {
-        var ac = avgCost(p).toFixed(2);
-        addLotModal.value = { show:true, targetId:p.id, ticker:p.ticker, currentQty:totalQty(p), currentAvg:ac, lots: p.lots ? p.lots.slice() : [{price:p.entry,qty:p.qty,date:''}] };
-        addLotForm.value = {price:'',qty:''};
-        addLotErrors.value = {price:'',qty:''};
-      }
-      function doAddLot() {
-        addLotErrors.value.price = validatePositive(addLotForm.value.price, '加倉價格');
-        addLotErrors.value.qty   = validatePositive(addLotForm.value.qty, '加倉股數');
-        if (addLotErrors.value.price || addLotErrors.value.qty) return;
-        var p = openPos.value.find(function(x){return x.id===addLotModal.value.targetId;});
-        if (!p) return;
-        if (!p.lots) p.lots = [{price:p.entry,qty:p.qty,date:''}];
-        p.lots.push({ price:Number(addLotForm.value.price), qty:Number(addLotForm.value.qty), date:new Date().toLocaleDateString('zh-TW') });
-        // Update legacy fields for compatibility
-        p.entry = avgCost(p);
-        p.qty   = totalQty(p);
-        save();
-        addLotModal.value.show = false;
-        toast(p.ticker + ' 加倉完成，均攤成本 $' + avgCost(p).toFixed(2), 'success');
+      // ── Add lot ──
+      function openAddLotModal(p){var ac=avgCost(p).toFixed(2);addLotModal.value={show:true,targetId:p.id,ticker:p.ticker,currentQty:totalQty(p),currentAvg:ac,lots:p.lots?p.lots.slice():[{price:p.entry,qty:p.qty,date:''}]};addLotForm.value={price:'',qty:''};addLotErrors.value={price:'',qty:''};}
+      function doAddLot(){
+        addLotErrors.value.price=vPos(addLotForm.value.price,'加倉價格');
+        addLotErrors.value.qty=vPos(addLotForm.value.qty,'加倉股數');
+        if(addLotErrors.value.price||addLotErrors.value.qty)return;
+        var p=openPos.value.find(function(x){return x.id===addLotModal.value.targetId;});if(!p)return;
+        if(!p.lots)p.lots=[{price:p.entry,qty:p.qty,date:''}];
+        p.lots.push({price:Number(addLotForm.value.price),qty:Number(addLotForm.value.qty),date:new Date().toLocaleDateString('zh-TW')});
+        p.entry=avgCost(p);p.qty=totalQty(p);
+        save();addLotModal.value.show=false;toast(p.ticker+' 加倉完成，均攤 $'+avgCost(p).toFixed(2),'success');
       }
 
-      // ── Edit / Settings modal ──
-      function openEditModal(p) {
-        editModal.value = { show:true, targetId:p.id, ticker:p.ticker };
-        editForm.value  = { tp: p.tp || '', sl: p.sl || '' };
-      }
-      function doEdit() {
-        var p = openPos.value.find(function(x){return x.id===editModal.value.targetId;});
-        if (!p) return;
-        p.tp = editForm.value.tp ? Number(editForm.value.tp) : null;
-        p.sl = editForm.value.sl ? Number(editForm.value.sl) : null;
-        save();
-        editModal.value.show = false;
-        toast('提醒設定已更新', 'info');
-      }
-      function doDeletePos() {
-        if (!confirm('確定刪除此持倉？')) return;
-        openPos.value = openPos.value.filter(function(x){return x.id!==editModal.value.targetId;});
-        save();
-        editModal.value.show = false;
-        toast('持倉已刪除', 'warn');
-      }
+      // ── Edit ──
+      function openEditModal(p){editModal.value={show:true,targetId:p.id,ticker:p.ticker};editForm.value={tp:p.tp||'',sl:p.sl||''};}
+      function doEdit(){var p=openPos.value.find(function(x){return x.id===editModal.value.targetId;});if(!p)return;p.tp=editForm.value.tp?Number(editForm.value.tp):null;p.sl=editForm.value.sl?Number(editForm.value.sl):null;save();editModal.value.show=false;toast('提醒設定已更新','info');}
+      function doDeletePos(){if(!confirm('確定刪除此持倉？'))return;openPos.value=openPos.value.filter(function(x){return x.id!==editModal.value.targetId;});save();editModal.value.show=false;toast('持倉已刪除','warn');}
 
-      // ── Exit modal ──
-      function openExitModal(p) {
-        var ac = avgCost(p).toFixed(2);
-        exitModal.value = { show:true, targetId:p.id, ticker:p.ticker, qty:totalQty(p), avgCost:ac };
-        exitForm.value  = { price:'', qty:'' };
-        exitErrors.value = {price:'',qty:''};
-      }
-      function doExit() {
-        exitErrors.value.price = validatePositive(exitForm.value.price, '賣出價格');
-        exitErrors.value.qty   = validatePositive(exitForm.value.qty, '賣出股數');
-        if (exitErrors.value.price || exitErrors.value.qty) return;
-        var p = openPos.value.find(function(x){return x.id===exitModal.value.targetId;});
-        if (!p) return;
-        var ac = avgCost(p);
-        var q  = Math.min(Number(exitForm.value.qty), totalQty(p));
-        var pnl = (Number(exitForm.value.price) - ac) * q;
-        hist.value.push({ id:Date.now(), ticker:p.ticker, entry:ac, exit:Number(exitForm.value.price), qty:q, pnl:pnl, closedMonth:new Date().getMonth()+1 });
-        // Remove sold lots (FIFO)
-        var remaining = q;
-        var newLots = [];
-        var lots = p.lots ? p.lots.slice() : [{price:p.entry,qty:totalQty(p),date:''}];
-        for (var i=0; i<lots.length; i++) {
-          if (remaining <= 0) { newLots.push(lots[i]); continue; }
-          if (lots[i].qty <= remaining) { remaining -= lots[i].qty; }
-          else { newLots.push({price:lots[i].price, qty:lots[i].qty-remaining, date:lots[i].date}); remaining=0; }
-        }
-        p.lots = newLots;
-        p.qty  = totalQty(p);
-        p.entry = p.lots.length > 0 ? avgCost(p) : 0;
-        if (p.qty <= 0 || p.lots.length === 0) openPos.value = openPos.value.filter(function(x){return x.id!==p.id;});
-        save();
-        exitModal.value.show = false;
-        toast(p.ticker + ' 結清 $' + pnl.toFixed(2) + '，回收 $' + (Number(exitForm.value.price)*q).toFixed(2), pnl>=0?'success':'warn');
+      // ── Exit ──
+      function openExitModal(p){var ac=avgCost(p).toFixed(2);exitModal.value={show:true,targetId:p.id,ticker:p.ticker,qty:totalQty(p),avgCost:ac};exitForm.value={price:'',qty:''};exitErrors.value={price:'',qty:''};}
+      function doExit(){
+        exitErrors.value.price=vPos(exitForm.value.price,'賣出價格');
+        exitErrors.value.qty=vPos(exitForm.value.qty,'賣出股數');
+        if(exitErrors.value.price||exitErrors.value.qty)return;
+        var p=openPos.value.find(function(x){return x.id===exitModal.value.targetId;});if(!p)return;
+        var ac=avgCost(p);var q=Math.min(Number(exitForm.value.qty),totalQty(p));
+        var pnl=(Number(exitForm.value.price)-ac)*q;
+        var now=new Date();
+        hist.value.push({id:Date.now(),ticker:p.ticker,entry:ac,exit:Number(exitForm.value.price),qty:q,pnl:pnl,closedMonth:now.getMonth()+1,closedDate:now.toLocaleDateString('zh-TW'),closedTs:now.getTime()});
+        var remaining=q;var newLots=[];var lots=p.lots?p.lots.slice():[{price:p.entry,qty:totalQty(p),date:''}];
+        for(var i=0;i<lots.length;i++){if(remaining<=0){newLots.push(lots[i]);continue;}if(lots[i].qty<=remaining){remaining-=lots[i].qty;}else{newLots.push({price:lots[i].price,qty:lots[i].qty-remaining,date:lots[i].date});remaining=0;}}
+        p.lots=newLots;p.qty=totalQty(p);p.entry=p.lots.length>0?avgCost(p):0;
+        if(p.qty<=0||p.lots.length===0)openPos.value=openPos.value.filter(function(x){return x.id!==p.id;});
+        save();exitModal.value.show=false;toast(p.ticker+' 結清 $'+fmt(pnl)+' &#x2022; 回收 $'+fmt(Number(exitForm.value.price)*q),pnl>=0?'success':'warn');
       }
 
       // ── Data management ──
       function clearAll(){if(!confirm('確定清空所有紀錄？'))return;openPos.value=[];hist.value=[];localStorage.removeItem(KO);localStorage.removeItem(KH);calcStor();}
-      function exportData(){var blob=new Blob([JSON.stringify({open:openPos.value,history:hist.value,apiKey:apiKey.value},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='M400_'+new Date().toISOString().slice(0,10)+'.json';a.click();}
-      function importData(e){var reader=new FileReader();reader.onload=function(ev){try{var d=JSON.parse(ev.target.result);openPos.value=d.open||[];hist.value=d.history||[];if(d.apiKey){apiKey.value=d.apiKey;localStorage.setItem(KA,d.apiKey);}save();location.reload();}catch(err){alert('導入失敗');}};reader.readAsText(e.target.files[0]);}
+      function exportData(){
+        var blob=new Blob([JSON.stringify({open:openPos.value,history:hist.value,apiKey:apiKey.value},null,2)],{type:'application/json'});
+        var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='M400_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+        lastBackup.value=Date.now();
+        localStorage.setItem(KB,String(lastBackup.value));
+        toast('備份已導出','success');
+      }
+      function importData(e){
+        var reader=new FileReader();
+        reader.onload=function(ev){
+          try{var d=JSON.parse(ev.target.result);openPos.value=d.open||[];hist.value=d.history||[];if(d.apiKey){apiKey.value=d.apiKey;localStorage.setItem(KA,d.apiKey);}save();location.reload();}
+          catch(err){alert('導入失敗，請確認格式');}
+        };
+        reader.readAsText(e.target.files[0]);
+      }
       function saveKey(){apiKey.value=tempKey.value;localStorage.setItem(KA,apiKey.value);location.reload();}
 
       onMounted(function(){
-        var so=localStorage.getItem(KO);var sh=localStorage.getItem(KH);var sa=localStorage.getItem(KA);
-        if(so)openPos.value=JSON.parse(so);if(sh)hist.value=JSON.parse(sh);
+        var so=localStorage.getItem(KO);var sh=localStorage.getItem(KH);var sa=localStorage.getItem(KA);var sb=localStorage.getItem(KB);
+        if(so)openPos.value=JSON.parse(so);
+        if(sh)hist.value=JSON.parse(sh);
         if(sa){apiKey.value=sa;tempKey.value=sa;}
+        if(sb){lastBackup.value=parseInt(sb)||0;}
         if(apiKey.value)fetchAll();
         calcStor();
         setInterval(fetchMarket,60000);
       });
 
       return{
-        tab,menuOpen,fetching,selMonth,openPos,hist,apiKey,tempKey,recs,storageUsage,toasts,indices,
+        tab,menuOpen,fetching,selMonth,openPos,hist,apiKey,tempKey,storageUsage,toasts,indices,sortBy,sortOptions,
         eModal,eForm,eErrors,addLotModal,addLotForm,addLotErrors,editModal,editForm,exitModal,exitForm,exitErrors,
         go,openEntryModal,doEntry,openAddLotModal,doAddLot,openEditModal,doEdit,doDeletePos,openExitModal,doExit,
         clearAll,exportData,importData,saveKey,fetchAll,
-        totalQty,avgCost,unrealized,pct,isTpTriggered,isSlTriggered,alertClass,tpSlBar,
+        fmt,totalQty,avgCost,unrealized,pct,isTpTriggered,isSlTriggered,alertClass,tpSlBar,sortedPos,
         totalValue,annualPnl,totalUnrealized,totalNetPnl,totalCostDeployed,totalRecovered,totalROI,
-        monthPnl,filteredHist,exitPv,exitPvPct,winRate,avgWin,avgLoss,tickerStats,score,
-        newAvgCostPreview
+        monthPnl,filteredHist,exitPv,exitPvPct,winRate,avgWin,avgLoss,tickerStats,newAvgCostPreview,
+        lastBackupDisplay,showBackupReminder
       };
     }
   }).mount('#app');
