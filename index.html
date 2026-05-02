@@ -4,292 +4,255 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="M400">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#F5F0E8">
+<meta name="theme-color" content="#080C14">
 <title>M400</title>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>
-(function() {
-  var cv = document.createElement('canvas');
-  cv.width = 512; cv.height = 512;
-  var cx = cv.getContext('2d');
-  cx.fillStyle = '#F5F0E8';
-  cx.beginPath();
-  if (cx.roundRect) { cx.roundRect(0,0,512,512,100); } else { cx.rect(0,0,512,512); }
-  cx.fill();
-  cx.fillStyle = 'rgba(180,90,110,0.12)'; cx.beginPath(); cx.arc(256,256,200,0,Math.PI*2); cx.fill();
-  cx.fillStyle = '#B45A6E'; cx.font = 'italic 300px Georgia,serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText('M', 256, 276);
-  var iconPng = cv.toDataURL('image/png');
-  var il = document.createElement('link'); il.rel = 'apple-touch-icon'; il.href = iconPng; document.head.appendChild(il);
-  var mf = {name:'M400 戰略終端',short_name:'M400',description:'個人資產管理',start_url:'./',display:'standalone',orientation:'portrait',background_color:'#F5F0E8',theme_color:'#F5F0E8',icons:[{src:iconPng,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
-  var ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(mf)); document.head.appendChild(ml);
+(function(){
+  var cv=document.createElement('canvas');cv.width=512;cv.height=512;
+  var cx=cv.getContext('2d');
+  var g=cx.createLinearGradient(0,0,512,512);
+  g.addColorStop(0,'#0D1420');g.addColorStop(1,'#111827');
+  cx.fillStyle=g;cx.fillRect(0,0,512,512);
+  cx.fillStyle='rgba(212,168,83,0.15)';cx.beginPath();cx.arc(256,256,180,0,Math.PI*2);cx.fill();
+  cx.strokeStyle='rgba(212,168,83,0.4)';cx.lineWidth=8;cx.beginPath();cx.arc(256,256,180,0,Math.PI*2);cx.stroke();
+  cx.fillStyle='#D4A853';cx.font='500 280px "Space Grotesk",sans-serif';cx.textAlign='center';cx.textBaseline='middle';cx.fillText('M',262,272);
+  var ip=cv.toDataURL('image/png');
+  var il=document.createElement('link');il.rel='apple-touch-icon';il.href=ip;document.head.appendChild(il);
+  var mf={name:'M400 Strategy Terminal',short_name:'M400',display:'standalone',orientation:'portrait',background_color:'#080C14',theme_color:'#080C14',icons:[{src:ip,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  var ml=document.createElement('link');ml.rel='manifest';ml.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(mf));document.head.appendChild(ml);
 })();
 </script>
 <style>
-:root {
-  --bg:    #F5F0E8;
-  --s1:    #EDE6D6;
-  --s2:    #E8E0CE;
-  --s3:    #DDD4C0;
-  --card:  #FFFFFF;
-  --line:  rgba(100,80,60,0.10);
-  --line2: rgba(100,80,60,0.18);
-  --sk:    #B45A6E;
-  --sk2:   rgba(180,90,110,0.10);
-  --sage:  #5A9068;
-  --sage2: rgba(90,144,104,0.10);
-  --umb:   #B06040;
-  --umb2:  rgba(176,96,64,0.10);
-  --amber: #A07828;
-  --amber2:rgba(160,120,40,0.10);
-  --ink:   #2C2418;
-  --mid:   #6B5A48;
-  --dim:   #9C8C78;
-  --pale:  #B8AA98;
+:root{
+  --bg:    #080C14;
+  --bg1:   #0D1220;
+  --bg2:   #111827;
+  --bg3:   #1A2235;
+  --bg4:   #1F2A40;
+  --line:  rgba(255,255,255,0.06);
+  --line2: rgba(255,255,255,0.12);
+  --gold:  #D4A853;
+  --gold2: rgba(212,168,83,0.10);
+  --gold3: rgba(212,168,83,0.20);
+  --green: #22C55E;
+  --grn2:  rgba(34,197,94,0.10);
+  --red:   #EF4444;
+  --red2:  rgba(239,68,68,0.10);
+  --blue:  #60A5FA;
+  --txt:   #E2E8F0;
+  --mid:   #94A3B8;
+  --dim:   #475569;
+  --pale:  #334155;
   --mono:  'IBM Plex Mono',monospace;
-  --serif: 'DM Serif Display',serif;
-  --sans:  'Noto Sans TC',sans-serif;
+  --ui:    'Space Grotesk','Noto Sans TC',sans-serif;
 }
 [v-cloak]{display:none!important}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:calc(52px + env(safe-area-inset-bottom))}
+body{font-family:var(--ui);background:var(--bg);color:var(--txt);min-height:100vh;padding-bottom:calc(56px + env(safe-area-inset-bottom))}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 80% 50% at 30% -10%,rgba(180,90,110,.06) 0%,transparent 55%),
-             radial-gradient(ellipse 50% 60% at 90% 90%,rgba(90,144,104,.04) 0%,transparent 50%)}
-.mono{font-family:var(--mono)} .g{color:var(--sage)} .r{color:var(--umb)} .sk{color:var(--sk)} .am{color:var(--amber)}
+  background:radial-gradient(ellipse 60% 40% at 80% 10%,rgba(212,168,83,.04) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 50% at 10% 80%,rgba(96,165,250,.03) 0%,transparent 50%)}
+
+.mono{font-family:var(--mono)}
+.g{color:var(--green)} .r{color:var(--red)} .gd{color:var(--gold)} .b{color:var(--blue)}
+
+/* ── TOPBAR SAFE AREA ── */
 .topbar-safe{padding-top:env(safe-area-inset-top)}
-.sidebar-safe{padding-top:calc(env(safe-area-inset-top) + 20px)}
-.sidebar{position:fixed;left:0;top:0;width:272px;height:100%;background:var(--s1);border-right:1px solid var(--line);transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:300;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.sidebar-safe{padding-top:calc(env(safe-area-inset-top) + 24px)}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;left:0;top:0;width:260px;height:100%;background:var(--bg1);border-right:1px solid var(--line);transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:300;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .sidebar::-webkit-scrollbar{display:none}
 .sidebar.open{transform:translateX(0)}
 @media(min-width:1024px){.sidebar{position:sticky;top:0;height:100vh;transform:none;flex-shrink:0}}
-.ov{position:fixed;inset:0;background:rgba(44,36,24,.45);z-index:200;backdrop-filter:blur(4px)}
-.ni{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;font-family:var(--sans);color:var(--pale);width:100%;text-align:left;border:1px solid transparent;transition:all .18s;cursor:pointer}
-.ni:hover{color:var(--ink);background:rgba(44,36,24,.06)}
-.ni.a1{color:var(--sage);background:var(--sage2);border-color:rgba(90,144,104,.2)}
-.ni.a2{color:#4A7CA8;background:rgba(74,124,168,.08);border-color:rgba(74,124,168,.18)}
-.ni.a3{color:#7A8AB0;background:rgba(122,138,176,.08);border-color:rgba(122,138,176,.18)}
-.ni.a4{color:var(--amber);background:var(--amber2);border-color:rgba(160,120,40,.2)}
-.ni.a5{color:var(--sk);background:var(--sk2);border-color:rgba(180,90,110,.2)}
-.slbl{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--pale);padding:0 14px;margin-bottom:8px;font-family:var(--mono)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 2px 12px rgba(100,80,60,.06)}
-.ixtile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px;position:relative;overflow:hidden;box-shadow:0 1px 6px rgba(100,80,60,.05)}
-.ixtile::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
-.ixtile.up::after{background:linear-gradient(90deg,transparent,var(--sage),transparent)}
-.ixtile.dn::after{background:linear-gradient(90deg,transparent,var(--umb),transparent)}
-.pc{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;transition:border-color .4s,box-shadow .4s;box-shadow:0 2px 14px rgba(100,80,60,.07)}
-@keyframes breathe{0%,100%{box-shadow:0 2px 14px rgba(90,144,104,.12),0 0 0 0 rgba(90,144,104,.2)}50%{box-shadow:0 2px 14px rgba(90,144,104,.12),0 0 0 8px rgba(90,144,104,0)}}
-.pc.alert-tp{border-color:rgba(90,144,104,.4);animation:breathe 3s ease infinite}
-.pc.alert-sl{border-color:rgba(176,96,64,.45)}
-.stat{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.stat-lbl{font-size:8px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--pale);margin-bottom:5px;font-family:var(--mono)}
-.bar{height:2px;border-radius:99px;background:rgba(100,80,60,.08);overflow:hidden}
-.bar-f{height:100%;border-radius:99px;transition:width .9s cubic-bezier(.4,0,.2,1)}
-.av{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--sk);background:var(--sk2);border:1px solid rgba(180,90,110,.15)}
-.lot-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--line);margin-bottom:6px}
-.alert-pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 8px;border-radius:99px;letter-spacing:.06em}
-.alert-pill.tp{color:var(--sage);background:var(--sage2);border:1px solid rgba(90,144,104,.22)}
-.alert-pill.sl{color:var(--umb);background:var(--umb2);border:1px solid rgba(176,96,64,.22)}
-.sort-tab{padding:5px 12px;border-radius:8px;font-size:10px;font-weight:600;transition:all .15s;color:var(--pale);background:rgba(100,80,60,.05);border:1px solid transparent;cursor:pointer;font-family:var(--mono);flex-shrink:0}
-.sort-tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;backdrop-filter:blur(6px)}
+
+/* ── NAV ── */
+.ni{display:flex;align-items:center;gap:9px;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--dim);width:100%;text-align:left;border:1px solid transparent;transition:all .15s;cursor:pointer;font-family:var(--ui)}
+.ni:hover{color:var(--txt);background:rgba(255,255,255,.04)}
+.ni.a1{color:var(--green);background:var(--grn2);border-color:rgba(34,197,94,.18)}
+.ni.a2{color:var(--blue);background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.18)}
+.ni.a3{color:#A78BFA;background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.18)}
+.ni.a4{color:var(--gold);background:var(--gold2);border-color:rgba(212,168,83,.2)}
+.ni.a5{color:var(--mid);background:rgba(148,163,184,.06);border-color:rgba(148,163,184,.14)}
+.slbl{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--pale);padding:0 14px;margin-bottom:6px;font-family:var(--mono)}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:16px}
+.card-hi{background:var(--bg2);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+
+/* ── INDEX TILE ── */
+.ixtile{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px;position:relative;overflow:hidden}
+.ixtile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--line)}
+.ixtile.up::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.ixtile.dn::before{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+
+/* ── POSITION CARD ── */
+.pc{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px;transition:border-color .3s,box-shadow .3s}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.25)}50%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}
+.pc.alert-tp{border-color:rgba(34,197,94,.4);animation:breathe 3s ease infinite}
+.pc.alert-sl{border-color:rgba(239,68,68,.4)}
+
+/* ── STAT BOX ── */
+.stat{background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat-lbl{font-size:8px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:4px;font-family:var(--mono)}
+
+/* ── BAR ── */
+.bar{height:2px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.bar-f{height:100%;border-radius:99px;transition:width .8s ease}
+
+/* ── TICKER AVATAR ── */
+.av{width:40px;height:40px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,83,.18)}
+
+/* ── BADGES ── */
+.badge{font-size:9px;font-weight:600;letter-spacing:.08em;padding:3px 9px;border-radius:6px;text-transform:uppercase;font-family:var(--mono)}
+.alert-pill{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 8px;border-radius:6px;letter-spacing:.06em}
+.alert-pill.tp{color:var(--green);background:var(--grn2);border:1px solid rgba(34,197,94,.22)}
+.alert-pill.sl{color:var(--red);background:var(--red2);border:1px solid rgba(239,68,68,.22)}
+
+/* ── SORT TABS ── */
+.sort-tab{padding:5px 12px;border-radius:6px;font-size:10px;font-weight:600;transition:all .15s;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;font-family:var(--mono);flex-shrink:0}
+.sort-tab.on{background:var(--bg4);color:var(--txt);border-color:var(--line2)}
+
+/* ── INPUT ── */
+.inp{background:var(--bg3);border:1px solid var(--line2);border-radius:10px;padding:11px 14px;color:var(--txt);outline:none;width:100%;font-size:14px;font-family:var(--mono);transition:border-color .2s,box-shadow .2s}
+.inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,168,83,.1)}
+.inp::placeholder{color:var(--pale)}
+.inp.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,.1)}
+.inp-sm{padding:8px 12px;font-size:13px;border-radius:8px}
+.err-msg{font-family:var(--mono);font-size:10px;color:var(--red);margin-top:4px}
+
+/* ── MONTH TAB ── */
+.mtab{padding:6px 13px;border-radius:6px;font-size:11px;font-weight:500;flex-shrink:0;transition:all .15s;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;font-family:var(--mono)}
+.mtab.on{background:var(--bg4);color:var(--txt);border-color:var(--line2)}
+
+/* ── BUTTONS ── */
+.btn-gold{background:var(--gold);color:#0D0800;font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;transition:opacity .15s;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--ui);border:none}
+.btn-gold:hover{opacity:.88}
+.btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--mid);font-weight:500;font-size:12px;padding:9px;border-radius:10px;transition:all .15s;cursor:pointer;font-family:var(--ui)}
+.btn-ghost:hover{color:var(--txt);border-color:var(--line2);background:rgba(255,255,255,.08)}
+.btn-add{background:var(--grn2);color:var(--green);border:1px solid rgba(34,197,94,.2);font-weight:600;font-size:12px;padding:9px;border-radius:10px;transition:all .15s;cursor:pointer;font-family:var(--ui)}
+.btn-add:hover{background:var(--green);color:#000}
+.btn-exit{background:var(--red2);color:var(--red);border:1px solid rgba(239,68,68,.2);font-weight:600;font-size:12px;padding:9px;border-radius:10px;transition:all .15s;cursor:pointer;font-family:var(--ui)}
+.btn-exit:hover{background:var(--red);color:#fff}
+.btn-del{background:var(--red2);color:var(--red);border:1px solid rgba(239,68,68,.2);font-weight:600;font-size:12px;padding:11px;border-radius:10px;transition:all .15s;cursor:pointer;width:100%;font-family:var(--ui)}
+.btn-del:hover{background:var(--red);color:#fff}
 
 /* ── RADAR SPECIFIC ── */
-.radar-card {
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 2px 12px rgba(100,80,60,.06);
-  transition:border-color .2s, box-shadow .2s;
-  position:relative;
-  overflow:hidden;
-}
-/* Signal zones */
-.radar-card.zone-entry {
-  border-color:rgba(90,144,104,.4);
-  box-shadow:0 2px 18px rgba(90,144,104,.12);
-}
-.radar-card.zone-watch {
-  border-color:rgba(160,120,40,.35);
-}
-.radar-card.zone-high {
-  border-color:var(--line);
-  opacity:.85;
-}
-.radar-card.zone-loading {
-  border-color:var(--line);
-}
+.radar-card{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px;transition:border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
+.radar-card.zone-entry{border-color:rgba(34,197,94,.35);box-shadow:0 0 0 1px rgba(34,197,94,.1)}
+.radar-card.zone-watch{border-color:rgba(212,168,83,.3)}
+.radar-card.zone-high{border-color:var(--line);opacity:.75}
+.radar-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.radar-card.zone-entry::before{background:linear-gradient(90deg,transparent,rgba(34,197,94,.6),transparent)}
+.radar-card.zone-watch::before{background:linear-gradient(90deg,transparent,rgba(212,168,83,.5),transparent)}
 
-/* Zone tag */
-.zone-tag {
-  display:inline-flex;align-items:center;gap:5px;
-  font-family:var(--mono);font-size:9px;font-weight:700;
-  padding:4px 10px;border-radius:99px;letter-spacing:.08em;
-  text-transform:uppercase;
-}
-.zone-tag.entry {
-  background:rgba(90,144,104,.12);
-  color:var(--sage);
-  border:1px solid rgba(90,144,104,.28);
-}
-.zone-tag.watch {
-  background:rgba(160,120,40,.10);
-  color:var(--amber);
-  border:1px solid rgba(160,120,40,.25);
-}
-.zone-tag.high {
-  background:rgba(176,96,64,.08);
-  color:var(--umb);
-  border:1px solid rgba(176,96,64,.2);
-}
-.zone-tag.loading {
-  background:rgba(100,80,60,.06);
-  color:var(--pale);
-  border:1px solid var(--line);
-}
+.zone-tag{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 9px;border-radius:6px;letter-spacing:.08em;text-transform:uppercase}
+.zone-tag.entry{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.zone-tag.watch{background:rgba(212,168,83,.10);color:var(--gold);border:1px solid rgba(212,168,83,.22)}
+.zone-tag.high{background:rgba(148,163,184,.07);color:var(--dim);border:1px solid var(--line)}
 
-/* Deviation gauge */
-.dev-gauge {
-  height:6px;
-  border-radius:99px;
-  background:rgba(100,80,60,.08);
-  overflow:visible;
-  position:relative;
-  margin:10px 0 4px;
-}
-.dev-gauge-fill {
-  height:100%;
-  border-radius:99px;
-  transition:width .8s ease;
-  position:relative;
-}
-/* MA line marker */
-.dev-ma-line {
-  position:absolute;
-  top:-3px;bottom:-3px;
-  width:2px;
-  background:var(--ink);
-  border-radius:99px;
-  opacity:.25;
-}
+.dev-gauge{height:4px;border-radius:99px;background:rgba(255,255,255,.06);position:relative;overflow:visible}
+.dev-ma-line{position:absolute;top:-4px;bottom:-4px;width:1px;background:rgba(255,255,255,.25);border-radius:99px}
 
-/* Sparkline container */
-.spark-wrap {
-  height:52px;
-  margin-top:10px;
-  position:relative;
-}
-
-/* Weekly candle mini chart */
-.candle-wrap {
-  height:60px;
-  margin-top:8px;
-  display:flex;
-  align-items:flex-end;
-  gap:3px;
-}
-.candle-body {
-  border-radius:2px;
-  flex-shrink:0;
-  transition:opacity .2s;
-}
-
-/* Condition checklist */
-.cond-row {
-  display:flex;align-items:center;gap:8px;
-  padding:6px 0;
-  border-bottom:1px solid var(--line);
-  font-size:12px;
-}
-.cond-row:last-child { border-bottom:none; }
-.cond-dot {
-  width:8px;height:8px;border-radius:99px;flex-shrink:0;
-}
-
-/* Strategy tip banner */
-.tip-banner {
-  background:rgba(90,144,104,.07);
-  border:1px solid rgba(90,144,104,.2);
-  border-radius:14px;
-  padding:14px 16px;
-}
-
-.inp{background:var(--bg);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;color:var(--ink);outline:none;width:100%;font-size:15px;font-family:var(--mono);transition:border-color .2s,box-shadow .2s}
-.inp:focus{border-color:var(--sk);box-shadow:0 0 0 3px rgba(180,90,110,.1)}
-.inp::placeholder{color:var(--pale)}
-.inp.error{border-color:var(--umb);box-shadow:0 0 0 3px rgba(176,96,64,.1)}
-.inp-sm{padding:8px 12px;font-size:13px;border-radius:10px}
-.err-msg{font-family:var(--mono);font-size:10px;color:var(--umb);margin-top:5px;display:flex;align-items:center;gap:4px}
-.mtab{padding:7px 14px;border-radius:8px;font-size:11px;font-weight:500;flex-shrink:0;transition:all .18s;color:var(--pale);background:rgba(100,80,60,.05);border:1px solid transparent;cursor:pointer;font-family:var(--mono)}
-.mtab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.btn-main{background:var(--sk);color:#fff;font-weight:700;font-size:13px;padding:11px 20px;border-radius:12px;transition:opacity .15s;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);border:none;box-shadow:0 2px 12px rgba(180,90,110,.25)}
-.btn-main:hover{opacity:.88}
-.btn-ghost{background:rgba(44,36,24,.05);border:1px solid var(--line);color:var(--mid);font-weight:500;font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
-.btn-ghost:hover{color:var(--ink);border-color:var(--line2)}
-.btn-add{background:var(--sage2);color:var(--sage);border:1px solid rgba(90,144,104,.2);font-weight:600;font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
-.btn-add:hover{background:var(--sage);color:#fff}
-.btn-exit{background:var(--umb2);color:var(--umb);border:1px solid rgba(176,96,64,.2);font-weight:600;font-size:12px;padding:10px;border-radius:12px;transition:all .18s;cursor:pointer;font-family:var(--sans)}
-.btn-exit:hover{background:var(--umb);color:#fff}
-.btn-del{background:var(--umb2);color:var(--umb);border:1px solid rgba(176,96,64,.2);font-weight:600;font-size:12px;padding:11px;border-radius:12px;transition:all .18s;cursor:pointer;width:100%;font-family:var(--sans)}
-.btn-del:hover{background:var(--umb);color:#fff}
-.badge{font-size:9px;font-weight:600;letter-spacing:.1em;padding:4px 10px;border-radius:99px;text-transform:uppercase;font-family:var(--mono)}
-.roi-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;position:relative;overflow:hidden;box-shadow:0 2px 14px rgba(100,80,60,.07)}
-.roi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.roi-card.pos::before{background:linear-gradient(90deg,transparent,rgba(90,144,104,.6),transparent)}
-.roi-card.neg::before{background:linear-gradient(90deg,transparent,rgba(176,96,64,.6),transparent)}
-.flow-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
+/* ── ROI CARD ── */
+.roi-card{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.roi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.roi-card.pos::before{background:linear-gradient(90deg,transparent,rgba(34,197,94,.5),transparent)}
+.roi-card.neg::before{background:linear-gradient(90deg,transparent,rgba(239,68,68,.5),transparent)}
+.flow-row{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}
 .flow-row:last-child{border-bottom:none}
-.backup-banner{background:rgba(160,120,40,.08);border:1px solid rgba(160,120,40,.25);border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
-.modal-bg{position:fixed;inset:0;z-index:500;display:flex;align-items:flex-end;background:rgba(44,36,24,.5);backdrop-filter:blur(14px)}
+
+/* ── LOT ROW ── */
+.lot-row{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;background:var(--bg3);border-radius:8px;border:1px solid var(--line);margin-bottom:5px}
+
+/* ── BACKUP BANNER ── */
+.backup-banner{background:rgba(212,168,83,.07);border:1px solid rgba(212,168,83,.22);border-radius:12px;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;z-index:500;display:flex;align-items:flex-end;background:rgba(0,0,0,.8);backdrop-filter:blur(16px)}
 @media(min-width:640px){.modal-bg{align-items:center;padding:16px}}
-.modal-box{background:var(--card);border:1px solid var(--line2);border-radius:24px 24px 0 0;padding:26px;width:100%;max-width:440px;box-shadow:0 -24px 60px rgba(44,36,24,.15);max-height:92vh;overflow-y:auto;padding-bottom:calc(26px + env(safe-area-inset-bottom))}
+.modal-box{background:var(--bg1);border:1px solid var(--line2);border-radius:20px 20px 0 0;padding:24px;width:100%;max-width:440px;box-shadow:0 -24px 80px rgba(0,0,0,.6);max-height:92vh;overflow-y:auto;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 .modal-box::-webkit-scrollbar{display:none}
-@media(min-width:640px){.modal-box{border-radius:24px;margin:auto;padding-bottom:26px}}
+@media(min-width:640px){.modal-box{border-radius:20px;margin:auto;padding-bottom:24px}}
+
+/* ── TOAST ── */
 .tc{position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;z-index:9999;display:flex;flex-direction:column;gap:6px;max-width:280px}
 @keyframes tIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 @keyframes tOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-8px)}}
-.toast{background:var(--card);border-radius:12px;padding:11px 14px;font-size:12px;font-weight:600;animation:tIn .25s ease;box-shadow:0 4px 20px rgba(44,36,24,.12);font-family:var(--sans);border-left:3px solid}
-.toast.success{color:var(--sage);border-color:var(--sage)}
-.toast.warn{color:var(--umb);border-color:var(--umb)}
-.toast.info{color:var(--sk);border-color:var(--sk)}
-.toast.out{animation:tOut .25s ease forwards}
-.bbar{position:fixed;bottom:0;left:0;right:0;background:rgba(245,240,232,.97);border-top:1px solid rgba(180,90,110,.12);padding:10px 20px;padding-bottom:calc(10px + env(safe-area-inset-bottom));text-align:center;z-index:100}
+.toast{background:var(--bg2);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;animation:tIn .22s ease;box-shadow:0 8px 32px rgba(0,0,0,.5);font-family:var(--ui);border-left:3px solid}
+.toast.success{color:var(--green);border-color:var(--green)}
+.toast.warn{color:var(--red);border-color:var(--red)}
+.toast.info{color:var(--gold);border-color:var(--gold)}
+.toast.out{animation:tOut .22s ease forwards}
+
+/* ── BOTTOM BAR ── */
+.bbar{position:fixed;bottom:0;left:0;right:0;background:rgba(8,12,20,.97);border-top:1px solid rgba(212,168,83,.1);padding:9px 20px;padding-bottom:calc(9px + env(safe-area-inset-bottom));text-align:center;z-index:100}
+
+/* ── ANIM ── */
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.r1{animation:rise .38s .00s ease both} .r2{animation:rise .38s .07s ease both} .r3{animation:rise .38s .14s ease both} .r4{animation:rise .38s .21s ease both}
+.r1{animation:rise .35s .00s ease both} .r2{animation:rise .35s .06s ease both} .r3{animation:rise .35s .12s ease both} .r4{animation:rise .35s .18s ease both}
 @keyframes sp{to{transform:rotate(360deg)}} .spin{animation:sp 1s linear infinite}
 .nsb::-webkit-scrollbar{display:none} .nsb{scrollbar-width:none}
-.dv{height:1px;background:var(--line);margin:18px 0}
-.pg-title{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.8rem,6vw,2.6rem);letter-spacing:.03em;color:var(--ink);line-height:1}
-.hrow{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;justify-content:space-between;align-items:center;transition:border-color .18s;box-shadow:0 1px 6px rgba(100,80,60,.05)}
+.dv{height:1px;background:var(--line);margin:16px 0}
+
+/* ── PAGE TITLE ── */
+.pg-title{font-family:var(--ui);font-size:clamp(1.6rem,5vw,2.2rem);font-weight:700;letter-spacing:-.02em;color:var(--txt);line-height:1}
+.pg-sub{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:6px}
+
+/* ── TABLE ROWS ── */
+.hrow{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;transition:border-color .15s}
 .hrow:hover{border-color:var(--line2)}
+
+/* ── SYSTEM STATUS DOT ── */
 .sdot{width:5px;height:5px;border-radius:99px;flex-shrink:0}
-.sdot.on{background:var(--sage);box-shadow:0 0 5px var(--sage)} .sdot.off{background:var(--umb)}
+.sdot.on{background:var(--green);box-shadow:0 0 5px var(--green)} .sdot.off{background:var(--red)}
+
+/* ── COND ROW ── */
+.cond-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12px}
+.cond-row:last-child{border-bottom:none}
+
+/* ── RESPONSIVE ── */
 @media(min-width:1024px){.lg-row{flex-direction:row!important}}
 .mob{display:flex} @media(min-width:1024px){.mob{display:none!important}}
 .desk{display:none} @media(min-width:1024px){.desk{display:flex!important}}
-@media(min-width:1024px){.main-pad{padding:40px!important}}
+@media(min-width:1024px){.main-pad{padding:36px!important}}
+
+/* ── SECTION DIVIDER ── */
+.section-sep{display:flex;align-items:center;gap:10px;margin:20px 0 14px}
+.section-sep::after{content:'';flex:1;height:1px;background:var(--line)}
+.section-sep-lbl{font-family:var(--mono);font-size:9px;color:var(--pale);letter-spacing:.18em;text-transform:uppercase;flex-shrink:0}
+
+/* ── TICKER TAG (for custom scan list) ── */
+.ticker-tag{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--line2);border-radius:8px;padding:5px 10px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--txt)}
+.ticker-tag button{color:var(--dim);background:none;border:none;cursor:pointer;padding:0;line-height:1;font-size:13px;transition:color .15s}
+.ticker-tag button:hover{color:var(--red)}
+.ticker-tag.mag7{border-color:rgba(212,168,83,.25);color:var(--gold)}
 </style>
 </head>
 
 <body>
 <div id="app" v-cloak style="position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh" class="lg-row">
 
+  <!-- TOASTS -->
   <div class="tc">
     <div v-for="t in toasts" :key="t.id" :class="['toast',t.type||'info',t.out?'out':'']">{{ t.msg }}</div>
   </div>
 
   <!-- MOBILE TOPBAR -->
-  <header class="mob topbar-safe" style="position:sticky;top:0;z-index:50;align-items:center;justify-content:space-between;padding-left:20px;padding-right:20px;padding-bottom:12px;background:rgba(245,240,232,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)">
+  <header class="mob topbar-safe" style="position:sticky;top:0;z-index:50;align-items:center;justify-content:space-between;padding-left:18px;padding-right:18px;padding-bottom:12px;background:rgba(8,12,20,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)">
     <div style="display:flex;align-items:center;gap:12px">
-      <div style="width:32px;height:32px;background:var(--sk);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(180,90,110,.3)">
-        <span style="font-family:var(--serif);font-style:italic;font-size:18px;color:#fff">M</span>
+      <div style="width:30px;height:30px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <span style="font-family:var(--mono);font-weight:700;font-size:14px;color:#0D0800">M</span>
       </div>
       <div>
-        <div style="font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink);line-height:1">M400</div>
-        <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;margin-top:2px">STRATEGY TERMINAL</div>
+        <div style="font-family:var(--mono);font-weight:700;font-size:14px;color:var(--txt);letter-spacing:.06em">M400</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;margin-top:1px">STRATEGY TERMINAL</div>
       </div>
     </div>
     <button @click="menuOpen=true" style="padding:6px;color:var(--mid);background:none;border:none;cursor:pointer">
@@ -301,52 +264,56 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
   <!-- SIDEBAR -->
   <aside :class="['sidebar',menuOpen?'open':'']">
-    <div class="sidebar-safe" style="padding-left:20px;padding-right:20px;padding-bottom:28px;display:flex;flex-direction:column;min-height:100%">
-      <div class="desk" style="align-items:center;gap:12px;margin-bottom:32px;padding-top:28px">
-        <div style="width:40px;height:40px;background:var(--sk);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px rgba(180,90,110,.3)"><span style="font-family:var(--serif);font-style:italic;font-size:22px;color:#fff">M</span></div>
+    <div class="sidebar-safe" style="padding:0 18px 24px;display:flex;flex-direction:column;min-height:100%">
+
+      <!-- Logo desktop -->
+      <div class="desk" style="align-items:center;gap:12px;margin-bottom:28px;padding-top:28px">
+        <div style="width:38px;height:38px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <span style="font-family:var(--mono);font-weight:700;font-size:18px;color:#0D0800">M</span>
+        </div>
         <div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--ink);line-height:1">M400</div>
-          <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;margin-top:3px">STRATEGY TERMINAL</div>
+          <div style="font-family:var(--mono);font-weight:700;font-size:17px;color:var(--txt);letter-spacing:.06em">M400</div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.14em;margin-top:2px">STRATEGY TERMINAL</div>
         </div>
       </div>
-      <div style="text-align:center;font-size:13px;margin-bottom:20px;opacity:.3">&#x273F; &#x2741; &#x273F;</div>
+
+      <!-- Nav -->
       <div>
         <div class="slbl" style="margin-top:0">主選單</div>
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <button @click="go('open')"    :class="['ni',tab==='open'   ?'a1':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>在庫倉位管理</button>
-          <button @click="go('history')" :class="['ni',tab==='history'?'a2':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>獲利分析報表</button>
-          <button @click="go('stats')"   :class="['ni',tab==='stats'  ?'a3':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>總成本損益統計</button>
-          <button @click="go('radar')"   :class="['ni',tab==='radar'  ?'a4':'']">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 2a10 10 0 010 20"/><path d="M12 7a5 5 0 010 10"/><path d="M2 12a10 10 0 0020 0"/></svg>
-            週線偏離雷達
-          </button>
-          <button @click="go('settings')" :class="['ni',tab==='settings'?'a5':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>API 連線設定</button>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <button @click="go('open')"    :class="['ni',tab==='open'   ?'a1':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>在庫倉位</button>
+          <button @click="go('history')" :class="['ni',tab==='history'?'a2':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>獲利分析</button>
+          <button @click="go('stats')"   :class="['ni',tab==='stats'  ?'a3':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>資本損益統計</button>
+          <button @click="go('radar')"   :class="['ni',tab==='radar'  ?'a4':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49M7.76 16.24a6 6 0 010-8.49M20.49 3.51a14 14 0 010 16.97M3.51 20.49a14 14 0 010-16.97"/></svg>週線偏離雷達</button>
+          <button @click="go('settings')" :class="['ni',tab==='settings'?'a5':'']"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 19.07a10 10 0 010-14.14"/></svg>API 設定</button>
         </div>
       </div>
       <div class="dv"></div>
       <div>
         <div class="slbl">數據管理</div>
-        <div style="display:flex;flex-direction:column;gap:3px">
+        <div style="display:flex;flex-direction:column;gap:2px">
           <button @click="exportData" class="ni"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>導出備份</button>
           <button @click="$refs.fi.click()" class="ni"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>導入備份</button>
           <input type="file" ref="fi" @change="importData" style="display:none" accept=".json">
-          <button @click="clearAll" class="ni" style="color:var(--umb)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>清空紀錄</button>
+          <button @click="clearAll" class="ni" style="color:var(--red)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>清空紀錄</button>
         </div>
       </div>
-      <div style="margin-top:auto;padding-top:24px">
-        <div style="background:rgba(44,36,24,.05);border:1px solid var(--line);border-radius:16px;padding:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span style="font-family:var(--mono);font-size:9px;color:var(--pale);letter-spacing:.12em;text-transform:uppercase">SYSTEM</span>
-            <div style="display:flex;align-items:center;gap:6px">
+
+      <!-- System status -->
+      <div style="margin-top:auto;padding-top:20px">
+        <div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+            <span style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase">SYSTEM</span>
+            <div style="display:flex;align-items:center;gap:5px">
               <div :class="['sdot',apiKey?'on':'off']"></div>
-              <span style="font-family:var(--mono);font-size:9px" :class="apiKey?'g':'r'">{{ apiKey?'LIVE':'OFFLINE' }}</span>
+              <span style="font-family:var(--mono);font-size:9px;font-weight:600" :class="apiKey?'g':'r'">{{ apiKey?'LIVE':'OFFLINE' }}</span>
             </div>
           </div>
-          <div style="font-family:var(--mono);font-size:8px;color:var(--pale);margin-bottom:10px">上次備份：{{ lastBackupDisplay }}</div>
-          <div class="bar" style="margin-bottom:14px"><div class="bar-f" :style="{width:storageUsage+'%',background:'var(--sk)'}"></div></div>
-          <button @click="fetchAll" :disabled="!apiKey||fetching" style="width:100%;background:var(--sk2);border:1px solid rgba(180,90,110,.2);border-radius:10px;padding:9px;color:var(--sk);font-size:11px;font-weight:600;display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;transition:all .18s;font-family:var(--sans)" :style="(!apiKey||fetching)?'opacity:.35;cursor:not-allowed;pointer-events:none':''">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:10px">備份：{{ lastBackupDisplay }}</div>
+          <div class="bar" style="margin-bottom:12px"><div class="bar-f" :style="{width:storageUsage+'%',background:'var(--gold)'}"></div></div>
+          <button @click="fetchAll" :disabled="!apiKey||fetching" style="width:100%;background:var(--gold2);border:1px solid rgba(212,168,83,.2);border-radius:8px;padding:8px;color:var(--gold);font-size:11px;font-weight:600;display:flex;justify-content:center;align-items:center;gap:5px;cursor:pointer;transition:all .15s;font-family:var(--ui)" :style="(!apiKey||fetching)?'opacity:.3;cursor:not-allowed;pointer-events:none':''">
             <svg :class="fetching?'spin':''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            同步最新數據
+            同步數據
           </button>
         </div>
       </div>
@@ -354,24 +321,24 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   </aside>
 
   <!-- MAIN -->
-  <main style="flex:1;padding:20px;overflow-y:auto;position:relative;z-index:1" class="main-pad">
-    <div style="max-width:880px;margin:0 auto">
+  <main style="flex:1;padding:18px;overflow-y:auto;position:relative;z-index:1" class="main-pad">
+    <div style="max-width:900px;margin:0 auto">
 
-      <!-- BACKUP REMINDER -->
+      <!-- BACKUP BANNER -->
       <div v-if="showBackupReminder" class="r1 backup-banner">
         <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:16px">&#x1F4BE;</span>
-          <div><div style="font-size:13px;font-weight:600;color:var(--amber)">已超過 7 天未備份</div><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px">上次：{{ lastBackupDisplay }}</div></div>
+          <span style="font-size:15px">&#x1F4BE;</span>
+          <div><div style="font-size:12px;font-weight:600;color:var(--gold)">已超過 7 天未備份</div><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:1px">{{ lastBackupDisplay }}</div></div>
         </div>
-        <button @click="exportData" style="background:var(--amber);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;font-family:var(--sans)">立即備份</button>
+        <button @click="exportData" style="background:var(--gold);color:#0D0800;border:none;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;font-family:var(--ui)">立即備份</button>
       </div>
 
       <!-- INDEX TILES -->
-      <div v-if="tab!=='settings'" class="r1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:28px">
+      <div v-if="tab!=='settings'" class="r1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px">
         <div v-for="ix in indices" :key="ix.symbol" :class="['ixtile',ix.change===null?'':(ix.change>=0?'up':'dn')]">
-          <div style="font-family:var(--mono);font-size:7px;color:var(--pale);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ix.name }}</div>
-          <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);line-height:1">{{ ix.price?ix.price.toFixed(2):'&#x2014;' }}</div>
-          <div style="font-family:var(--mono);font-size:9px;margin-top:5px" :class="(ix.change||0)>=0?'g':'r'">{{ ix.change!==null?((ix.change>=0?'+':'')+ix.change.toFixed(2)+'%'):'&#x2014;' }}</div>
+          <div style="font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ix.name }}</div>
+          <div style="font-family:var(--mono);font-size:15px;font-weight:500;color:var(--txt);line-height:1">{{ ix.price?ix.price.toFixed(2):'&#x2014;' }}</div>
+          <div style="font-family:var(--mono);font-size:9px;margin-top:5px;font-weight:500" :class="(ix.change||0)>=0?'g':'r'">{{ ix.change!==null?((ix.change>=0?'+':'')+ix.change.toFixed(2)+'%'):'&#x2014;' }}</div>
         </div>
       </div>
 
@@ -380,48 +347,49 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px">
           <div>
             <div class="pg-title">在庫倉位</div>
-            <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--pale)">{{ openPos.length }} positions &#x2022; <span style="color:var(--mid)">${{ fmt(totalValue) }}</span></div>
+            <div class="pg-sub">{{ openPos.length }} positions &nbsp;&#x2022;&nbsp; <span style="color:var(--mid)">${{ fmt(totalValue) }}</span></div>
           </div>
-          <button @click="openEntryModal()" class="btn-main"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增持倉</button>
+          <button @click="openEntryModal()" class="btn-gold"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增持倉</button>
         </div>
-        <div v-if="openPos.length>1" class="r2 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px">
+        <div v-if="openPos.length>1" class="r2 nsb" style="display:flex;gap:5px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px">
           <button v-for="s in sortOptions" :key="s.key" @click="sortBy=s.key" :class="['sort-tab',sortBy===s.key?'on':'']">{{ s.label }}</button>
         </div>
-        <div v-if="openPos.length===0" class="r2 card" style="padding:60px 20px;text-align:center">
-          <div style="font-size:26px;margin-bottom:14px;opacity:.3">&#x2741;</div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--mid)">尚無持倉標的</div>
+        <div v-if="openPos.length===0" class="r2 card" style="padding:56px 20px;text-align:center">
+          <div style="font-size:22px;margin-bottom:12px;opacity:.3">&#x1F4CA;</div>
+          <div style="font-size:16px;font-weight:600;color:var(--mid)">尚無持倉標的</div>
+          <div style="font-size:12px;color:var(--dim);margin-top:5px;font-family:var(--mono)">點擊「新增持倉」開始記錄</div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
           <div v-for="(p,i) in sortedPos" :key="p.id" :class="['pc r2',alertClass(p)]" :style="'animation-delay:'+(i*.05)+'s'">
-            <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap;min-height:24px">
-              <span v-if="isTpTriggered(p)" class="alert-pill tp">&#x1F4C8; 已達停利 ${{ p.tp }}</span>
+            <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap;min-height:22px">
+              <span v-if="isTpTriggered(p)" class="alert-pill tp">&#x25B2; TP ${{ p.tp }}</span>
               <span v-else-if="p.tp" class="alert-pill tp">TP ${{ p.tp }}</span>
-              <span v-if="isSlTriggered(p)" class="alert-pill sl">&#x26A0; 停損警報 ${{ p.sl }}</span>
+              <span v-if="isSlTriggered(p)" class="alert-pill sl">&#x25BC; SL ${{ p.sl }}</span>
               <span v-else-if="p.sl" class="alert-pill sl">SL ${{ p.sl }}</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-              <div style="display:flex;align-items:center;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+              <div style="display:flex;align-items:center;gap:10px">
                 <div class="av">{{ p.ticker.substring(0,2) }}</div>
                 <div>
-                  <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--ink);line-height:1">{{ p.ticker }}</div>
-                  <div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:3px">{{ totalQty(p).toLocaleString() }} shs<span v-if="p.lots&&p.lots.length>1" style="margin-left:4px;background:var(--sk2);color:var(--sk);border-radius:4px;padding:1px 5px;font-size:8px">{{ p.lots.length }} lots</span></div>
+                  <div style="font-family:var(--mono);font-size:18px;font-weight:600;color:var(--txt);line-height:1;letter-spacing:.02em">{{ p.ticker }}</div>
+                  <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:3px">{{ totalQty(p).toLocaleString() }} shs<span v-if="p.lots&&p.lots.length>1" style="margin-left:5px;background:var(--gold2);color:var(--gold);border-radius:4px;padding:1px 5px;font-size:8px">{{ p.lots.length }} lots</span></div>
                 </div>
               </div>
               <div style="text-align:right">
-                <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">市價</div>
-                <div style="font-family:var(--mono);font-size:19px;font-weight:500;color:var(--ink);line-height:1">{{ p.currentPrice?'$'+p.currentPrice.toFixed(2):'&#x2014;' }}</div>
+                <div style="font-family:var(--mono);font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">LAST</div>
+                <div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--txt);line-height:1">{{ p.currentPrice?'$'+p.currentPrice.toFixed(2):'&#x2014;' }}</div>
               </div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px">
-              <div class="stat"><div class="stat-lbl">均攤成本</div><div style="font-family:var(--mono);font-size:12px;color:var(--ink)">${{ avgCost(p).toFixed(2) }}</div></div>
-              <div class="stat"><div class="stat-lbl">未實現</div><div style="font-family:var(--mono);font-size:12px" :class="unrealized(p)>=0?'g':'r'">${{ fmt(unrealized(p)) }}</div></div>
-              <div class="stat"><div class="stat-lbl">漲跌幅</div><div style="font-family:var(--mono);font-size:12px" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div></div>
+              <div class="stat"><div class="stat-lbl">均攤</div><div style="font-family:var(--mono);font-size:13px;font-weight:500;color:var(--txt)">${{ avgCost(p).toFixed(2) }}</div></div>
+              <div class="stat"><div class="stat-lbl">損益</div><div style="font-family:var(--mono);font-size:13px;font-weight:500" :class="unrealized(p)>=0?'g':'r'">${{ fmt(unrealized(p)) }}</div></div>
+              <div class="stat"><div class="stat-lbl">漲跌</div><div style="font-family:var(--mono);font-size:13px;font-weight:500" :class="pct(p)>=0?'g':'r'">{{ pct(p)>=0?'+':'' }}{{ pct(p).toFixed(2) }}%</div></div>
             </div>
             <div v-if="p.sl||p.tp" style="margin-bottom:12px">
-              <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--pale);margin-bottom:4px"><span v-if="p.sl">SL ${{ p.sl }}</span><span v-else></span><span v-if="p.tp">TP ${{ p.tp }}</span></div>
-              <div style="height:4px;border-radius:99px;background:rgba(100,80,60,.08);position:relative;overflow:hidden"><div style="position:absolute;top:0;bottom:0;border-radius:99px;transition:left .5s,right .5s" :style="tpSlBar(p)"></div></div>
+              <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--dim);margin-bottom:4px"><span v-if="p.sl">SL ${{ p.sl }}</span><span v-else></span><span v-if="p.tp">TP ${{ p.tp }}</span></div>
+              <div style="height:4px;border-radius:99px;background:rgba(255,255,255,.06);position:relative;overflow:hidden"><div style="position:absolute;top:0;bottom:0;border-radius:99px;transition:left .5s,right .5s" :style="tpSlBar(p)"></div></div>
             </div>
-            <div v-else class="bar" style="margin-bottom:12px"><div class="bar-f" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--sage)':'var(--umb)'}"></div></div>
+            <div v-else class="bar" style="margin-bottom:12px"><div class="bar-f" :style="{width:Math.min(Math.abs(pct(p))*8,100)+'%',background:pct(p)>=0?'var(--green)':'var(--red)'}"></div></div>
             <div style="display:flex;gap:6px">
               <button @click="openAddLotModal(p)" class="btn-add" style="flex:1">+ 加倉</button>
               <button @click="openEditModal(p)" class="btn-ghost" style="flex:1">設定</button>
@@ -433,289 +401,265 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
       <!-- ═══ 獲利分析 ═══ -->
       <section v-if="tab==='history'">
-        <div class="r1 pg-title" style="margin-bottom:24px">獲利分析</div>
-        <div class="r2" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:20px">
-          <div class="card" style="padding:24px"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">ANNUAL P&amp;L（已實現）</div><div style="font-family:var(--mono);font-size:clamp(2rem,7vw,3rem);font-weight:300;line-height:1" :class="annualPnl>=0?'g':'r'">${{ fmt(annualPnl) }}</div><div class="bar" style="margin-top:14px"><div class="bar-f" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--sage)':'var(--umb)'}"></div></div></div>
-          <div class="card" style="padding:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">{{ selMonth }} 月結算</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300" :class="monthPnl>=0?'g':'r'">${{ fmt(monthPnl) }}</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:6px">{{ filteredHist.length }} trades</div></div>
+        <div class="r1 pg-title" style="margin-bottom:20px">獲利分析</div>
+        <div class="r2" style="display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:18px">
+          <div class="card" style="padding:22px"><div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">ANNUAL P&amp;L</div><div style="font-family:var(--mono);font-size:clamp(1.8rem,6vw,3rem);font-weight:600;line-height:1" :class="annualPnl>=0?'g':'r'">${{ fmt(annualPnl) }}</div><div class="bar" style="margin-top:14px"><div class="bar-f" :style="{width:Math.min(Math.abs(annualPnl)/300,100)+'%',background:annualPnl>=0?'var(--green)':'var(--red)'}"></div></div></div>
+          <div class="card" style="padding:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">{{ selMonth }}M P&amp;L</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:600" :class="monthPnl>=0?'g':'r'">${{ fmt(monthPnl) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">{{ filteredHist.length }} trades</div></div>
         </div>
-        <div class="r3 nsb" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px">
+        <div class="r3 nsb" style="display:flex;gap:5px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px">
           <button v-for="m in 12" :key="m" @click="selMonth=m" :class="['mtab',selMonth===m?'on':'']">{{ m }}</button>
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div v-if="filteredHist.length===0" class="card" style="padding:40px;text-align:center;color:var(--pale);font-size:13px;font-family:var(--mono)">&#x2014; 本月無交易紀錄 &#x2014;</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div v-if="filteredHist.length===0" class="card" style="padding:36px;text-align:center;color:var(--dim);font-size:13px;font-family:var(--mono)">&#x2014; 本月無紀錄 &#x2014;</div>
           <div v-for="h in filteredHist" :key="h.id" class="hrow">
-            <div style="display:flex;align-items:center;gap:12px">
-              <div class="av" style="width:36px;height:36px;border-radius:10px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="av" style="width:34px;height:34px;border-radius:8px;font-size:12px">{{ h.ticker.substring(0,2) }}</div>
               <div>
-                <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--ink)">{{ h.ticker }}</div>
-                <div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:3px">均成 ${{ Number(h.entry).toFixed(2) }} &#x2192; ${{ Number(h.exit).toFixed(2) }} &#x2022; {{ h.qty }} shs<span v-if="h.closedDate" style="margin-left:6px;opacity:.6">{{ h.closedDate }}</span></div>
+                <div style="font-family:var(--mono);font-size:16px;font-weight:600;color:var(--txt)">{{ h.ticker }}</div>
+                <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px">avg ${{ Number(h.entry).toFixed(2) }} &#x2192; ${{ Number(h.exit).toFixed(2) }} &nbsp;&#x2022;&nbsp; {{ h.qty }} shs<span v-if="h.closedDate" style="margin-left:6px;opacity:.5">{{ h.closedDate }}</span></div>
               </div>
             </div>
-            <div style="text-align:right"><div style="font-family:var(--mono);font-size:18px;font-weight:400" :class="h.pnl>=0?'g':'r'">${{ fmt(h.pnl) }}</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:3px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(2) }}%</div></div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:17px;font-weight:600" :class="h.pnl>=0?'g':'r'">${{ fmt(h.pnl) }}</div><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px">{{ h.pnl>=0?'+':'' }}{{ ((h.pnl/(h.entry*h.qty))*100).toFixed(2) }}%</div></div>
           </div>
         </div>
       </section>
 
-      <!-- ═══ 總成本損益 ═══ -->
+      <!-- ═══ 資本損益 ═══ -->
       <section v-if="tab==='stats'">
-        <div class="r1 pg-title" style="margin-bottom:6px">總成本損益</div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--pale);margin-bottom:24px">含所有投入資本 &#x2022; 已平倉回收 &#x2022; 未平倉市值</div>
-        <div :class="['r2 roi-card',totalROI>=0?'pos':'neg']" style="margin-bottom:14px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
-            <div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">整體投資報酬率 (ROI)</div><div style="font-family:var(--mono);font-size:clamp(2.2rem,9vw,3.8rem);font-weight:300;line-height:1" :class="totalROI>=0?'g':'r'">{{ totalROI>=0?'+':'' }}{{ totalROI.toFixed(2) }}<span style="font-size:1.2rem">%</span></div></div>
-            <div style="text-align:right"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">淨損益</div><div style="font-family:var(--mono);font-size:1.6rem;font-weight:300" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ fmt(totalNetPnl) }}</div></div>
+        <div class="r1 pg-title" style="margin-bottom:6px">資本損益統計</div>
+        <div class="pg-sub" style="margin-bottom:22px">含所有投入資本 &#x2022; 已平倉回收 &#x2022; 未平倉市值</div>
+        <div :class="['r2 roi-card',totalROI>=0?'pos':'neg']" style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">TOTAL ROI</div><div style="font-family:var(--mono);font-size:clamp(2rem,8vw,3.5rem);font-weight:700;line-height:1" :class="totalROI>=0?'g':'r'">{{ totalROI>=0?'+':'' }}{{ totalROI.toFixed(2) }}<span style="font-size:1.1rem">%</span></div></div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">NET P&amp;L</div><div style="font-family:var(--mono);font-size:1.5rem;font-weight:600" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ fmt(totalNetPnl) }}</div></div>
           </div>
-          <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:6px;border-radius:99px;background:rgba(44,36,24,.08);overflow:hidden"><div style="height:100%;border-radius:99px;transition:width .9s ease" :style="{width:Math.min(Math.abs(totalROI),100)+'%',background:totalROI>=0?'var(--sage)':'var(--umb)'}"></div></div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);flex-shrink:0">on ${{ fmt(totalCostDeployed) }}</div></div>
+          <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:5px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden"><div style="height:100%;border-radius:99px;transition:width .9s ease" :style="{width:Math.min(Math.abs(totalROI),100)+'%',background:totalROI>=0?'var(--green)':'var(--red)'}"></div></div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);flex-shrink:0">deployed ${{ fmt(totalCostDeployed) }}</div></div>
         </div>
-        <div class="r3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
-          <div class="card" style="padding:18px"><div class="stat-lbl">總投入成本</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;color:var(--ink);margin-top:4px">${{ fmt(totalCostDeployed) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">已結清 + 在庫</div></div>
-          <div class="card" style="padding:18px"><div class="stat-lbl">已實現獲利</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;margin-top:4px" :class="annualPnl>=0?'g':'r'">${{ fmt(annualPnl) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">{{ hist.length }} 筆已結清</div></div>
-          <div class="card" style="padding:18px"><div class="stat-lbl">未實現損益</div><div style="font-family:var(--mono);font-size:1.2rem;font-weight:400;margin-top:4px" :class="totalUnrealized>=0?'g':'r'">${{ fmt(totalUnrealized) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:6px">{{ openPos.length }} 筆在庫</div></div>
+        <div class="r3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+          <div class="card" style="padding:16px"><div class="stat-lbl">總投入</div><div style="font-family:var(--mono);font-size:1.15rem;font-weight:600;color:var(--txt);margin-top:3px">${{ fmt(totalCostDeployed) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">已結清 + 在庫</div></div>
+          <div class="card" style="padding:16px"><div class="stat-lbl">已實現</div><div style="font-family:var(--mono);font-size:1.15rem;font-weight:600;margin-top:3px" :class="annualPnl>=0?'g':'r'">${{ fmt(annualPnl) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">{{ hist.length }} 筆結清</div></div>
+          <div class="card" style="padding:16px"><div class="stat-lbl">未實現</div><div style="font-family:var(--mono);font-size:1.15rem;font-weight:600;margin-top:3px" :class="totalUnrealized>=0?'g':'r'">${{ fmt(totalUnrealized) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">{{ openPos.length }} 筆在庫</div></div>
         </div>
-        <div class="r4 card" style="padding:24px;margin-bottom:14px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px">資金流向明細</div>
-          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--umb2);border:1px solid rgba(176,96,64,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--umb)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v6M12 2l-3 3M12 2l3 3"/><path d="M3 12h18"/><path d="M5 21h14a2 2 0 002-2v-8H3v8a2 2 0 002 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">總投入成本</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">所有買入金額合計（含已結清）</div></div><div style="font-family:var(--mono);font-size:16px;color:var(--umb)">&#x2212;${{ fmt(totalCostDeployed) }}</div></div>
-          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--sage2);border:1px solid rgba(90,144,104,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--sage)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22v-6M12 22l-3-3M12 22l3-3"/><path d="M3 12h18"/><path d="M5 3h14a2 2 0 012 2v8H3V5a2 2 0 012-2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">已回收資金</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">結清售出金額＝成本回收 + 獲利</div></div><div style="font-family:var(--mono);font-size:16px" :class="totalRecovered>=0?'g':'r'">+${{ fmt(totalRecovered) }}</div></div>
-          <div class="flow-row"><div style="width:32px;height:32px;border-radius:10px;background:var(--sk2);border:1px solid rgba(180,90,110,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" fill="none" stroke="var(--sk)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--ink)">在庫市值</div><div style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:2px">目前持倉的即時市場價值</div></div><div style="font-family:var(--mono);font-size:16px;color:var(--sk)">${{ fmt(totalValue) }}</div></div>
-          <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:14px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center"><div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px">最終結算</div><div style="font-size:12px;color:var(--mid)">已回收 + 在庫 &#x2212; 總投入</div></div><div style="font-family:var(--mono);font-size:22px;font-weight:300" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ fmt(totalNetPnl) }}</div></div>
+        <div class="r4 card" style="padding:20px;margin-bottom:12px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px">CAPITAL FLOW</div>
+          <div class="flow-row"><div style="width:30px;height:30px;border-radius:8px;background:var(--red2);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="13" height="13" fill="none" stroke="var(--red)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v6M12 2l-3 3M12 2l3 3"/><path d="M3 12h18"/><path d="M5 21h14a2 2 0 002-2v-8H3v8a2 2 0 002 2z"/></svg></div><div style="flex:1;margin-left:10px"><div style="font-size:13px;font-weight:500;color:var(--txt)">總投入成本</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:1px">所有買入金額合計（含已結清）</div></div><div style="font-family:var(--mono);font-size:15px;font-weight:500;color:var(--red)">&#x2212;${{ fmt(totalCostDeployed) }}</div></div>
+          <div class="flow-row"><div style="width:30px;height:30px;border-radius:8px;background:var(--grn2);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="13" height="13" fill="none" stroke="var(--green)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22v-6M12 22l-3-3M12 22l3-3"/><path d="M3 12h18"/><path d="M5 3h14a2 2 0 012 2v8H3V5a2 2 0 012-2z"/></svg></div><div style="flex:1;margin-left:10px"><div style="font-size:13px;font-weight:500;color:var(--txt)">已回收資金</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:1px">結清售出金額</div></div><div style="font-family:var(--mono);font-size:15px;font-weight:500" :class="totalRecovered>=0?'g':'r'">+${{ fmt(totalRecovered) }}</div></div>
+          <div class="flow-row"><div style="width:30px;height:30px;border-radius:8px;background:var(--gold2);border:1px solid rgba(212,168,83,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="13" height="13" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="flex:1;margin-left:10px"><div style="font-size:13px;font-weight:500;color:var(--txt)">在庫市值</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:1px">即時市場價值</div></div><div style="font-family:var(--mono);font-size:15px;font-weight:500;color:var(--gold)">${{ fmt(totalValue) }}</div></div>
+          <div style="margin-top:14px;padding:12px;background:var(--bg3);border-radius:10px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center"><div><div style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">NET RESULT</div><div style="font-size:11px;color:var(--mid)">已回收 + 在庫 &#x2212; 總投入</div></div><div style="font-family:var(--mono);font-size:20px;font-weight:700" :class="totalNetPnl>=0?'g':'r'">{{ totalNetPnl>=0?'+':'' }}${{ fmt(totalNetPnl) }}</div></div>
         </div>
         <div v-if="tickerStats.length>0" class="r4 card" style="overflow:hidden">
-          <div style="padding:18px 20px 12px;font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid var(--line)">各標的完整損益</div>
-          <div v-for="(tk,i) in tickerStats" :key="tk.ticker" :style="i<tickerStats.length-1?'border-bottom:1px solid var(--line)':''" style="padding:14px 20px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:34px;height:34px;border-radius:10px;font-size:12px">{{ tk.ticker.substring(0,2) }}</div><div><div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--ink)">{{ tk.ticker }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:1px">{{ tk.trades }} trades &#x2022; {{ tk.openQty>0?tk.openQty+' open':'fully closed' }}</div></div></div>
-              <div style="text-align:right"><div style="font-family:var(--mono);font-size:17px;font-weight:400" :class="tk.netPnl>=0?'g':'r'">{{ tk.netPnl>=0?'+':'' }}${{ fmt(tk.netPnl) }}</div><div style="font-family:var(--mono);font-size:10px;margin-top:2px" :class="tk.roi>=0?'g':'r'">{{ tk.roi>=0?'+':'' }}{{ tk.roi.toFixed(2) }}% ROI</div></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div class="stat" style="padding:8px 10px"><div class="stat-lbl">投入</div><div style="font-family:var(--mono);font-size:11px;color:var(--ink)">${{ fmt(tk.cost) }}</div></div><div class="stat" style="padding:8px 10px"><div class="stat-lbl">回收</div><div style="font-family:var(--mono);font-size:11px" :class="tk.recovered>0?'g':'r'">${{ fmt(tk.recovered) }}</div></div><div class="stat" style="padding:8px 10px"><div class="stat-lbl">市值</div><div style="font-family:var(--mono);font-size:11px;color:var(--sk)">${{ fmt(tk.currentVal) }}</div></div></div>
+          <div style="padding:16px 18px 10px;font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid var(--line)">PER TICKER BREAKDOWN</div>
+          <div v-for="(tk,i) in tickerStats" :key="tk.ticker" :style="i<tickerStats.length-1?'border-bottom:1px solid var(--line)':''" style="padding:12px 18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><div style="display:flex;align-items:center;gap:8px"><div class="av" style="width:32px;height:32px;border-radius:8px;font-size:11px">{{ tk.ticker.substring(0,2) }}</div><div><div style="font-family:var(--mono);font-size:15px;font-weight:600;color:var(--txt)">{{ tk.ticker }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:1px">{{ tk.trades }}t &#x2022; {{ tk.openQty>0?tk.openQty+' open':'closed' }}</div></div></div><div style="text-align:right"><div style="font-family:var(--mono);font-size:16px;font-weight:600" :class="tk.netPnl>=0?'g':'r'">{{ tk.netPnl>=0?'+':'' }}${{ fmt(tk.netPnl) }}</div><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:1px" :class="tk.roi>=0?'g':'r'">{{ tk.roi>=0?'+':'' }}{{ tk.roi.toFixed(2) }}%</div></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px"><div class="stat" style="padding:7px 9px"><div class="stat-lbl">投入</div><div style="font-family:var(--mono);font-size:11px;color:var(--txt)">${{ fmt(tk.cost) }}</div></div><div class="stat" style="padding:7px 9px"><div class="stat-lbl">回收</div><div style="font-family:var(--mono);font-size:11px" :class="tk.recovered>0?'g':'r'">${{ fmt(tk.recovered) }}</div></div><div class="stat" style="padding:7px 9px"><div class="stat-lbl">市值</div><div style="font-family:var(--mono);font-size:11px;color:var(--gold)">${{ fmt(tk.currentVal) }}</div></div></div>
           </div>
         </div>
-        <div v-if="hist.length>0" class="r4" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px">
-          <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">勝率</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="winRate>=50?'g':'r'">{{ winRate.toFixed(0) }}<span style="font-size:1rem;color:var(--pale)">%</span></div></div>
-          <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">平均獲利</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="avgWin>=0?'g':'r'">${{ fmt(avgWin) }}</div></div>
-          <div class="card" style="padding:18px;text-align:center"><div class="stat-lbl" style="text-align:center">平均虧損</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:300;margin-top:4px" :class="avgLoss<=0?'r':'g'">${{ fmt(avgLoss) }}</div></div>
+        <div v-if="hist.length>0" class="r4" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">
+          <div class="card" style="padding:16px;text-align:center"><div class="stat-lbl" style="text-align:center">WIN RATE</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:700;margin-top:3px" :class="winRate>=50?'g':'r'">{{ winRate.toFixed(0) }}<span style="font-size:.9rem;color:var(--dim)">%</span></div></div>
+          <div class="card" style="padding:16px;text-align:center"><div class="stat-lbl" style="text-align:center">AVG WIN</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:700;margin-top:3px;color:var(--green)">${{ fmt(avgWin) }}</div></div>
+          <div class="card" style="padding:16px;text-align:center"><div class="stat-lbl" style="text-align:center">AVG LOSS</div><div style="font-family:var(--mono);font-size:1.8rem;font-weight:700;margin-top:3px;color:var(--red)">${{ fmt(avgLoss) }}</div></div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════
+      <!-- ═══════════════════════════════
            週線偏離雷達
-      ═══════════════════════════════════════════ -->
+      ═══════════════════════════════ -->
       <section v-if="tab==='radar'">
-        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px">
+        <div class="r1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px">
           <div>
             <div class="pg-title">週線偏離雷達</div>
-            <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--pale)">七巨頭 &#x2022; 週線 20MA 偏離度監控</div>
+            <div class="pg-sub">週線 20MA 偏離度 &#x2022; 進場時機篩選</div>
           </div>
           <button @click="fetchRadar" :disabled="!apiKey||radarLoading"
-            style="background:var(--amber2);border:1px solid rgba(160,120,40,.22);border-radius:10px;padding:9px 14px;color:var(--amber);font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--sans)"
+            style="background:var(--gold);color:#0D0800;border:none;border-radius:10px;padding:9px 16px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--ui)"
             :style="(!apiKey||radarLoading)?'opacity:.4;cursor:not-allowed':''">
             <svg :class="radarLoading?'spin':''" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             掃描
           </button>
         </div>
 
-        <!-- Strategy tip -->
-        <div class="r2 tip-banner" style="margin-bottom:20px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--sage);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">週線操作系統 &#x2022; 進場條件</div>
+        <!-- ── SCAN LIST MANAGER ── -->
+        <div class="r2 card" style="padding:18px;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase">掃描標的清單</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--dim)">{{ scanList.length }} tickers</div>
+          </div>
+          <!-- Tag list -->
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+            <div v-for="s in scanList" :key="s" :class="['ticker-tag', mag7.includes(s)?'mag7':'']">
+              <span>{{ s }}</span>
+              <span v-if="mag7.includes(s)" style="font-size:8px;color:var(--gold);opacity:.6">M7</span>
+              <button @click="removeFromScan(s)" title="移除">&#x00D7;</button>
+            </div>
+          </div>
+          <!-- Add ticker input -->
+          <div style="display:flex;gap:8px">
+            <input v-model="newTicker" class="inp inp-sm" placeholder="輸入代號 e.g. TSMC" style="flex:1;text-transform:uppercase" @keyup.enter="addToScan" @input="newTickerErr=''">
+            <button @click="addToScan" class="btn-add" style="padding:8px 14px;flex-shrink:0">加入</button>
+          </div>
+          <div v-if="newTickerErr" style="font-family:var(--mono);font-size:10px;color:var(--red);margin-top:5px">{{ newTickerErr }}</div>
+          <div style="display:flex;gap:6px;margin-top:10px">
+            <button @click="resetToMag7" style="font-family:var(--mono);font-size:10px;color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,83,.2);border-radius:6px;padding:5px 10px;cursor:pointer">重置為七巨頭</button>
+            <button @click="addMyPositions" v-if="openPos.length>0" style="font-family:var(--mono);font-size:10px;color:var(--blue);background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.18);border-radius:6px;padding:5px 10px;cursor:pointer">加入我的持倉</button>
+          </div>
+        </div>
+
+        <!-- Strategy rule card -->
+        <div class="r3" style="background:var(--bg2);border:1px solid rgba(34,197,94,.18);border-radius:14px;padding:16px;margin-bottom:18px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--green);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">進場條件 &#x2022; 週線系統</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-            <div class="cond-row" style="border:none;padding:4px 0"><div class="cond-dot" style="background:var(--sage)"></div><span style="font-size:11px;color:var(--mid)">股價在週線 <strong>20MA 上方</strong></span></div>
-            <div class="cond-row" style="border:none;padding:4px 0"><div class="cond-dot" style="background:var(--sage)"></div><span style="font-size:11px;color:var(--mid)">20MA 方向<strong>向右上</strong></span></div>
-            <div class="cond-row" style="border:none;padding:4px 0"><div class="cond-dot" style="background:var(--amber)"></div><span style="font-size:11px;color:var(--mid)">偏離 20MA <strong>0–8%</strong>（回踩中）</span></div>
-            <div class="cond-row" style="border:none;padding:4px 0"><div class="cond-dot" style="background:var(--umb)"></div><span style="font-size:11px;color:var(--mid)">偏離 <strong>&gt;15%</strong>（漲太多不追）</span></div>
+            <div class="cond-row" style="border:none;padding:3px 0"><div style="width:6px;height:6px;border-radius:99px;flex-shrink:0;background:var(--green)"></div><span style="font-size:11px;color:var(--mid)">股價在 20MA <strong style="color:var(--txt)">上方</strong></span></div>
+            <div class="cond-row" style="border:none;padding:3px 0"><div style="width:6px;height:6px;border-radius:99px;flex-shrink:0;background:var(--green)"></div><span style="font-size:11px;color:var(--mid)">20MA 方向<strong style="color:var(--txt)">向上</strong></span></div>
+            <div class="cond-row" style="border:none;padding:3px 0"><div style="width:6px;height:6px;border-radius:99px;flex-shrink:0;background:var(--gold)"></div><span style="font-size:11px;color:var(--mid)">偏離 <strong style="color:var(--txt)">0–10%</strong>（回踩中）</span></div>
+            <div class="cond-row" style="border:none;padding:3px 0"><div style="width:6px;height:6px;border-radius:99px;flex-shrink:0;background:var(--red)"></div><span style="font-size:11px;color:var(--mid)">偏離 <strong style="color:var(--txt)">&gt;15%</strong> 不追</span></div>
           </div>
         </div>
 
-        <!-- No API key -->
-        <div v-if="!apiKey" class="r3 card" style="padding:40px;text-align:center;color:var(--pale);font-family:var(--mono);font-size:12px">
-          請先在「API 連線設定」輸入 Finnhub API Key
-        </div>
+        <!-- No API -->
+        <div v-if="!apiKey" class="r4 card" style="padding:40px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:12px">請先設定 API Key</div>
 
-        <!-- Loading state -->
-        <div v-else-if="radarLoading" class="r3" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
-          <div v-for="s in mag7" :key="s" class="radar-card zone-loading">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-              <div class="av">{{ s.substring(0,2) }}</div>
-              <div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">{{ s }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">載入週線數據中...</div></div>
-            </div>
-            <div style="height:40px;background:rgba(100,80,60,.05);border-radius:10px;display:flex;align-items:center;justify-content:center">
-              <svg class="spin" width="16" height="16" fill="none" stroke="var(--pale)" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            </div>
+        <!-- Loading skeleton -->
+        <div v-else-if="radarLoading" class="r4" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px">
+          <div v-for="s in scanList" :key="s" class="radar-card" style="opacity:.5">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div class="av">{{ s.substring(0,2) }}</div><div><div style="font-family:var(--mono);font-size:16px;font-weight:600;color:var(--txt)">{{ s }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:2px">掃描中...</div></div></div>
+            <div style="height:30px;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center"><svg class="spin" width="14" height="14" fill="none" stroke="var(--dim)" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div>
           </div>
         </div>
 
-        <!-- Results sorted by deviation -->
-        <div v-else-if="radarData.length>0" class="r3" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
-          <div v-for="(s,i) in sortedRadar" :key="s.ticker"
-            :class="['radar-card r3', s.zone]"
-            :style="'animation-delay:'+(i*.06)+'s'">
+        <!-- Results -->
+        <div v-else-if="sortedRadar.length>0" class="r4" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px">
+          <div v-for="(s,i) in sortedRadar" :key="s.ticker" :class="['radar-card',s.zone]" :style="'animation-delay:'+(i*.05)+'s'">
 
-            <!-- Header -->
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-              <div style="display:flex;align-items:center;gap:10px">
-                <div class="av" style="font-size:14px">{{ s.ticker.substring(0,2) }}</div>
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="av" style="font-size:13px">{{ s.ticker.substring(0,2) }}</div>
                 <div>
-                  <div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink);line-height:1">{{ s.ticker }}</div>
-                  <div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">{{ s.companyShort }}</div>
+                  <div style="font-family:var(--mono);font-size:17px;font-weight:700;color:var(--txt);line-height:1">{{ s.ticker }}</div>
+                  <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:2px">{{ s.companyShort }}</div>
                 </div>
               </div>
-              <span :class="['zone-tag', s.zoneKey]">{{ s.zoneLabel }}</span>
+              <span :class="['zone-tag',s.zoneKey]">{{ s.zoneLabel }}</span>
             </div>
 
-            <!-- Current price vs MA20 -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-              <div class="stat" style="padding:9px 11px">
-                <div class="stat-lbl">週收盤價</div>
-                <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink)">${{ s.price.toFixed(2) }}</div>
-              </div>
-              <div class="stat" style="padding:9px 11px">
-                <div class="stat-lbl">週線 20MA</div>
-                <div style="font-family:var(--mono);font-size:14px;font-weight:500;color:var(--mid)">${{ s.ma20.toFixed(2) }}</div>
-              </div>
+            <!-- Price vs MA -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px">
+              <div class="stat" style="padding:9px 11px"><div class="stat-lbl">CLOSE</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--txt)">${{ s.price.toFixed(2) }}</div></div>
+              <div class="stat" style="padding:9px 11px"><div class="stat-lbl">20MA</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--mid)">${{ s.ma20.toFixed(2) }}</div></div>
             </div>
 
-            <!-- Deviation display — the core number -->
+            <!-- Deviation — key number -->
             <div style="margin-bottom:12px">
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-                <span style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.1em;text-transform:uppercase">距離 20MA</span>
-                <span style="font-family:var(--mono);font-size:20px;font-weight:500;line-height:1" :class="s.deviation>=0?'g':'r'">
-                  {{ s.deviation>=0?'+':'' }}{{ s.deviation.toFixed(2) }}<span style="font-size:12px">%</span>
-                </span>
+                <span style="font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase">DEVIATION vs 20MA</span>
+                <span style="font-family:var(--mono);font-size:22px;font-weight:700;line-height:1" :class="s.deviation>=0?'g':'r'">{{ s.deviation>=0?'+':'' }}{{ s.deviation.toFixed(2) }}<span style="font-size:12px">%</span></span>
               </div>
-              <!-- Gauge: -20% to +30% range, MA at 0 -->
               <div class="dev-gauge">
                 <div class="dev-ma-line" style="left:40%"></div>
-                <div class="dev-gauge-fill" :style="gaugeStyle(s)"></div>
+                <div :style="gaugeStyle(s)"></div>
               </div>
-              <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:7px;color:var(--pale);margin-top:3px">
-                <span>&#x2212;20%</span><span>20MA</span><span>+30%</span>
-              </div>
+              <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:7px;color:var(--dim);margin-top:3px"><span>&#x2212;20%</span><span>MA</span><span>+30%</span></div>
             </div>
 
-            <!-- MA trend indicator -->
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <!-- MA trend -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
               <div style="display:flex;align-items:center;gap:6px">
-                <div style="width:7px;height:7px;border-radius:99px;flex-shrink:0" :style="{background: s.maTrend==='up'?'var(--sage)':s.maTrend==='down'?'var(--umb)':'var(--pale)'}"></div>
-                <span style="font-family:var(--mono);font-size:10px" :class="s.maTrend==='up'?'g':s.maTrend==='down'?'r':''" >
-                  20MA {{ s.maTrend==='up'?'向右上 &#x2197;':s.maTrend==='down'?'向右下 &#x2198;':'持平 &#x2192;' }}
-                </span>
+                <div style="width:6px;height:6px;border-radius:99px" :style="{background:s.maTrend==='up'?'var(--green)':s.maTrend==='down'?'var(--red)':'var(--dim)'}"></div>
+                <span style="font-family:var(--mono);font-size:10px" :class="s.maTrend==='up'?'g':s.maTrend==='down'?'r':''">20MA {{ s.maTrend==='up'?'&#x2197; Uptrend':s.maTrend==='down'?'&#x2198; Downtrend':'&#x2192; Flat' }}</span>
               </div>
-              <div style="font-family:var(--mono);font-size:9px;color:var(--pale)">
-                {{ s.weeksAbove > 0 ? s.weeksAbove+'w above MA' : Math.abs(s.weeksAbove)+'w below MA' }}
-              </div>
+              <span style="font-family:var(--mono);font-size:9px;color:var(--dim)">{{ Math.abs(s.weeksAbove) }}w {{ s.weeksAbove>0?'above':'below' }}</span>
             </div>
 
-            <!-- Mini price sparkline (last 12 weekly closes) -->
-            <div class="spark-wrap">
-              <svg v-if="s.closes.length>2" width="100%" height="52" viewBox="0 0 200 52" preserveAspectRatio="none">
-                <!-- MA20 reference line -->
-                <line
-                  :x1="0" :y1="sparkY(s.ma20, s.closes, 48)"
-                  :x2="200" :y2="sparkY(s.ma20, s.closes, 48)"
-                  stroke="rgba(100,80,60,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
-                <!-- Price area fill -->
-                <polygon
-                  :points="sparkArea(s.closes, 200, 48)"
-                  :fill="s.deviation>=0?'rgba(90,144,104,0.1)':'rgba(176,96,64,0.1)'"/>
-                <!-- Price line -->
-                <polyline
-                  :points="sparkPoints(s.closes, 200, 48)"
-                  fill="none"
-                  :stroke="s.deviation>=0?'var(--sage)':'var(--umb)'"
-                  stroke-width="1.8"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"/>
-                <!-- Current price dot -->
-                <circle
-                  :cx="200"
-                  :cy="sparkY(s.closes[s.closes.length-1], s.closes, 48)"
-                  r="3"
-                  :fill="s.deviation>=0?'var(--sage)':'var(--umb)'"/>
+            <!-- Sparkline -->
+            <div style="height:50px;position:relative">
+              <svg v-if="s.closes.length>2" width="100%" height="50" viewBox="0 0 200 50" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient :id="'sg'+s.ticker" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" :stop-color="s.deviation>=0?'#22C55E':'#EF4444'" stop-opacity="0.2"/>
+                    <stop offset="100%" :stop-color="s.deviation>=0?'#22C55E':'#EF4444'" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <line :x1="0" :y1="sparkY(s.ma20,s.closes,46)" :x2="200" :y2="sparkY(s.ma20,s.closes,46)" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="3,3"/>
+                <polygon :points="sparkArea(s.closes,200,46)" :fill="'url(#sg'+s.ticker+')'"/>
+                <polyline :points="sparkPoints(s.closes,200,46)" fill="none" :stroke="s.deviation>=0?'var(--green)':'var(--red)'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle :cx="200" :cy="sparkY(s.closes[s.closes.length-1],s.closes,46)" r="3" :fill="s.deviation>=0?'var(--green)':'var(--red)'"/>
               </svg>
             </div>
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:7px;color:var(--pale);margin-top:4px">
-              <span>12 週前</span><span>今</span>
-            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:7px;color:var(--dim);margin-top:3px"><span>12W AGO</span><span>NOW</span></div>
 
             <!-- Condition checklist -->
-            <div style="margin-top:12px;background:var(--bg);border-radius:12px;padding:10px 12px">
+            <div style="margin-top:12px;background:var(--bg3);border-radius:10px;padding:10px 12px">
               <div class="cond-row">
-                <div class="cond-dot" :style="{background: s.price>s.ma20?'var(--sage)':'var(--umb)'}"></div>
+                <div style="width:6px;height:6px;border-radius:99px;flex-shrink:0" :style="{background:s.price>s.ma20?'var(--green)':'var(--red)'}"></div>
                 <span style="font-size:11px;color:var(--mid)">股價在 20MA {{ s.price>s.ma20?'上方':'下方' }}</span>
-                <span style="margin-left:auto;font-family:var(--mono);font-size:9px" :class="s.price>s.ma20?'g':'r'">{{ s.price>s.ma20?'&#x2713;':'&#x2717;' }}</span>
+                <span style="margin-left:auto;font-family:var(--mono);font-size:9px;font-weight:700" :class="s.price>s.ma20?'g':'r'">{{ s.price>s.ma20?'YES':'NO' }}</span>
               </div>
               <div class="cond-row">
-                <div class="cond-dot" :style="{background: s.maTrend==='up'?'var(--sage)':'var(--umb)'}"></div>
+                <div style="width:6px;height:6px;border-radius:99px;flex-shrink:0" :style="{background:s.maTrend==='up'?'var(--green)':'var(--red)'}"></div>
                 <span style="font-size:11px;color:var(--mid)">20MA 方向向上</span>
-                <span style="margin-left:auto;font-family:var(--mono);font-size:9px" :class="s.maTrend==='up'?'g':'r'">{{ s.maTrend==='up'?'&#x2713;':'&#x2717;' }}</span>
+                <span style="margin-left:auto;font-family:var(--mono);font-size:9px;font-weight:700" :class="s.maTrend==='up'?'g':'r'">{{ s.maTrend==='up'?'YES':'NO' }}</span>
               </div>
-              <div class="cond-row" style="border-bottom:none">
-                <div class="cond-dot" :style="{background: (s.deviation>=0&&s.deviation<=10)?'var(--sage)':'var(--pale)'}"></div>
-                <span style="font-size:11px;color:var(--mid)">位置適合進場（0–10%）</span>
-                <span style="margin-left:auto;font-family:var(--mono);font-size:9px" :class="(s.deviation>=0&&s.deviation<=10)?'g':'r'">{{ (s.deviation>=0&&s.deviation<=10)?'&#x2713;':'&#x2717;' }}</span>
+              <div class="cond-row" style="border:none">
+                <div style="width:6px;height:6px;border-radius:99px;flex-shrink:0" :style="{background:(s.deviation>=0&&s.deviation<=10)?'var(--green)':'var(--red)'}"></div>
+                <span style="font-size:11px;color:var(--mid)">偏離 0–10%（回踩中）</span>
+                <span style="margin-left:auto;font-family:var(--mono);font-size:9px;font-weight:700" :class="(s.deviation>=0&&s.deviation<=10)?'g':'r'">{{ (s.deviation>=0&&s.deviation<=10)?'YES':'NO' }}</span>
               </div>
             </div>
 
             <!-- Score -->
-            <div style="margin-top:10px;text-align:center">
-              <span style="font-family:var(--mono);font-size:10px;font-weight:600;padding:5px 14px;border-radius:99px"
-                :style="s.score===3?'background:rgba(90,144,104,.15);color:var(--sage)':s.score===2?'background:rgba(160,120,40,.12);color:var(--amber)':'background:rgba(100,80,60,.06);color:var(--pale)'">
-                {{ s.score===3?'&#x2B50; 三條件全符合 — 等進場確認':s.score===2?'&#x25CB; 兩條件符合 — 持續觀察':'&#x2014; 條件不足' }}
+            <div style="margin-top:10px;padding:8px 12px;border-radius:8px;text-align:center"
+              :style="s.score===3?'background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22)':s.score===2?'background:rgba(212,168,83,.08);border:1px solid rgba(212,168,83,.18)':'background:rgba(255,255,255,.03);border:1px solid var(--line)'">
+              <span style="font-family:var(--mono);font-size:10px;font-weight:700"
+                :class="s.score===3?'g':s.score===2?'gd':''">
+                {{ s.score===3?'&#x2605; 3/3 — 等進場確認':s.score===2?'&#x25C6; 2/3 — 持續觀察':'&#x2014; '+s.score+'/3 條件' }}
               </span>
             </div>
-
           </div>
         </div>
 
-        <!-- Empty state -->
-        <div v-else class="r3 card" style="padding:48px;text-align:center">
-          <div style="font-size:28px;margin-bottom:12px;opacity:.4">&#x1F4E1;</div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:17px;color:var(--mid);margin-bottom:6px">點擊右上角「掃描」</div>
-          <div style="font-family:var(--mono);font-size:11px;color:var(--pale)">自動抓取七巨頭週線數據並計算 20MA 偏離度</div>
+        <!-- Empty -->
+        <div v-else class="r4 card" style="padding:48px;text-align:center">
+          <div style="font-size:22px;margin-bottom:10px;opacity:.3">&#x1F4E1;</div>
+          <div style="font-size:15px;font-weight:600;color:var(--mid);margin-bottom:5px">點擊「掃描」開始分析</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--dim)">自動計算所有標的的週線 20MA 偏離度</div>
         </div>
 
-        <!-- Last updated -->
-        <div v-if="radarUpdatedAt" style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--pale);margin-top:16px">
-          上次掃描：{{ radarUpdatedAt }}
-        </div>
+        <div v-if="radarUpdatedAt" style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:14px">LAST SCAN: {{ radarUpdatedAt }}</div>
       </section>
 
       <!-- ═══ API 設定 ═══ -->
       <section v-if="tab==='settings'">
-        <div class="r1 pg-title" style="margin-bottom:24px">連線設定</div>
-        <div class="r2 card" style="padding:24px;max-width:420px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--sk);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px">FINNHUB API KEY</div>
+        <div class="r1 pg-title" style="margin-bottom:22px">API 設定</div>
+        <div class="r2 card" style="padding:22px;max-width:420px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">FINNHUB API KEY</div>
           <input v-model="tempKey" type="password" placeholder="Paste your API key ..." class="inp" style="margin-bottom:8px">
-          <div style="font-size:11px;color:var(--pale);margin-bottom:20px;line-height:1.7">前往 <a href="https://finnhub.io" target="_blank" style="color:var(--sk);text-decoration:none;border-bottom:1px solid rgba(180,90,110,.3)">finnhub.io</a> 免費申請 &#x2014; 每分鐘 60 次</div>
-          <button @click="saveKey" class="btn-main" style="width:100%;justify-content:center;padding:13px">儲存並重新連線</button>
+          <div style="font-size:11px;color:var(--dim);margin-bottom:18px;line-height:1.7">前往 <a href="https://finnhub.io" target="_blank" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(212,168,83,.3)">finnhub.io</a> 免費申請 &#x2014; 60 req/min</div>
+          <button @click="saveKey" class="btn-gold" style="width:100%;justify-content:center;padding:12px">儲存並重新連線</button>
         </div>
-        <div class="r3 card" style="padding:22px;max-width:420px;margin-top:14px;border-color:rgba(180,90,110,.15)">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--sk);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">&#x1F4F1; 加入主畫面 (PWA)</div>
-          <div style="font-size:12px;color:var(--mid);line-height:1.85"><strong style="color:var(--ink)">iOS Safari：</strong>點分享按鈕 &#x2192; 加入主畫面<br><strong style="color:var(--ink)">Android Chrome：</strong>選單 &#x2192; 加到主畫面</div>
+        <div class="r3 card" style="padding:20px;max-width:420px;margin-top:12px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">&#x1F4F1; PWA — 加入主畫面</div>
+          <div style="font-size:12px;color:var(--mid);line-height:1.85"><strong style="color:var(--txt)">iOS Safari：</strong>分享按鈕 &#x2192; 加入主畫面<br><strong style="color:var(--txt)">Android Chrome：</strong>選單 &#x2192; 加到主畫面<br><span style="color:var(--dim)">全螢幕 App 模式，無瀏覽器介面。</span></div>
         </div>
       </section>
+
     </div>
   </main>
 
-  <div class="bbar"><div style="font-family:var(--mono);font-size:9px;color:rgba(180,90,110,.5);letter-spacing:.06em">&#x26A0; 數據僅存本地快取 &#xB7; 請定期導出備份</div></div>
+  <div class="bbar"><div style="font-family:var(--mono);font-size:9px;color:rgba(212,168,83,.35);letter-spacing:.06em">&#x26A0; 數據僅存本地快取 &#xB7; 請定期導出備份</div></div>
 
-  <!-- MODALS (entry/addlot/edit/exit — same as v16.3, abbreviated) -->
-  <div v-if="eModal.show" class="modal-bg" @click.self="eModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--sk);border-radius:99px"></div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">新增持倉</div></div><button @click="eModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div style="display:flex;flex-direction:column;gap:14px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">股票代號</div><input v-model="eForm.ticker" :class="['inp',eErrors.ticker?'error':'']" placeholder="AAPL" style="text-transform:uppercase;font-size:20px;font-weight:600" @input="eErrors.ticker=''"><div v-if="eErrors.ticker" class="err-msg">{{ eErrors.ticker }}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">買入價格 ($)</div><input v-model.number="eForm.price" type="number" step="0.01" :class="['inp',eErrors.price?'error':'']" placeholder="0.00" @input="eErrors.price=''"><div v-if="eErrors.price" class="err-msg">{{ eErrors.price }}</div></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">股數</div><input v-model.number="eForm.qty" type="number" :class="['inp',eErrors.qty?'error':'']" placeholder="100" @input="eErrors.qty=''"><div v-if="eErrors.qty" class="err-msg">{{ eErrors.qty }}</div></div></div><div style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">價格提醒（選填）</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--sage);letter-spacing:.1em;margin-bottom:6px">&#x25B2; 停利目標 ($)</div><input v-model.number="eForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="選填"></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--umb);letter-spacing:.1em;margin-bottom:6px">&#x25BC; 停損警報 ($)</div><input v-model.number="eForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="選填"></div></div></div><div style="padding-top:4px"><button @click="doEntry" class="btn-main" style="width:100%;justify-content:center;padding:13px">確認新增持倉</button><button @click="eModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;margin-top:8px;text-align:center">取消返回</button></div></div></div></div>
-  <div v-if="addLotModal.show" class="modal-bg" @click.self="addLotModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--sage);border-radius:99px"></div><div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">加倉</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">{{ addLotModal.ticker }} &#x2022; 現持 {{ addLotModal.currentQty }} shs &#x2022; 均成 ${{ addLotModal.currentAvg }}</div></div></div><button @click="addLotModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div v-if="addLotModal.lots&&addLotModal.lots.length>0" style="margin-bottom:16px"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">現有批次</div><div v-for="(lot,li) in addLotModal.lots" :key="li" class="lot-row"><div><span style="font-family:var(--mono);font-size:12px;color:var(--ink)">${{ Number(lot.price).toFixed(2) }}</span><span style="font-family:var(--mono);font-size:10px;color:var(--pale);margin-left:8px">{{ lot.qty }} shs</span></div><div style="font-family:var(--mono);font-size:10px;color:var(--pale)">{{ lot.date||'' }}</div></div></div><div style="display:flex;flex-direction:column;gap:12px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">加倉價格 ($)</div><input v-model.number="addLotForm.price" type="number" step="0.01" :class="['inp',addLotErrors.price?'error':'']" placeholder="0.00" @input="addLotErrors.price=''"><div v-if="addLotErrors.price" class="err-msg">{{ addLotErrors.price }}</div></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">加倉股數</div><input v-model.number="addLotForm.qty" type="number" :class="['inp',addLotErrors.qty?'error':'']" placeholder="100" @input="addLotErrors.qty=''"><div v-if="addLotErrors.qty" class="err-msg">{{ addLotErrors.qty }}</div></div></div><div v-if="addLotForm.price>0&&addLotForm.qty>0" style="background:var(--bg);border:1px solid var(--line2);border-radius:12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">加倉後均攤成本</div><div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--ink)">${{ newAvgCostPreview }}</div></div><div style="text-align:right"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">總股數</div><div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--mid)">{{ addLotModal.currentQty+addLotForm.qty }}</div></div></div></div><button @click="doAddLot" class="btn-add" style="width:100%;justify-content:center;padding:13px">確認加倉</button><button @click="addLotModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button></div></div></div>
-  <div v-if="editModal.show" class="modal-bg" @click.self="editModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--amber);border-radius:99px"></div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">{{ editModal.ticker }} 設定</div></div><button @click="editModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div style="display:flex;flex-direction:column;gap:14px"><div style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">價格提醒設定</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--sage);letter-spacing:.1em;margin-bottom:6px">&#x25B2; 停利目標 ($)</div><input v-model.number="editForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="留空清除"></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--umb);letter-spacing:.1em;margin-bottom:6px">&#x25BC; 停損警報 ($)</div><input v-model.number="editForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="留空清除"></div></div></div><div style="display:flex;flex-direction:column;gap:8px;padding-top:4px"><button @click="doEdit" class="btn-main" style="width:100%;justify-content:center;padding:13px">儲存設定</button><button @click="doDeletePos" class="btn-del">&#x1F5D1; 刪除此持倉</button><button @click="editModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button></div></div></div></div>
-  <div v-if="exitModal.show" class="modal-bg" @click.self="exitModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:20px;background:var(--umb);border-radius:99px"></div><div><div style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)">結清獲利</div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);margin-top:2px">{{ exitModal.ticker }} &#x2022; 均成 ${{ exitModal.avgCost }} &#x2022; {{ exitModal.qty }} shs</div></div></div><button @click="exitModal.show=false" style="color:var(--pale);padding:4px;background:none;border:none;cursor:pointer"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div style="display:flex;flex-direction:column;gap:14px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">賣出價格 ($)</div><input v-model.number="exitForm.price" type="number" step="0.01" :class="['inp',exitErrors.price?'error':'']" placeholder="0.00" @input="exitErrors.price=''"><div v-if="exitErrors.price" class="err-msg">{{ exitErrors.price }}</div></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--pale);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px">賣出股數</div><input v-model.number="exitForm.qty" type="number" :class="['inp',exitErrors.qty?'error':'']" :placeholder="String(exitModal.qty)" @input="exitErrors.qty=''"><div v-if="exitErrors.qty" class="err-msg">{{ exitErrors.qty }}</div></div></div><div v-if="exitForm.price>0&&exitForm.qty>0" style="background:var(--bg);border:1px solid var(--line2);border-radius:14px;padding:14px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px"><div style="text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">預估損益</div><div style="font-family:var(--mono);font-size:22px;font-weight:300" :class="exitPv>=0?'g':'r'">{{ exitPv>=0?'+':'' }}${{ fmt(exitPv) }}</div></div><div style="text-align:center"><div style="font-family:var(--mono);font-size:8px;color:var(--pale);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">回收金額</div><div style="font-family:var(--mono);font-size:22px;font-weight:300;color:var(--mid)">${{ fmt(exitForm.price*Math.min(exitForm.qty,exitModal.qty)) }}</div></div></div><div style="font-family:var(--mono);font-size:9px;color:var(--pale);text-align:center">{{ exitPvPct>=0?'+':'' }}{{ exitPvPct.toFixed(2) }}%</div></div><button @click="doExit" class="btn-exit" style="width:100%;justify-content:center;padding:13px;font-size:13px">確認平倉</button><button @click="exitModal.show=false" style="color:var(--pale);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--sans);width:100%;text-align:center">取消</button></div></div></div>
+  <!-- MODALS -->
+  <div v-if="eModal.show" class="modal-bg" @click.self="eModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:18px;background:var(--gold);border-radius:99px"></div><div style="font-size:18px;font-weight:700;color:var(--txt)">新增持倉</div></div><button @click="eModal.show=false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div style="display:flex;flex-direction:column;gap:12px"><div><div class="stat-lbl" style="margin-bottom:6px">TICKER</div><input v-model="eForm.ticker" :class="['inp',eErrors.ticker?'error':'']" placeholder="AAPL" style="text-transform:uppercase;font-size:20px;font-weight:700" @input="eErrors.ticker=''"><div v-if="eErrors.ticker" class="err-msg">{{ eErrors.ticker }}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="stat-lbl" style="margin-bottom:6px">BUY PRICE ($)</div><input v-model.number="eForm.price" type="number" step="0.01" :class="['inp',eErrors.price?'error':'']" placeholder="0.00" @input="eErrors.price=''"><div v-if="eErrors.price" class="err-msg">{{ eErrors.price }}</div></div><div><div class="stat-lbl" style="margin-bottom:6px">SHARES</div><input v-model.number="eForm.qty" type="number" :class="['inp',eErrors.qty?'error':'']" placeholder="100" @input="eErrors.qty=''"><div v-if="eErrors.qty" class="err-msg">{{ eErrors.qty }}</div></div></div><div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px"><div class="stat-lbl" style="margin-bottom:8px">PRICE ALERTS（選填）</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--green);letter-spacing:.1em;margin-bottom:5px">&#x25B2; TAKE PROFIT ($)</div><input v-model.number="eForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="選填"></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.1em;margin-bottom:5px">&#x25BC; STOP LOSS ($)</div><input v-model.number="eForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="選填"></div></div></div><div style="padding-top:2px"><button @click="doEntry" class="btn-gold" style="width:100%;justify-content:center;padding:12px">確認新增</button><button @click="eModal.show=false" style="color:var(--dim);font-size:12px;padding:8px;background:none;border:none;cursor:pointer;font-family:var(--ui);width:100%;margin-top:6px;text-align:center">取消</button></div></div></div></div>
+  <div v-if="addLotModal.show" class="modal-bg" @click.self="addLotModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:18px;background:var(--green);border-radius:99px"></div><div><div style="font-size:18px;font-weight:700;color:var(--txt)">加倉</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:2px">{{ addLotModal.ticker }} &#x2022; {{ addLotModal.currentQty }} shs &#x2022; avg ${{ addLotModal.currentAvg }}</div></div></div><button @click="addLotModal.show=false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div v-if="addLotModal.lots&&addLotModal.lots.length>0" style="margin-bottom:14px"><div class="stat-lbl" style="margin-bottom:6px">現有批次</div><div v-for="(lot,li) in addLotModal.lots" :key="li" class="lot-row"><div><span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--txt)">${{ Number(lot.price).toFixed(2) }}</span><span style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-left:8px">{{ lot.qty }} shs</span></div><div style="font-family:var(--mono);font-size:9px;color:var(--dim)">{{ lot.date||'' }}</div></div></div><div style="display:flex;flex-direction:column;gap:10px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="stat-lbl" style="margin-bottom:6px">ADD PRICE ($)</div><input v-model.number="addLotForm.price" type="number" step="0.01" :class="['inp',addLotErrors.price?'error':'']" placeholder="0.00" @input="addLotErrors.price=''"><div v-if="addLotErrors.price" class="err-msg">{{ addLotErrors.price }}</div></div><div><div class="stat-lbl" style="margin-bottom:6px">ADD SHARES</div><input v-model.number="addLotForm.qty" type="number" :class="['inp',addLotErrors.qty?'error':'']" placeholder="100" @input="addLotErrors.qty=''"><div v-if="addLotErrors.qty" class="err-msg">{{ addLotErrors.qty }}</div></div></div><div v-if="addLotForm.price>0&&addLotForm.qty>0" style="background:var(--bg3);border:1px solid var(--line2);border-radius:10px;padding:12px"><div style="display:flex;justify-content:space-between"><div><div class="stat-lbl" style="margin-bottom:3px">新均攤成本</div><div style="font-family:var(--mono);font-size:18px;font-weight:600;color:var(--txt)">${{ newAvgCostPreview }}</div></div><div style="text-align:right"><div class="stat-lbl" style="margin-bottom:3px">總股數</div><div style="font-family:var(--mono);font-size:18px;font-weight:600;color:var(--mid)">{{ addLotModal.currentQty+addLotForm.qty }}</div></div></div></div><button @click="doAddLot" class="btn-add" style="width:100%;justify-content:center;padding:12px">確認加倉</button><button @click="addLotModal.show=false" style="color:var(--dim);font-size:12px;padding:6px;background:none;border:none;cursor:pointer;font-family:var(--ui);width:100%;text-align:center">取消</button></div></div></div>
+  <div v-if="editModal.show" class="modal-bg" @click.self="editModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:18px;background:var(--gold);border-radius:99px"></div><div style="font-size:18px;font-weight:700;color:var(--txt)">{{ editModal.ticker }} 設定</div></div><button @click="editModal.show=false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div style="display:flex;flex-direction:column;gap:12px"><div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px"><div class="stat-lbl" style="margin-bottom:8px">PRICE ALERTS</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-family:var(--mono);font-size:8px;color:var(--green);letter-spacing:.1em;margin-bottom:5px">&#x25B2; TAKE PROFIT</div><input v-model.number="editForm.tp" type="number" step="0.01" class="inp inp-sm" placeholder="留空清除"></div><div><div style="font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.1em;margin-bottom:5px">&#x25BC; STOP LOSS</div><input v-model.number="editForm.sl" type="number" step="0.01" class="inp inp-sm" placeholder="留空清除"></div></div></div><div style="display:flex;flex-direction:column;gap:6px;padding-top:2px"><button @click="doEdit" class="btn-gold" style="width:100%;justify-content:center;padding:12px">儲存</button><button @click="doDeletePos" class="btn-del">&#x1F5D1; 刪除持倉</button><button @click="editModal.show=false" style="color:var(--dim);font-size:12px;padding:6px;background:none;border:none;cursor:pointer;font-family:var(--ui);width:100%;text-align:center">取消</button></div></div></div></div>
+  <div v-if="exitModal.show" class="modal-bg" @click.self="exitModal.show=false"><div class="modal-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:18px;background:var(--red);border-radius:99px"></div><div><div style="font-size:18px;font-weight:700;color:var(--txt)">結清獲利</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:2px">{{ exitModal.ticker }} &#x2022; avg ${{ exitModal.avgCost }} &#x2022; {{ exitModal.qty }} shs</div></div></div><button @click="exitModal.show=false" style="color:var(--dim);padding:4px;background:none;border:none;cursor:pointer"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div style="display:flex;flex-direction:column;gap:12px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div class="stat-lbl" style="margin-bottom:6px">SELL PRICE ($)</div><input v-model.number="exitForm.price" type="number" step="0.01" :class="['inp',exitErrors.price?'error':'']" placeholder="0.00" @input="exitErrors.price=''"><div v-if="exitErrors.price" class="err-msg">{{ exitErrors.price }}</div></div><div><div class="stat-lbl" style="margin-bottom:6px">SELL QTY</div><input v-model.number="exitForm.qty" type="number" :class="['inp',exitErrors.qty?'error':'']" :placeholder="String(exitModal.qty)" @input="exitErrors.qty=''"><div v-if="exitErrors.qty" class="err-msg">{{ exitErrors.qty }}</div></div></div><div v-if="exitForm.price>0&&exitForm.qty>0" style="background:var(--bg3);border:1px solid var(--line2);border-radius:12px;padding:14px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px"><div style="text-align:center"><div class="stat-lbl" style="margin-bottom:4px;text-align:center">P&amp;L</div><div style="font-family:var(--mono);font-size:22px;font-weight:700" :class="exitPv>=0?'g':'r'">{{ exitPv>=0?'+':'' }}${{ fmt(exitPv) }}</div></div><div style="text-align:center"><div class="stat-lbl" style="margin-bottom:4px;text-align:center">PROCEEDS</div><div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--mid)">${{ fmt(exitForm.price*Math.min(exitForm.qty,exitModal.qty)) }}</div></div></div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center">{{ exitPvPct>=0?'+':'' }}{{ exitPvPct.toFixed(2) }}%</div></div><button @click="doExit" class="btn-exit" style="width:100%;justify-content:center;padding:12px;font-size:13px">確認平倉</button><button @click="exitModal.show=false" style="color:var(--dim);font-size:12px;padding:6px;background:none;border:none;cursor:pointer;font-family:var(--ui);width:100%;text-align:center">取消</button></div></div></div>
 
 </div>
 
 <script>
-(function() {
-  var KO = 'M400_POSITIONS';
-  var KH = 'M400_HISTORY';
-  var KA = 'M400_APIKEY';
-  var KB = 'M400_LASTBACKUP';
-
-  var OLD_O = ['M400v162_O','M400v16_O','M400v15_O','M400v14_O','M400v13_O','M400v12_OPEN','M400v11_OPEN','M400_STATION_OPEN_DATA'];
-  var OLD_H = ['M400v162_H','M400v16_H','M400v15_H','M400v14_H','M400v13_H','M400v12_HIST','M400v11_HIST','M400_STATION_HISTORY_DATA'];
-  var OLD_A = ['M400v162_A','M400v16_A','M400v15_A','M400v14_A','M400v13_A','M400v12_API','M400v11_API','M400_FINNHUB_API_KEY'];
-
+(function(){
+  var KO='M400_POSITIONS',KH='M400_HISTORY',KA='M400_APIKEY',KB='M400_LASTBACKUP',KSL='M400_SCANLIST';
+  var OLD_O=['M400v162_O','M400v16_O','M400v15_O','M400v14_O','M400v13_O','M400v12_OPEN','M400v11_OPEN','M400_STATION_OPEN_DATA'];
+  var OLD_H=['M400v162_H','M400v16_H','M400v15_H','M400v14_H','M400v13_H','M400v12_HIST','M400v11_HIST','M400_STATION_HISTORY_DATA'];
+  var OLD_A=['M400v162_A','M400v16_A','M400v15_A','M400v14_A','M400v13_A','M400v12_API','M400v11_API','M400_FINNHUB_API_KEY'];
   function migrate(){
     if(!localStorage.getItem(KO)){for(var i=0;i<OLD_O.length;i++){var v=localStorage.getItem(OLD_O[i]);if(v){localStorage.setItem(KO,v);break;}}}
     if(!localStorage.getItem(KH)){for(var j=0;j<OLD_H.length;j++){var h=localStorage.getItem(OLD_H[j]);if(h){localStorage.setItem(KH,h);break;}}}
@@ -723,299 +667,179 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   }
   migrate();
 
-  Vue.createApp({
-    setup: function() {
-      var ref = Vue.ref; var computed = Vue.computed; var onMounted = Vue.onMounted;
+  Vue.createApp({setup:function(){
+    var ref=Vue.ref,computed=Vue.computed,onMounted=Vue.onMounted;
+    var tab=ref('open'),menuOpen=ref(false),fetching=ref(false);
+    var selMonth=ref(new Date().getMonth()+1);
+    var openPos=ref([]),hist=ref([]),apiKey=ref(''),tempKey=ref('');
+    var storageUsage=ref(0),toasts=ref([]),lastBackup=ref(0);
+    var sortBy=ref('default');
+    var sortOptions=[{key:'default',label:'預設'},{key:'pct-desc',label:'漲幅 ↓'},{key:'pct-asc',label:'漲幅 ↑'},{key:'value-desc',label:'市值 ↓'},{key:'pnl-desc',label:'損益 ↓'}];
 
-      var tab = ref('open'); var menuOpen = ref(false); var fetching = ref(false);
-      var selMonth = ref(new Date().getMonth()+1);
-      var openPos = ref([]); var hist = ref([]);
-      var apiKey = ref(''); var tempKey = ref('');
-      var storageUsage = ref(0); var toasts = ref([]);
-      var lastBackup = ref(0);
-      var sortBy = ref('default');
-      var sortOptions = [{key:'default',label:'預設'},{key:'pct-desc',label:'漲幅 ↓'},{key:'pct-asc',label:'漲幅 ↑'},{key:'value-desc',label:'市值 ↓'},{key:'pnl-desc',label:'損益 ↓'}];
+    // Radar
+    var radarLoading=ref(false),radarData=ref([]),radarUpdatedAt=ref('');
+    var mag7=['AAPL','MSFT','NVDA','GOOGL','AMZN','META','TSLA'];
+    var companyNames={AAPL:'Apple',MSFT:'Microsoft',NVDA:'NVIDIA',GOOGL:'Alphabet',AMZN:'Amazon',META:'Meta',TSLA:'Tesla'};
+    var scanList=ref(['AAPL','MSFT','NVDA','GOOGL','AMZN','META','TSLA']);
+    var newTicker=ref(''),newTickerErr=ref('');
 
-      // ── Radar state ──
-      var radarLoading   = ref(false);
-      var radarData      = ref([]);
-      var radarUpdatedAt = ref('');
+    var eModal=ref({show:false}),eForm=ref({ticker:'',price:'',qty:'',tp:'',sl:''}),eErrors=ref({ticker:'',price:'',qty:''});
+    var addLotModal=ref({show:false,targetId:null,ticker:'',currentQty:0,currentAvg:'0',lots:[]}),addLotForm=ref({price:'',qty:''}),addLotErrors=ref({price:'',qty:''});
+    var editModal=ref({show:false,targetId:null,ticker:''}),editForm=ref({tp:'',sl:''});
+    var exitModal=ref({show:false,targetId:null,ticker:'',qty:0,avgCost:'0'}),exitForm=ref({price:'',qty:''}),exitErrors=ref({price:'',qty:''});
 
-      var mag7 = ['AAPL','MSFT','NVDA','GOOGL','AMZN','META','TSLA'];
-      var companyNames = { AAPL:'Apple', MSFT:'Microsoft', NVDA:'NVIDIA', GOOGL:'Alphabet', AMZN:'Amazon', META:'Meta', TSLA:'Tesla' };
+    var indices=ref([{symbol:'SPY',name:'S&P 500',price:null,change:null},{symbol:'QQQ',name:'NASDAQ',price:null,change:null},{symbol:'DIA',name:'DOW JONES',price:null,change:null},{symbol:'VXX',name:'VIX 恐慌',price:null,change:null}]);
 
-      var eModal = ref({show:false}); var eForm = ref({ticker:'',price:'',qty:'',tp:'',sl:''}); var eErrors = ref({ticker:'',price:'',qty:''});
-      var addLotModal = ref({show:false,targetId:null,ticker:'',currentQty:0,currentAvg:'0',lots:[]}); var addLotForm = ref({price:'',qty:''}); var addLotErrors = ref({price:'',qty:''});
-      var editModal = ref({show:false,targetId:null,ticker:''}); var editForm = ref({tp:'',sl:''});
-      var exitModal = ref({show:false,targetId:null,ticker:'',qty:0,avgCost:'0'}); var exitForm = ref({price:'',qty:''}); var exitErrors = ref({price:'',qty:''});
+    function go(t){tab.value=t;menuOpen.value=false;}
+    function save(){localStorage.setItem(KO,JSON.stringify(openPos.value));localStorage.setItem(KH,JSON.stringify(hist.value));calcStor();}
+    function calcStor(){var t=0;for(var k in localStorage){if(Object.prototype.hasOwnProperty.call(localStorage,k))t+=(k.length+((localStorage[k]&&localStorage[k].length)||0))*2;}storageUsage.value=Math.min(100,Math.round(t/5242880*100));}
+    function toast(msg,type){var id=Date.now()+Math.random();toasts.value.push({id:id,msg:msg,type:type||'info',out:false});setTimeout(function(){var t=toasts.value.find(function(x){return x.id===id;});if(t)t.out=true;setTimeout(function(){toasts.value=toasts.value.filter(function(x){return x.id!==id;});},260);},4200);}
+    function fmt(n){var num=Number(n);if(isNaN(num))return'0.00';return num.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 
-      var indices = ref([
-        {symbol:'SPY',name:'S&P 500',price:null,change:null},
-        {symbol:'QQQ',name:'NASDAQ',price:null,change:null},
-        {symbol:'DIA',name:'DOW JONES',price:null,change:null},
-        {symbol:'VXX',name:'VIX 恐慌',price:null,change:null}
-      ]);
+    var lastBackupDisplay=computed(function(){if(!lastBackup.value)return'Never';var d=new Date(lastBackup.value);return(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');});
+    var showBackupReminder=computed(function(){if(!openPos.value.length&&!hist.value.length)return false;if(!lastBackup.value)return hist.value.length>0;return(Date.now()-lastBackup.value)>7*86400000;});
 
-      function go(t){tab.value=t;menuOpen.value=false;}
-      function save(){localStorage.setItem(KO,JSON.stringify(openPos.value));localStorage.setItem(KH,JSON.stringify(hist.value));calcStor();}
-      function calcStor(){var t=0;for(var k in localStorage){if(Object.prototype.hasOwnProperty.call(localStorage,k))t+=(k.length+((localStorage[k]&&localStorage[k].length)||0))*2;}storageUsage.value=Math.min(100,Math.round(t/5242880*100));}
-      function toast(msg,type){var id=Date.now()+Math.random();toasts.value.push({id:id,msg:msg,type:type||'info',out:false});setTimeout(function(){var t=toasts.value.find(function(x){return x.id===id;});if(t)t.out=true;setTimeout(function(){toasts.value=toasts.value.filter(function(x){return x.id!==id;});},280);},4200);}
-      function fmt(n){var num=Number(n);if(isNaN(num))return'0.00';return num.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-
-      var lastBackupDisplay = computed(function(){if(!lastBackup.value)return'從未';var d=new Date(lastBackup.value);return(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');});
-      var showBackupReminder = computed(function(){if(!openPos.value.length&&!hist.value.length)return false;if(!lastBackup.value)return hist.value.length>0;return(Date.now()-lastBackup.value)>7*86400000;});
-
-      function totalQty(p){if(p.lots&&p.lots.length>0)return p.lots.reduce(function(s,l){return s+l.qty;},0);return p.qty||0;}
-      function avgCost(p){if(p.lots&&p.lots.length>0){var tc=p.lots.reduce(function(s,l){return s+l.price*l.qty;},0);var tq=p.lots.reduce(function(s,l){return s+l.qty;},0);return tq>0?tc/tq:0;}return p.entry||0;}
-      function unrealized(p){return(p.currentPrice?p.currentPrice-avgCost(p):0)*totalQty(p);}
-      function pct(p){var ac=avgCost(p);return(p.currentPrice&&ac>0)?((p.currentPrice-ac)/ac*100):0;}
-      function isTpTriggered(p){return p.tp&&p.currentPrice&&p.currentPrice>=p.tp;}
-      function isSlTriggered(p){return p.sl&&p.currentPrice&&p.currentPrice<=p.sl;}
-      function alertClass(p){if(isTpTriggered(p))return'alert-tp';if(isSlTriggered(p))return'alert-sl';return'';}
-      function tpSlBar(p){if(!p.currentPrice)return'display:none';var sl=p.sl||0;var tp=p.tp||0;var cur=p.currentPrice;var ac=avgCost(p);var lo=sl||(ac*0.9);var hi=tp||(ac*1.1);if(hi<=lo)return'display:none';var curPct=Math.max(0,Math.min(100,(cur-lo)/(hi-lo)*100));var color=cur>=ac?'var(--sage)':'var(--umb)';return'left:0;right:'+(100-curPct)+'%;background:'+color;}
-
-      var sortedPos = computed(function(){
-        var arr=openPos.value.slice();
-        if(sortBy.value==='pct-desc') arr.sort(function(a,b){return pct(b)-pct(a);});
-        else if(sortBy.value==='pct-asc') arr.sort(function(a,b){return pct(a)-pct(b);});
-        else if(sortBy.value==='value-desc') arr.sort(function(a,b){return(b.currentPrice||avgCost(b))*totalQty(b)-(a.currentPrice||avgCost(a))*totalQty(a);});
-        else if(sortBy.value==='pnl-desc') arr.sort(function(a,b){return unrealized(b)-unrealized(a);});
-        return arr;
-      });
-
-      // ── Sorted radar (entry zone first) ──
-      var sortedRadar = computed(function(){
-        return radarData.value.slice().sort(function(a,b){
-          if(a.score!==b.score)return b.score-a.score;
-          return Math.abs(a.deviation)-Math.abs(b.deviation);
-        });
-      });
-
-      var totalValue=computed(function(){return openPos.value.reduce(function(s,p){return s+(p.currentPrice||avgCost(p))*totalQty(p);},0);});
-      var annualPnl=computed(function(){return hist.value.reduce(function(s,h){return s+h.pnl;},0);});
-      var totalUnrealized=computed(function(){return openPos.value.reduce(function(s,p){return s+unrealized(p);},0);});
-      var totalNetPnl=computed(function(){return annualPnl.value+totalUnrealized.value;});
-      var totalCostDeployed=computed(function(){return hist.value.reduce(function(s,h){return s+h.entry*h.qty;},0)+openPos.value.reduce(function(s,p){return s+avgCost(p)*totalQty(p);},0);});
-      var totalRecovered=computed(function(){return hist.value.reduce(function(s,h){return s+h.exit*h.qty;},0);});
-      var totalROI=computed(function(){return totalCostDeployed.value===0?0:(totalNetPnl.value/totalCostDeployed.value)*100;});
-      var monthPnl=computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reduce(function(s,h){return s+h.pnl;},0);});
-      var filteredHist=computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).sort(function(a,b){return(b.closedTs||0)-(a.closedTs||0);});});
-      var winRate=computed(function(){if(!hist.value.length)return 0;return hist.value.filter(function(h){return h.pnl>0;}).length/hist.value.length*100;});
-      var avgWin=computed(function(){var w=hist.value.filter(function(h){return h.pnl>0;});if(!w.length)return 0;return w.reduce(function(s,h){return s+h.pnl;},0)/w.length;});
-      var avgLoss=computed(function(){var l=hist.value.filter(function(h){return h.pnl<=0;});if(!l.length)return 0;return l.reduce(function(s,h){return s+h.pnl;},0)/l.length;});
-      var tickerStats=computed(function(){var map={};hist.value.forEach(function(h){var tk=h.ticker;if(!map[tk])map[tk]={ticker:tk,cost:0,recovered:0,currentVal:0,pnl:0,trades:0,openQty:0};map[tk].cost+=h.entry*h.qty;map[tk].recovered+=h.exit*h.qty;map[tk].pnl+=h.pnl;map[tk].trades+=1;});openPos.value.forEach(function(p){var tk=p.ticker;if(!map[tk])map[tk]={ticker:tk,cost:0,recovered:0,currentVal:0,pnl:0,trades:0,openQty:0};map[tk].cost+=avgCost(p)*totalQty(p);map[tk].currentVal+=(p.currentPrice||avgCost(p))*totalQty(p);map[tk].pnl+=unrealized(p);map[tk].openQty+=totalQty(p);});return Object.values(map).map(function(d){return{ticker:d.ticker,cost:d.cost,recovered:d.recovered,currentVal:d.currentVal,netPnl:d.pnl,roi:d.cost>0?(d.pnl/d.cost)*100:0,trades:d.trades,openQty:d.openQty};}).sort(function(a,b){return b.netPnl-a.netPnl;});});
-      var newAvgCostPreview=computed(function(){var m=addLotModal.value;if(!m.show||!addLotForm.value.price||!addLotForm.value.qty)return'0.00';var ec=m.lots.reduce(function(s,l){return s+l.price*l.qty;},0);var eq=m.lots.reduce(function(s,l){return s+l.qty;},0);var nc=ec+addLotForm.value.price*addLotForm.value.qty;var nq=eq+addLotForm.value.qty;return nq>0?(nc/nq).toFixed(2):'0.00';});
-      var exitPv=computed(function(){var m=exitModal.value;if(!m.show||!exitForm.value.price||!exitForm.value.qty)return 0;return(exitForm.value.price-parseFloat(m.avgCost))*Math.min(exitForm.value.qty,m.qty);});
-      var exitPvPct=computed(function(){var avgC=parseFloat(exitModal.value.avgCost)||0;if(!avgC||!exitForm.value.price)return 0;return(exitForm.value.price-avgC)/avgC*100;});
-
-      // ── Sparkline helpers ──
-      function sparkMinMax(closes) {
-        var mn = Math.min.apply(null, closes);
-        var mx = Math.max.apply(null, closes);
-        return { mn:mn, mx:mx, rng:(mx-mn)||1 };
-      }
-      function sparkY(val, closes, h) {
-        var mm = sparkMinMax(closes);
-        return h - ((val - mm.mn) / mm.rng) * (h - 8) - 4;
-      }
-      function sparkPoints(closes, w, h) {
-        if (!closes || closes.length < 2) return '';
-        return closes.map(function(v, i) {
-          var x = (i / (closes.length - 1)) * w;
-          var y = sparkY(v, closes, h);
-          return x.toFixed(1) + ',' + y.toFixed(1);
-        }).join(' ');
-      }
-      function sparkArea(closes, w, h) {
-        if (!closes || closes.length < 2) return '';
-        var pts = closes.map(function(v, i) {
-          var x = (i / (closes.length - 1)) * w;
-          var y = sparkY(v, closes, h);
-          return x.toFixed(1) + ',' + y.toFixed(1);
-        });
-        return pts.join(' ') + ' ' + w + ',' + h + ' 0,' + h;
-      }
-
-      // ── Deviation gauge style ──
-      function gaugeStyle(s) {
-        // Range: -20% to +30% (total 50%), MA at 40% from left
-        var lo = -20; var hi = 30; var range = hi - lo;
-        var devClamped = Math.max(lo, Math.min(hi, s.deviation));
-        var pct2 = ((devClamped - lo) / range) * 100;
-        var zeroPos = ((0 - lo) / range) * 100; // = 40%
-        var leftPct, width;
-        if (devClamped >= 0) {
-          leftPct = zeroPos; width = pct2 - zeroPos;
-        } else {
-          leftPct = pct2; width = zeroPos - pct2;
-        }
-        var color = s.deviation >= 0 ? 'var(--sage)' : 'var(--umb)';
-        return 'position:absolute;top:0;bottom:0;left:' + leftPct + '%;width:' + Math.max(width, 1) + '%;background:' + color + ';border-radius:99px;opacity:.7';
-      }
-
-      // ── Fetch Radar data ──
-      function fetchRadar() {
-        if (!apiKey.value) return;
-        radarLoading.value = true;
-        radarData.value = [];
-        var now  = Math.floor(Date.now() / 1000);
-        var from = now - 86400 * 200; // ~28 weeks of data (need 20 for MA + some extra)
-
-        Promise.all(mag7.map(function(sym) {
-          return fetch('https://finnhub.io/api/v1/stock/candle?symbol=' + sym + '&resolution=W&from=' + from + '&to=' + now + '&token=' + apiKey.value)
-            .then(function(r) { return r.json(); })
-            .then(function(data) { return { sym:sym, data:data }; });
-        })).then(function(results) {
-          var processed = [];
-          results.forEach(function(r) {
-            var sym = r.sym;
-            var d   = r.data;
-            if (!d || !d.c || d.c.length < 20) return; // need at least 20 weekly closes
-
-            var closes = d.c; // all weekly closes
-            var n = closes.length;
-
-            // Calculate 20-week MA using last 20 closes
-            var last20 = closes.slice(n - 20);
-            var ma20 = last20.reduce(function(s, v) { return s + v; }, 0) / 20;
-
-            // MA trend: compare current MA20 vs MA20 from 3 weeks ago
-            var maTrend = 'flat';
-            if (n >= 23) {
-              var prev3 = closes.slice(n - 23, n - 3);
-              var ma20prev = prev3.reduce(function(s, v) { return s + v; }, 0) / 20;
-              if (ma20 > ma20prev * 1.001) maTrend = 'up';
-              else if (ma20 < ma20prev * 0.999) maTrend = 'down';
-            }
-
-            var price = closes[n - 1];
-            var deviation = ((price - ma20) / ma20) * 100;
-
-            // How many consecutive weeks above/below MA
-            var weeksAbove = 0;
-            for (var i = n - 1; i >= 0; i--) {
-              var localLast20 = closes.slice(Math.max(0, i - 19), i + 1);
-              if (localLast20.length < 20) break;
-              var localMa = localLast20.reduce(function(s,v){return s+v;},0) / 20;
-              if (price > 0 && closes[i] > localMa) { if (weeksAbove >= 0) weeksAbove++; else break; }
-              else { if (weeksAbove <= 0) weeksAbove--; else break; }
-            }
-
-            // Zone classification
-            var zoneKey, zoneLabel, zone;
-            if (price < ma20) {
-              zoneKey = 'high'; zoneLabel = '20MA 下方'; zone = 'zone-high';
-            } else if (deviation <= 10 && maTrend === 'up') {
-              zoneKey = 'entry'; zoneLabel = '回踩區 &#x2605;'; zone = 'zone-entry';
-            } else if (deviation <= 18) {
-              zoneKey = 'watch'; zoneLabel = '觀察中'; zone = 'zone-watch';
-            } else {
-              zoneKey = 'high'; zoneLabel = '漲幅過大'; zone = 'zone-high';
-            }
-
-            // Score (conditions met)
-            var score = 0;
-            if (price > ma20) score++;
-            if (maTrend === 'up') score++;
-            if (deviation >= 0 && deviation <= 10) score++;
-
-            // Use last 12 weekly closes for sparkline
-            var sparkCloses = closes.slice(Math.max(0, n - 12));
-
-            processed.push({
-              ticker:       sym,
-              companyShort: companyNames[sym] || sym,
-              price:        price,
-              ma20:         ma20,
-              deviation:    deviation,
-              maTrend:      maTrend,
-              weeksAbove:   weeksAbove,
-              zone:         zone,
-              zoneKey:      zoneKey,
-              zoneLabel:    zoneLabel,
-              score:        score,
-              closes:       sparkCloses
-            });
-          });
-
-          radarData.value = processed;
-          radarUpdatedAt.value = new Date().toLocaleString('zh-TW', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
-          radarLoading.value = false;
-
-          // Toast summary
-          var entryCount = processed.filter(function(s){ return s.score === 3; }).length;
-          if (entryCount > 0) {
-            toast(entryCount + ' 支股票三條件全符合，等進場確認', 'success');
-          } else {
-            toast('掃描完成，本週無三條件同時符合的標的', 'info');
-          }
-        }).catch(function(e) {
-          console.error(e);
-          radarLoading.value = false;
-          toast('掃描失敗，請確認 API Key', 'warn');
-        });
-      }
-
-      // ── Fetch market ──
-      function fetchMarket(){
-        if(!apiKey.value)return; fetching.value=true;
-        var unique=Array.from(new Set(openPos.value.map(function(p){return p.ticker;})));
-        var syms=indices.value.map(function(i){return i.symbol;}).concat(unique);
-        Promise.all(syms.map(function(s){return fetch('https://finnhub.io/api/v1/quote?symbol='+s+'&token='+apiKey.value).then(function(r){return r.json();});}))
-        .then(function(results){
-          indices.value.forEach(function(ix,i){if(results[i]&&results[i].c){ix.price=results[i].c;ix.change=results[i].dp;}});
-          var off=indices.value.length;
-          openPos.value.forEach(function(p){var si=unique.indexOf(p.ticker);if(si!==-1&&results[off+si]&&results[off+si].c)p.currentPrice=results[off+si].c;});
-          save();
-          openPos.value.forEach(function(p){
-            if(pct(p)>=3&&!isTpTriggered(p))toast(p.ticker+' 已獲利 '+pct(p).toFixed(1)+'%','success');
-            if(isTpTriggered(p))toast('&#x1F4C8; '+p.ticker+' 已達停利 $'+p.tp,'success');
-            if(isSlTriggered(p))toast('&#x26A0; '+p.ticker+' 觸及停損 $'+p.sl,'warn');
-          });
-          fetching.value=false;
-        }).catch(function(e){console.error(e);fetching.value=false;});
-      }
-      function fetchAll(){fetchMarket();}
-
-      function vPos(val,lbl){if(val===''||val===null||val===undefined)return lbl+'不能為空';var n=Number(val);if(isNaN(n))return'請輸入有效數字';if(n<=0)return lbl+'必須大於 0';return'';}
-      function openEntryModal(){eForm.value={ticker:'',price:'',qty:'',tp:'',sl:''};eErrors.value={ticker:'',price:'',qty:''};eModal.value.show=true;}
-      function doEntry(){var tk=(eForm.value.ticker||'').toUpperCase().trim();eErrors.value.ticker=tk?'':'請輸入股票代號';eErrors.value.price=vPos(eForm.value.price,'買入價格');eErrors.value.qty=vPos(eForm.value.qty,'股數');if(eErrors.value.ticker||eErrors.value.price||eErrors.value.qty)return;var lot={price:Number(eForm.value.price),qty:Number(eForm.value.qty),date:new Date().toLocaleDateString('zh-TW')};openPos.value.push({id:Date.now(),ticker:tk,entry:Number(eForm.value.price),currentPrice:null,qty:Number(eForm.value.qty),lots:[lot],tp:eForm.value.tp?Number(eForm.value.tp):null,sl:eForm.value.sl?Number(eForm.value.sl):null});save();eModal.value.show=false;toast(tk+' 已新增持倉','success');}
-      function openAddLotModal(p){var ac=avgCost(p).toFixed(2);addLotModal.value={show:true,targetId:p.id,ticker:p.ticker,currentQty:totalQty(p),currentAvg:ac,lots:p.lots?p.lots.slice():[{price:p.entry,qty:p.qty,date:''}]};addLotForm.value={price:'',qty:''};addLotErrors.value={price:'',qty:''};}
-      function doAddLot(){addLotErrors.value.price=vPos(addLotForm.value.price,'加倉價格');addLotErrors.value.qty=vPos(addLotForm.value.qty,'加倉股數');if(addLotErrors.value.price||addLotErrors.value.qty)return;var p=openPos.value.find(function(x){return x.id===addLotModal.value.targetId;});if(!p)return;if(!p.lots)p.lots=[{price:p.entry,qty:p.qty,date:''}];p.lots.push({price:Number(addLotForm.value.price),qty:Number(addLotForm.value.qty),date:new Date().toLocaleDateString('zh-TW')});p.entry=avgCost(p);p.qty=totalQty(p);save();addLotModal.value.show=false;toast(p.ticker+' 加倉完成，均攤 $'+avgCost(p).toFixed(2),'success');}
-      function openEditModal(p){editModal.value={show:true,targetId:p.id,ticker:p.ticker};editForm.value={tp:p.tp||'',sl:p.sl||''};}
-      function doEdit(){var p=openPos.value.find(function(x){return x.id===editModal.value.targetId;});if(!p)return;p.tp=editForm.value.tp?Number(editForm.value.tp):null;p.sl=editForm.value.sl?Number(editForm.value.sl):null;save();editModal.value.show=false;toast('提醒設定已更新','info');}
-      function doDeletePos(){if(!confirm('確定刪除此持倉？'))return;openPos.value=openPos.value.filter(function(x){return x.id!==editModal.value.targetId;});save();editModal.value.show=false;toast('持倉已刪除','warn');}
-      function openExitModal(p){var ac=avgCost(p).toFixed(2);exitModal.value={show:true,targetId:p.id,ticker:p.ticker,qty:totalQty(p),avgCost:ac};exitForm.value={price:'',qty:''};exitErrors.value={price:'',qty:''};}
-      function doExit(){exitErrors.value.price=vPos(exitForm.value.price,'賣出價格');exitErrors.value.qty=vPos(exitForm.value.qty,'賣出股數');if(exitErrors.value.price||exitErrors.value.qty)return;var p=openPos.value.find(function(x){return x.id===exitModal.value.targetId;});if(!p)return;var ac=avgCost(p);var q=Math.min(Number(exitForm.value.qty),totalQty(p));var pnl=(Number(exitForm.value.price)-ac)*q;var now=new Date();hist.value.push({id:Date.now(),ticker:p.ticker,entry:ac,exit:Number(exitForm.value.price),qty:q,pnl:pnl,closedMonth:now.getMonth()+1,closedDate:now.toLocaleDateString('zh-TW'),closedTs:now.getTime()});var remaining=q;var newLots=[];var lots=p.lots?p.lots.slice():[{price:p.entry,qty:totalQty(p),date:''}];for(var i=0;i<lots.length;i++){if(remaining<=0){newLots.push(lots[i]);continue;}if(lots[i].qty<=remaining){remaining-=lots[i].qty;}else{newLots.push({price:lots[i].price,qty:lots[i].qty-remaining,date:lots[i].date});remaining=0;}}p.lots=newLots;p.qty=totalQty(p);p.entry=p.lots.length>0?avgCost(p):0;if(p.qty<=0||p.lots.length===0)openPos.value=openPos.value.filter(function(x){return x.id!==p.id;});save();exitModal.value.show=false;toast(p.ticker+' 結清 $'+fmt(pnl)+' &#x2022; 回收 $'+fmt(Number(exitForm.value.price)*q),pnl>=0?'success':'warn');}
-      function clearAll(){if(!confirm('確定清空所有紀錄？'))return;openPos.value=[];hist.value=[];localStorage.removeItem(KO);localStorage.removeItem(KH);calcStor();}
-      function exportData(){var blob=new Blob([JSON.stringify({open:openPos.value,history:hist.value,apiKey:apiKey.value},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='M400_'+new Date().toISOString().slice(0,10)+'.json';a.click();lastBackup.value=Date.now();localStorage.setItem(KB,String(lastBackup.value));toast('備份已導出','success');}
-      function importData(e){var reader=new FileReader();reader.onload=function(ev){try{var d=JSON.parse(ev.target.result);openPos.value=d.open||[];hist.value=d.history||[];if(d.apiKey){apiKey.value=d.apiKey;localStorage.setItem(KA,d.apiKey);}save();location.reload();}catch(err){alert('導入失敗');}};reader.readAsText(e.target.files[0]);}
-      function saveKey(){apiKey.value=tempKey.value;localStorage.setItem(KA,apiKey.value);location.reload();}
-
-      onMounted(function(){
-        var so=localStorage.getItem(KO);var sh=localStorage.getItem(KH);var sa=localStorage.getItem(KA);var sb=localStorage.getItem(KB);
-        if(so)openPos.value=JSON.parse(so);if(sh)hist.value=JSON.parse(sh);
-        if(sa){apiKey.value=sa;tempKey.value=sa;}
-        if(sb){lastBackup.value=parseInt(sb)||0;}
-        if(apiKey.value)fetchAll();
-        calcStor();
-        setInterval(fetchMarket,60000);
-      });
-
-      return{
-        tab,menuOpen,fetching,selMonth,openPos,hist,apiKey,tempKey,storageUsage,toasts,indices,sortBy,sortOptions,
-        radarLoading,radarData,radarUpdatedAt,mag7,sortedRadar,
-        eModal,eForm,eErrors,addLotModal,addLotForm,addLotErrors,editModal,editForm,exitModal,exitForm,exitErrors,
-        go,openEntryModal,doEntry,openAddLotModal,doAddLot,openEditModal,doEdit,doDeletePos,openExitModal,doExit,
-        clearAll,exportData,importData,saveKey,fetchAll,fetchRadar,
-        fmt,totalQty,avgCost,unrealized,pct,isTpTriggered,isSlTriggered,alertClass,tpSlBar,sortedPos,
-        totalValue,annualPnl,totalUnrealized,totalNetPnl,totalCostDeployed,totalRecovered,totalROI,
-        monthPnl,filteredHist,exitPv,exitPvPct,winRate,avgWin,avgLoss,tickerStats,newAvgCostPreview,
-        lastBackupDisplay,showBackupReminder,
-        sparkY,sparkPoints,sparkArea,gaugeStyle
-      };
+    // Scan list management
+    function addToScan(){
+      var tk=(newTicker.value||'').toUpperCase().trim().replace('.TW','');
+      if(!tk){newTickerErr.value='請輸入代號';return;}
+      if(scanList.value.includes(tk)){newTickerErr.value=tk+' 已在清單中';return;}
+      scanList.value.push(tk);
+      newTicker.value='';newTickerErr.value='';
+      localStorage.setItem(KSL,JSON.stringify(scanList.value));
+      toast(tk+' 已加入掃描清單','info');
     }
-  }).mount('#app');
+    function removeFromScan(tk){scanList.value=scanList.value.filter(function(s){return s!==tk;});localStorage.setItem(KSL,JSON.stringify(scanList.value));}
+    function resetToMag7(){scanList.value=mag7.slice();localStorage.setItem(KSL,JSON.stringify(scanList.value));toast('已重置為七巨頭','info');}
+    function addMyPositions(){var myTickers=Array.from(new Set(openPos.value.map(function(p){return p.ticker;})));var added=0;myTickers.forEach(function(tk){if(!scanList.value.includes(tk)){scanList.value.push(tk);added++;}});localStorage.setItem(KSL,JSON.stringify(scanList.value));if(added>0)toast('已加入 '+added+' 個持倉標的','info');else toast('所有持倉已在清單中','info');}
+
+    // Position helpers
+    function totalQty(p){if(p.lots&&p.lots.length>0)return p.lots.reduce(function(s,l){return s+l.qty;},0);return p.qty||0;}
+    function avgCost(p){if(p.lots&&p.lots.length>0){var tc=p.lots.reduce(function(s,l){return s+l.price*l.qty;},0);var tq=p.lots.reduce(function(s,l){return s+l.qty;},0);return tq>0?tc/tq:0;}return p.entry||0;}
+    function unrealized(p){return(p.currentPrice?p.currentPrice-avgCost(p):0)*totalQty(p);}
+    function pct(p){var ac=avgCost(p);return(p.currentPrice&&ac>0)?((p.currentPrice-ac)/ac*100):0;}
+    function isTpTriggered(p){return p.tp&&p.currentPrice&&p.currentPrice>=p.tp;}
+    function isSlTriggered(p){return p.sl&&p.currentPrice&&p.currentPrice<=p.sl;}
+    function alertClass(p){if(isTpTriggered(p))return'alert-tp';if(isSlTriggered(p))return'alert-sl';return'';}
+    function tpSlBar(p){if(!p.currentPrice)return'display:none';var sl=p.sl||0;var tp=p.tp||0;var cur=p.currentPrice;var ac=avgCost(p);var lo=sl||(ac*0.9);var hi=tp||(ac*1.1);if(hi<=lo)return'display:none';var curPct=Math.max(0,Math.min(100,(cur-lo)/(hi-lo)*100));return'left:0;right:'+(100-curPct)+'%;background:'+(cur>=ac?'var(--green)':'var(--red)')+';position:absolute;top:0;bottom:0;border-radius:99px;transition:right .5s';}
+
+    var sortedPos=computed(function(){var arr=openPos.value.slice();if(sortBy.value==='pct-desc')arr.sort(function(a,b){return pct(b)-pct(a);});else if(sortBy.value==='pct-asc')arr.sort(function(a,b){return pct(a)-pct(b);});else if(sortBy.value==='value-desc')arr.sort(function(a,b){return(b.currentPrice||avgCost(b))*totalQty(b)-(a.currentPrice||avgCost(a))*totalQty(a);});else if(sortBy.value==='pnl-desc')arr.sort(function(a,b){return unrealized(b)-unrealized(a);});return arr;});
+    var sortedRadar=computed(function(){return radarData.value.slice().sort(function(a,b){if(a.score!==b.score)return b.score-a.score;return Math.abs(a.deviation)-Math.abs(b.deviation);});});
+    var totalValue=computed(function(){return openPos.value.reduce(function(s,p){return s+(p.currentPrice||avgCost(p))*totalQty(p);},0);});
+    var annualPnl=computed(function(){return hist.value.reduce(function(s,h){return s+h.pnl;},0);});
+    var totalUnrealized=computed(function(){return openPos.value.reduce(function(s,p){return s+unrealized(p);},0);});
+    var totalNetPnl=computed(function(){return annualPnl.value+totalUnrealized.value;});
+    var totalCostDeployed=computed(function(){return hist.value.reduce(function(s,h){return s+h.entry*h.qty;},0)+openPos.value.reduce(function(s,p){return s+avgCost(p)*totalQty(p);},0);});
+    var totalRecovered=computed(function(){return hist.value.reduce(function(s,h){return s+h.exit*h.qty;},0);});
+    var totalROI=computed(function(){return totalCostDeployed.value===0?0:(totalNetPnl.value/totalCostDeployed.value)*100;});
+    var monthPnl=computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reduce(function(s,h){return s+h.pnl;},0);});
+    var filteredHist=computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).sort(function(a,b){return(b.closedTs||0)-(a.closedTs||0);});});
+    var winRate=computed(function(){if(!hist.value.length)return 0;return hist.value.filter(function(h){return h.pnl>0;}).length/hist.value.length*100;});
+    var avgWin=computed(function(){var w=hist.value.filter(function(h){return h.pnl>0;});if(!w.length)return 0;return w.reduce(function(s,h){return s+h.pnl;},0)/w.length;});
+    var avgLoss=computed(function(){var l=hist.value.filter(function(h){return h.pnl<=0;});if(!l.length)return 0;return l.reduce(function(s,h){return s+h.pnl;},0)/l.length;});
+    var tickerStats=computed(function(){var map={};hist.value.forEach(function(h){var tk=h.ticker;if(!map[tk])map[tk]={ticker:tk,cost:0,recovered:0,currentVal:0,pnl:0,trades:0,openQty:0};map[tk].cost+=h.entry*h.qty;map[tk].recovered+=h.exit*h.qty;map[tk].pnl+=h.pnl;map[tk].trades+=1;});openPos.value.forEach(function(p){var tk=p.ticker;if(!map[tk])map[tk]={ticker:tk,cost:0,recovered:0,currentVal:0,pnl:0,trades:0,openQty:0};map[tk].cost+=avgCost(p)*totalQty(p);map[tk].currentVal+=(p.currentPrice||avgCost(p))*totalQty(p);map[tk].pnl+=unrealized(p);map[tk].openQty+=totalQty(p);});return Object.values(map).map(function(d){return{ticker:d.ticker,cost:d.cost,recovered:d.recovered,currentVal:d.currentVal,netPnl:d.pnl,roi:d.cost>0?(d.pnl/d.cost)*100:0,trades:d.trades,openQty:d.openQty};}).sort(function(a,b){return b.netPnl-a.netPnl;});});
+    var newAvgCostPreview=computed(function(){var m=addLotModal.value;if(!m.show||!addLotForm.value.price||!addLotForm.value.qty)return'0.00';var ec=m.lots.reduce(function(s,l){return s+l.price*l.qty;},0);var eq=m.lots.reduce(function(s,l){return s+l.qty;},0);return(eq+addLotForm.value.qty)>0?((ec+addLotForm.value.price*addLotForm.value.qty)/(eq+addLotForm.value.qty)).toFixed(2):'0.00';});
+    var exitPv=computed(function(){var m=exitModal.value;if(!m.show||!exitForm.value.price||!exitForm.value.qty)return 0;return(exitForm.value.price-parseFloat(m.avgCost))*Math.min(exitForm.value.qty,m.qty);});
+    var exitPvPct=computed(function(){var ac=parseFloat(exitModal.value.avgCost)||0;if(!ac||!exitForm.value.price)return 0;return(exitForm.value.price-ac)/ac*100;});
+
+    // Sparkline helpers
+    function sparkMinMax(c){var mn=Math.min.apply(null,c);var mx=Math.max.apply(null,c);return{mn:mn,mx:mx,rng:(mx-mn)||1};}
+    function sparkY(val,closes,h){var mm=sparkMinMax(closes);return h-((val-mm.mn)/mm.rng)*(h-8)-4;}
+    function sparkPoints(c,w,h){if(!c||c.length<2)return'';return c.map(function(v,i){return((i/(c.length-1))*w).toFixed(1)+','+sparkY(v,c,h).toFixed(1);}).join(' ');}
+    function sparkArea(c,w,h){if(!c||c.length<2)return'';var pts=c.map(function(v,i){return((i/(c.length-1))*w).toFixed(1)+','+sparkY(v,c,h).toFixed(1);});return pts.join(' ')+' '+w+','+h+' 0,'+h;}
+    function gaugeStyle(s){var lo=-20,hi=30,range=50;var dc=Math.max(lo,Math.min(hi,s.deviation));var pct2=((dc-lo)/range)*100;var zero=(20/range)*100;var left,width;if(dc>=0){left=zero;width=pct2-zero;}else{left=pct2;width=zero-pct2;}var color=s.deviation>=0?'var(--green)':'var(--red)';return'position:absolute;top:0;bottom:0;left:'+left+'%;width:'+Math.max(width,1)+'%;background:'+color+';border-radius:99px;opacity:.6';}
+
+    // Fetch radar
+    function fetchRadar(){
+      if(!apiKey.value)return;
+      radarLoading.value=true;radarData.value=[];
+      var now=Math.floor(Date.now()/1000),from=now-86400*200;
+      var tickers=scanList.value.slice();
+      Promise.all(tickers.map(function(sym){
+        return fetch('https://finnhub.io/api/v1/stock/candle?symbol='+sym+'&resolution=W&from='+from+'&to='+now+'&token='+apiKey.value)
+          .then(function(r){return r.json();}).then(function(d){return{sym:sym,data:d};});
+      })).then(function(results){
+        var processed=[];
+        results.forEach(function(r){
+          var sym=r.sym,d=r.data;
+          if(!d||!d.c||d.c.length<20)return;
+          var closes=d.c,n=closes.length;
+          var last20=closes.slice(n-20);
+          var ma20=last20.reduce(function(s,v){return s+v;},0)/20;
+          var maTrend='flat';
+          if(n>=23){var prev3=closes.slice(n-23,n-3),ma20p=prev3.reduce(function(s,v){return s+v;},0)/20;if(ma20>ma20p*1.001)maTrend='up';else if(ma20<ma20p*0.999)maTrend='down';}
+          var price=closes[n-1],deviation=((price-ma20)/ma20)*100;
+          var weeksAbove=0;
+          for(var i=n-1;i>=Math.max(0,n-20);i--){var loc=closes.slice(Math.max(0,i-19),i+1);if(loc.length<20)break;var lm=loc.reduce(function(s,v){return s+v;},0)/20;if(closes[i]>lm){if(weeksAbove>=0)weeksAbove++;else break;}else{if(weeksAbove<=0)weeksAbove--;else break;}}
+          var zoneKey,zoneLabel,zone;
+          if(price<ma20){zoneKey='high';zoneLabel='MA 下方';zone='zone-high';}
+          else if(deviation<=10&&maTrend==='up'){zoneKey='entry';zoneLabel='回踩區';zone='zone-entry';}
+          else if(deviation<=18){zoneKey='watch';zoneLabel='觀察中';zone='zone-watch';}
+          else{zoneKey='high';zoneLabel='漲幅過大';zone='zone-high';}
+          var score=0;
+          if(price>ma20)score++;if(maTrend==='up')score++;if(deviation>=0&&deviation<=10)score++;
+          processed.push({ticker:sym,companyShort:companyNames[sym]||sym,price:price,ma20:ma20,deviation:deviation,maTrend:maTrend,weeksAbove:weeksAbove,zone:zone,zoneKey:zoneKey,zoneLabel:zoneLabel,score:score,closes:closes.slice(Math.max(0,n-12))});
+        });
+        radarData.value=processed;
+        radarUpdatedAt.value=new Date().toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+        radarLoading.value=false;
+        var ec=processed.filter(function(s){return s.score===3;}).length;
+        toast(ec>0?ec+' 支三條件全符合':'掃描完成，本週無三條件標的',ec>0?'success':'info');
+      }).catch(function(e){console.error(e);radarLoading.value=false;toast('掃描失敗','warn');});
+    }
+
+    function fetchMarket(){
+      if(!apiKey.value)return;fetching.value=true;
+      var unique=Array.from(new Set(openPos.value.map(function(p){return p.ticker;})));
+      var syms=indices.value.map(function(i){return i.symbol;}).concat(unique);
+      Promise.all(syms.map(function(s){return fetch('https://finnhub.io/api/v1/quote?symbol='+s+'&token='+apiKey.value).then(function(r){return r.json();});}))
+      .then(function(results){
+        indices.value.forEach(function(ix,i){if(results[i]&&results[i].c){ix.price=results[i].c;ix.change=results[i].dp;}});
+        var off=indices.value.length;
+        openPos.value.forEach(function(p){var si=unique.indexOf(p.ticker);if(si!==-1&&results[off+si]&&results[off+si].c)p.currentPrice=results[off+si].c;});
+        save();
+        openPos.value.forEach(function(p){if(pct(p)>=3&&!isTpTriggered(p))toast(p.ticker+' +'+pct(p).toFixed(1)+'%','success');if(isTpTriggered(p))toast(p.ticker+' TP triggered $'+p.tp,'success');if(isSlTriggered(p))toast(p.ticker+' SL triggered $'+p.sl,'warn');});
+        fetching.value=false;
+      }).catch(function(e){console.error(e);fetching.value=false;});
+    }
+    function fetchAll(){fetchMarket();}
+
+    function vPos(val,lbl){if(val===''||val===null||val===undefined)return lbl+'不能為空';var n=Number(val);if(isNaN(n))return'請輸入有效數字';if(n<=0)return lbl+'必須大於 0';return'';}
+    function openEntryModal(){eForm.value={ticker:'',price:'',qty:'',tp:'',sl:''};eErrors.value={ticker:'',price:'',qty:''};eModal.value.show=true;}
+    function doEntry(){var tk=(eForm.value.ticker||'').toUpperCase().trim();eErrors.value.ticker=tk?'':'請輸入代號';eErrors.value.price=vPos(eForm.value.price,'價格');eErrors.value.qty=vPos(eForm.value.qty,'股數');if(eErrors.value.ticker||eErrors.value.price||eErrors.value.qty)return;var lot={price:Number(eForm.value.price),qty:Number(eForm.value.qty),date:new Date().toLocaleDateString('zh-TW')};openPos.value.push({id:Date.now(),ticker:tk,entry:Number(eForm.value.price),currentPrice:null,qty:Number(eForm.value.qty),lots:[lot],tp:eForm.value.tp?Number(eForm.value.tp):null,sl:eForm.value.sl?Number(eForm.value.sl):null});save();eModal.value.show=false;toast(tk+' added','success');}
+    function openAddLotModal(p){var ac=avgCost(p).toFixed(2);addLotModal.value={show:true,targetId:p.id,ticker:p.ticker,currentQty:totalQty(p),currentAvg:ac,lots:p.lots?p.lots.slice():[{price:p.entry,qty:p.qty,date:''}]};addLotForm.value={price:'',qty:''};addLotErrors.value={price:'',qty:''};}
+    function doAddLot(){addLotErrors.value.price=vPos(addLotForm.value.price,'價格');addLotErrors.value.qty=vPos(addLotForm.value.qty,'股數');if(addLotErrors.value.price||addLotErrors.value.qty)return;var p=openPos.value.find(function(x){return x.id===addLotModal.value.targetId;});if(!p)return;if(!p.lots)p.lots=[{price:p.entry,qty:p.qty,date:''}];p.lots.push({price:Number(addLotForm.value.price),qty:Number(addLotForm.value.qty),date:new Date().toLocaleDateString('zh-TW')});p.entry=avgCost(p);p.qty=totalQty(p);save();addLotModal.value.show=false;toast(p.ticker+' lot added, avg $'+avgCost(p).toFixed(2),'success');}
+    function openEditModal(p){editModal.value={show:true,targetId:p.id,ticker:p.ticker};editForm.value={tp:p.tp||'',sl:p.sl||''};}
+    function doEdit(){var p=openPos.value.find(function(x){return x.id===editModal.value.targetId;});if(!p)return;p.tp=editForm.value.tp?Number(editForm.value.tp):null;p.sl=editForm.value.sl?Number(editForm.value.sl):null;save();editModal.value.show=false;toast('Alerts updated','info');}
+    function doDeletePos(){if(!confirm('確定刪除？'))return;openPos.value=openPos.value.filter(function(x){return x.id!==editModal.value.targetId;});save();editModal.value.show=false;toast('持倉已刪除','warn');}
+    function openExitModal(p){var ac=avgCost(p).toFixed(2);exitModal.value={show:true,targetId:p.id,ticker:p.ticker,qty:totalQty(p),avgCost:ac};exitForm.value={price:'',qty:''};exitErrors.value={price:'',qty:''};}
+    function doExit(){exitErrors.value.price=vPos(exitForm.value.price,'賣出價');exitErrors.value.qty=vPos(exitForm.value.qty,'股數');if(exitErrors.value.price||exitErrors.value.qty)return;var p=openPos.value.find(function(x){return x.id===exitModal.value.targetId;});if(!p)return;var ac=avgCost(p),q=Math.min(Number(exitForm.value.qty),totalQty(p)),pnl=(Number(exitForm.value.price)-ac)*q,now=new Date();hist.value.push({id:Date.now(),ticker:p.ticker,entry:ac,exit:Number(exitForm.value.price),qty:q,pnl:pnl,closedMonth:now.getMonth()+1,closedDate:now.toLocaleDateString('zh-TW'),closedTs:now.getTime()});var remaining=q,newLots=[],lots=p.lots?p.lots.slice():[{price:p.entry,qty:totalQty(p),date:''}];for(var i=0;i<lots.length;i++){if(remaining<=0){newLots.push(lots[i]);continue;}if(lots[i].qty<=remaining){remaining-=lots[i].qty;}else{newLots.push({price:lots[i].price,qty:lots[i].qty-remaining,date:lots[i].date});remaining=0;}}p.lots=newLots;p.qty=totalQty(p);p.entry=p.lots.length>0?avgCost(p):0;if(p.qty<=0||p.lots.length===0)openPos.value=openPos.value.filter(function(x){return x.id!==p.id;});save();exitModal.value.show=false;toast(p.ticker+' closed $'+fmt(pnl),pnl>=0?'success':'warn');}
+    function clearAll(){if(!confirm('確定清空？'))return;openPos.value=[];hist.value=[];localStorage.removeItem(KO);localStorage.removeItem(KH);calcStor();}
+    function exportData(){var blob=new Blob([JSON.stringify({open:openPos.value,history:hist.value,apiKey:apiKey.value},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='M400_'+new Date().toISOString().slice(0,10)+'.json';a.click();lastBackup.value=Date.now();localStorage.setItem(KB,String(lastBackup.value));toast('Backup exported','success');}
+    function importData(e){var reader=new FileReader();reader.onload=function(ev){try{var d=JSON.parse(ev.target.result);openPos.value=d.open||[];hist.value=d.history||[];if(d.apiKey){apiKey.value=d.apiKey;localStorage.setItem(KA,d.apiKey);}save();location.reload();}catch(err){alert('Import failed');}};reader.readAsText(e.target.files[0]);}
+    function saveKey(){apiKey.value=tempKey.value;localStorage.setItem(KA,apiKey.value);location.reload();}
+
+    onMounted(function(){
+      var so=localStorage.getItem(KO),sh=localStorage.getItem(KH),sa=localStorage.getItem(KA),sb=localStorage.getItem(KB),ss=localStorage.getItem(KSL);
+      if(so)openPos.value=JSON.parse(so);if(sh)hist.value=JSON.parse(sh);
+      if(sa){apiKey.value=sa;tempKey.value=sa;}if(sb){lastBackup.value=parseInt(sb)||0;}
+      if(ss){try{scanList.value=JSON.parse(ss);}catch(e){}}
+      if(apiKey.value)fetchAll();calcStor();
+      setInterval(fetchMarket,60000);
+    });
+
+    return{
+      tab,menuOpen,fetching,selMonth,openPos,hist,apiKey,tempKey,storageUsage,toasts,indices,sortBy,sortOptions,
+      radarLoading,radarData,radarUpdatedAt,mag7,sortedRadar,scanList,newTicker,newTickerErr,
+      eModal,eForm,eErrors,addLotModal,addLotForm,addLotErrors,editModal,editForm,exitModal,exitForm,exitErrors,
+      go,addToScan,removeFromScan,resetToMag7,addMyPositions,openEntryModal,doEntry,openAddLotModal,doAddLot,openEditModal,doEdit,doDeletePos,openExitModal,doExit,
+      clearAll,exportData,importData,saveKey,fetchAll,fetchRadar,
+      fmt,totalQty,avgCost,unrealized,pct,isTpTriggered,isSlTriggered,alertClass,tpSlBar,sortedPos,
+      totalValue,annualPnl,totalUnrealized,totalNetPnl,totalCostDeployed,totalRecovered,totalROI,
+      monthPnl,filteredHist,exitPv,exitPvPct,winRate,avgWin,avgLoss,tickerStats,newAvgCostPreview,
+      lastBackupDisplay,showBackupReminder,sparkY,sparkPoints,sparkArea,gaugeStyle
+    };
+  }}).mount('#app');
 })();
 </script>
 </body>
