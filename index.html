@@ -436,7 +436,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
           <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:5px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden"><div style="height:100%;border-radius:99px;transition:width .9s ease" :style="{width:Math.min(Math.abs(totalROI),100)+'%',background:totalROI>=0?'var(--green)':'var(--red)'}"></div></div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);flex-shrink:0">deployed ${{ fmt(totalCostDeployed) }}</div></div>
         </div>
         <div class="r3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
-          <div class="card" style="padding:16px"><div class="stat-lbl">總投入</div><div style="font-family:var(--mono);font-size:1.15rem;font-weight:600;color:var(--txt);margin-top:3px">${{ fmt(totalCostDeployed) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">已結清 + 在庫</div></div>
+          <div class="card" style="padding:16px"><div class="stat-lbl">{{ startingCapital>0?'起始資金':'在庫成本' }}</div><div style="font-family:var(--mono);font-size:1.15rem;font-weight:600;color:var(--txt);margin-top:3px">${{ fmt(totalCostDeployed) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">{{ startingCapital>0?'手動設定，固定不變':'當前持倉成本' }}</div></div>
           <div class="card" style="padding:16px"><div class="stat-lbl">已實現</div><div style="font-family:var(--mono);font-size:1.15rem;font-weight:600;margin-top:3px" :class="annualPnl>=0?'g':'r'">${{ fmt(annualPnl) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">{{ hist.length }} 筆結清</div></div>
           <div class="card" style="padding:16px"><div class="stat-lbl">未實現</div><div style="font-family:var(--mono);font-size:1.15rem;font-weight:600;margin-top:3px" :class="totalUnrealized>=0?'g':'r'">${{ fmt(totalUnrealized) }}</div><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px">{{ openPos.length }} 筆在庫</div></div>
         </div>
@@ -635,8 +635,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
           <div style="font-size:11px;color:var(--dim);margin-bottom:18px;line-height:1.7">前往 <a href="https://finnhub.io" target="_blank" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(212,168,83,.3)">finnhub.io</a> 免費申請 &#x2014; 60 req/min</div>
           <button @click="saveKey" class="btn-gold" style="width:100%;justify-content:center;padding:12px">儲存並重新連線</button>
         </div>
-        <div class="r3 card" style="padding:20px;max-width:420px;margin-top:12px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">&#x1F4F1; PWA — 加入主畫面</div>
+        <div class="r3 card" style="padding:22px;max-width:420px;margin-top:12px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">&#x1F4B0; 起始投入資金</div>
+          <div style="font-size:12px;color:var(--mid);margin-bottom:12px;line-height:1.7">設定你的<strong style="color:var(--txt)">總投入本金</strong>（固定金額，不隨交易累計）。設定後「資本損益統計」的 ROI 以此為分母計算。</div>
+          <div style="display:flex;gap:8px">
+            <input v-model="tempCapital" type="number" class="inp" placeholder="例如 100000" style="flex:1">
+            <button @click="saveCapital" class="btn-gold" style="flex-shrink:0;padding:11px 16px">設定</button>
+          </div>
+          <div v-if="startingCapital>0" style="font-family:var(--mono);font-size:11px;color:var(--green);margin-top:8px">目前設定：${{ fmt(startingCapital) }}</div>
+          <div v-else style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px">未設定 — 目前以在庫持倉成本計算</div>
+        </div>
           <div style="font-size:12px;color:var(--mid);line-height:1.85"><strong style="color:var(--txt)">iOS Safari：</strong>分享按鈕 &#x2192; 加入主畫面<br><strong style="color:var(--txt)">Android Chrome：</strong>選單 &#x2192; 加到主畫面<br><span style="color:var(--dim)">全螢幕 App 模式，無瀏覽器介面。</span></div>
         </div>
       </section>
@@ -682,6 +690,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     var companyNames={AAPL:'Apple',MSFT:'Microsoft',NVDA:'NVIDIA',GOOGL:'Alphabet',AMZN:'Amazon',META:'Meta',TSLA:'Tesla'};
     var scanList=ref(['AAPL','MSFT','NVDA','GOOGL','AMZN','META','TSLA']);
     var newTicker=ref(''),newTickerErr=ref('');
+    var startingCapital=ref(0);
+    var tempCapital=ref('');
 
     var eModal=ref({show:false}),eForm=ref({ticker:'',price:'',qty:'',tp:'',sl:''}),eErrors=ref({ticker:'',price:'',qty:''});
     var addLotModal=ref({show:false,targetId:null,ticker:'',currentQty:0,currentAvg:'0',lots:[]}),addLotForm=ref({price:'',qty:''}),addLotErrors=ref({price:'',qty:''});
@@ -729,7 +739,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     var annualPnl=computed(function(){return hist.value.reduce(function(s,h){return s+h.pnl;},0);});
     var totalUnrealized=computed(function(){return openPos.value.reduce(function(s,p){return s+unrealized(p);},0);});
     var totalNetPnl=computed(function(){return annualPnl.value+totalUnrealized.value;});
-    var totalCostDeployed=computed(function(){return hist.value.reduce(function(s,h){return s+h.entry*h.qty;},0)+openPos.value.reduce(function(s,p){return s+avgCost(p)*totalQty(p);},0);});
+    // Total cost = user-defined starting capital (if set), else current open positions cost only
+    var totalCostDeployed=computed(function(){
+      if(startingCapital.value>0)return startingCapital.value;
+      return openPos.value.reduce(function(s,p){return s+avgCost(p)*totalQty(p);},0);
+    });
     var totalRecovered=computed(function(){return hist.value.reduce(function(s,h){return s+h.exit*h.qty;},0);});
     var totalROI=computed(function(){return totalCostDeployed.value===0?0:(totalNetPnl.value/totalCostDeployed.value)*100;});
     var monthPnl=computed(function(){return hist.value.filter(function(h){return h.closedMonth===selMonth.value;}).reduce(function(s,h){return s+h.pnl;},0);});
@@ -749,43 +763,83 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     function sparkArea(c,w,h){if(!c||c.length<2)return'';var pts=c.map(function(v,i){return((i/(c.length-1))*w).toFixed(1)+','+sparkY(v,c,h).toFixed(1);});return pts.join(' ')+' '+w+','+h+' 0,'+h;}
     function gaugeStyle(s){var lo=-20,hi=30,range=50;var dc=Math.max(lo,Math.min(hi,s.deviation));var pct2=((dc-lo)/range)*100;var zero=(20/range)*100;var left,width;if(dc>=0){left=zero;width=pct2-zero;}else{left=pct2;width=zero-pct2;}var color=s.deviation>=0?'var(--green)':'var(--red)';return'position:absolute;top:0;bottom:0;left:'+left+'%;width:'+Math.max(width,1)+'%;background:'+color+';border-radius:99px;opacity:.6';}
 
-    // Fetch radar
+    // Fetch radar — sequential to avoid rate limit, validates s==="ok"
     function fetchRadar(){
       if(!apiKey.value)return;
       radarLoading.value=true;radarData.value=[];
-      var now=Math.floor(Date.now()/1000),from=now-86400*200;
+      var now=Math.floor(Date.now()/1000);
+      var from=now-86400*300; // 300 days = ~43 weeks, enough for 20-week MA
       var tickers=scanList.value.slice();
-      Promise.all(tickers.map(function(sym){
-        return fetch('https://finnhub.io/api/v1/stock/candle?symbol='+sym+'&resolution=W&from='+from+'&to='+now+'&token='+apiKey.value)
-          .then(function(r){return r.json();}).then(function(d){return{sym:sym,data:d};});
-      })).then(function(results){
-        var processed=[];
-        results.forEach(function(r){
-          var sym=r.sym,d=r.data;
-          if(!d||!d.c||d.c.length<20)return;
-          var closes=d.c,n=closes.length;
-          var last20=closes.slice(n-20);
-          var ma20=last20.reduce(function(s,v){return s+v;},0)/20;
-          var maTrend='flat';
-          if(n>=23){var prev3=closes.slice(n-23,n-3),ma20p=prev3.reduce(function(s,v){return s+v;},0)/20;if(ma20>ma20p*1.001)maTrend='up';else if(ma20<ma20p*0.999)maTrend='down';}
-          var price=closes[n-1],deviation=((price-ma20)/ma20)*100;
-          var weeksAbove=0;
-          for(var i=n-1;i>=Math.max(0,n-20);i--){var loc=closes.slice(Math.max(0,i-19),i+1);if(loc.length<20)break;var lm=loc.reduce(function(s,v){return s+v;},0)/20;if(closes[i]>lm){if(weeksAbove>=0)weeksAbove++;else break;}else{if(weeksAbove<=0)weeksAbove--;else break;}}
-          var zoneKey,zoneLabel,zone;
-          if(price<ma20){zoneKey='high';zoneLabel='MA 下方';zone='zone-high';}
-          else if(deviation<=10&&maTrend==='up'){zoneKey='entry';zoneLabel='回踩區';zone='zone-entry';}
-          else if(deviation<=18){zoneKey='watch';zoneLabel='觀察中';zone='zone-watch';}
-          else{zoneKey='high';zoneLabel='漲幅過大';zone='zone-high';}
-          var score=0;
-          if(price>ma20)score++;if(maTrend==='up')score++;if(deviation>=0&&deviation<=10)score++;
-          processed.push({ticker:sym,companyShort:companyNames[sym]||sym,price:price,ma20:ma20,deviation:deviation,maTrend:maTrend,weeksAbove:weeksAbove,zone:zone,zoneKey:zoneKey,zoneLabel:zoneLabel,score:score,closes:closes.slice(Math.max(0,n-12))});
-        });
-        radarData.value=processed;
-        radarUpdatedAt.value=new Date().toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
-        radarLoading.value=false;
-        var ec=processed.filter(function(s){return s.score===3;}).length;
-        toast(ec>0?ec+' 支三條件全符合':'掃描完成，本週無三條件標的',ec>0?'success':'info');
-      }).catch(function(e){console.error(e);radarLoading.value=false;toast('掃描失敗','warn');});
+      var processed=[];
+      var idx=0;
+
+      function fetchNext(){
+        if(idx>=tickers.length){
+          // Done
+          radarData.value=processed;
+          radarUpdatedAt.value=new Date().toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+          radarLoading.value=false;
+          var ec=processed.filter(function(s){return s.score===3;}).length;
+          var wc=processed.filter(function(s){return s.score===2;}).length;
+          var msg=ec>0?(ec+' 支三條件全符合'):wc>0?(wc+' 支兩條件符合'):'掃描完成，目前無符合進場條件的標的';
+          toast(msg,ec>0?'success':'info');
+          return;
+        }
+        var sym=tickers[idx];idx++;
+        fetch('https://finnhub.io/api/v1/stock/candle?symbol='+sym+'&resolution=W&from='+from+'&to='+now+'&token='+apiKey.value)
+          .then(function(r){return r.json();})
+          .then(function(d){
+            // Validate response
+            if(!d||d.s!=='ok'||!d.c||d.c.length<21){
+              // Try with more history
+              processed.push({ticker:sym,companyShort:companyNames[sym]||sym,price:0,ma20:0,deviation:0,maTrend:'flat',weeksAbove:0,zone:'zone-high',zoneKey:'high',zoneLabel:'數據不足',score:0,closes:[],error:true});
+              setTimeout(fetchNext,300);
+              return;
+            }
+            var closes=d.c,n=closes.length;
+            // 20-week MA
+            var last20=closes.slice(n-20);
+            var ma20=last20.reduce(function(s,v){return s+v;},0)/20;
+            // MA trend: compare current MA20 vs MA20 from 4 weeks ago
+            var maTrend='flat';
+            if(n>=24){
+              var w4ago=closes.slice(n-24,n-4);
+              var ma20old=w4ago.reduce(function(s,v){return s+v;},0)/20;
+              var diff=(ma20-ma20old)/ma20old*100;
+              if(diff>0.3)maTrend='up';
+              else if(diff<-0.3)maTrend='down';
+            }
+            var price=closes[n-1];
+            var deviation=((price-ma20)/ma20)*100;
+            // Count consecutive weeks above/below MA
+            var weeksAbove=0;
+            for(var i=n-1;i>=Math.max(0,n-30);i--){
+              if(i<19)break;
+              var sl=closes.slice(i-19,i+1);
+              var lm=sl.reduce(function(s,v){return s+v;},0)/20;
+              if(closes[i]>lm){if(weeksAbove>=0)weeksAbove++;else break;}
+              else{if(weeksAbove<=0)weeksAbove--;else break;}
+            }
+            // Zone
+            var zoneKey,zoneLabel,zone;
+            if(price<ma20){zoneKey='high';zoneLabel='MA 下方';zone='zone-high';}
+            else if(deviation<=10&&maTrend==='up'){zoneKey='entry';zoneLabel='回踩區 &#x2605;';zone='zone-entry';}
+            else if(deviation<=18){zoneKey='watch';zoneLabel='觀察中';zone='zone-watch';}
+            else{zoneKey='high';zoneLabel='漲幅過大';zone='zone-high';}
+            // Score
+            var score=0;
+            if(price>ma20)score++;
+            if(maTrend==='up')score++;
+            if(deviation>=0&&deviation<=10)score++;
+            processed.push({ticker:sym,companyShort:companyNames[sym]||sym,price:price,ma20:ma20,deviation:deviation,maTrend:maTrend,weeksAbove:weeksAbove,zone:zone,zoneKey:zoneKey,zoneLabel:zoneLabel,score:score,closes:closes.slice(Math.max(0,n-14))});
+            setTimeout(fetchNext,350); // 350ms gap = ~170 req/min, well under 60/min limit... actually this is fine per symbol
+          })
+          .catch(function(){
+            processed.push({ticker:sym,companyShort:companyNames[sym]||sym,price:0,ma20:0,deviation:0,maTrend:'flat',weeksAbove:0,zone:'zone-high',zoneKey:'high',zoneLabel:'讀取失敗',score:0,closes:[],error:true});
+            setTimeout(fetchNext,400);
+          });
+      }
+      fetchNext();
     }
 
     function fetchMarket(){
@@ -818,12 +872,20 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     function exportData(){var blob=new Blob([JSON.stringify({open:openPos.value,history:hist.value,apiKey:apiKey.value},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='M400_'+new Date().toISOString().slice(0,10)+'.json';a.click();lastBackup.value=Date.now();localStorage.setItem(KB,String(lastBackup.value));toast('Backup exported','success');}
     function importData(e){var reader=new FileReader();reader.onload=function(ev){try{var d=JSON.parse(ev.target.result);openPos.value=d.open||[];hist.value=d.history||[];if(d.apiKey){apiKey.value=d.apiKey;localStorage.setItem(KA,d.apiKey);}save();location.reload();}catch(err){alert('Import failed');}};reader.readAsText(e.target.files[0]);}
     function saveKey(){apiKey.value=tempKey.value;localStorage.setItem(KA,apiKey.value);location.reload();}
+    function saveCapital(){
+      var n=Number(tempCapital.value);
+      if(isNaN(n)||n<0){toast('請輸入有效金額','warn');return;}
+      startingCapital.value=n;
+      localStorage.setItem('M400_CAPITAL',String(n));
+      toast('起始資金已設定為 $'+fmt(n),'success');
+    }
 
     onMounted(function(){
-      var so=localStorage.getItem(KO),sh=localStorage.getItem(KH),sa=localStorage.getItem(KA),sb=localStorage.getItem(KB),ss=localStorage.getItem(KSL);
+      var so=localStorage.getItem(KO),sh=localStorage.getItem(KH),sa=localStorage.getItem(KA),sb=localStorage.getItem(KB),ss=localStorage.getItem(KSL),sc=localStorage.getItem('M400_CAPITAL');
       if(so)openPos.value=JSON.parse(so);if(sh)hist.value=JSON.parse(sh);
       if(sa){apiKey.value=sa;tempKey.value=sa;}if(sb){lastBackup.value=parseInt(sb)||0;}
       if(ss){try{scanList.value=JSON.parse(ss);}catch(e){}}
+      if(sc){var cv=parseFloat(sc)||0;startingCapital.value=cv;tempCapital.value=cv>0?String(cv):'';}
       if(apiKey.value)fetchAll();calcStor();
       setInterval(fetchMarket,60000);
     });
@@ -834,6 +896,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       eModal,eForm,eErrors,addLotModal,addLotForm,addLotErrors,editModal,editForm,exitModal,exitForm,exitErrors,
       go,addToScan,removeFromScan,resetToMag7,addMyPositions,openEntryModal,doEntry,openAddLotModal,doAddLot,openEditModal,doEdit,doDeletePos,openExitModal,doExit,
       clearAll,exportData,importData,saveKey,fetchAll,fetchRadar,
+      startingCapital,tempCapital,saveCapital,
       fmt,totalQty,avgCost,unrealized,pct,isTpTriggered,isSlTriggered,alertClass,tpSlBar,sortedPos,
       totalValue,annualPnl,totalUnrealized,totalNetPnl,totalCostDeployed,totalRecovered,totalROI,
       monthPnl,filteredHist,exitPv,exitPvPct,winRate,avgWin,avgLoss,tickerStats,newAvgCostPreview,
